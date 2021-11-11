@@ -199,7 +199,7 @@ namespace ChessIT.KuricaUtils.View
                                         choose.SetConditions(conditions);
 
 #if !DEBUG
-                                        ((EditText)Form.Items.Item("etFilial").Specific).String = "Kurica Ambiental";
+                                        ((EditText)Form.Items.Item("etFilial").Specific).String = "Kurica Ambiental (M)";
 #endif
                                         ((CheckBox)Form.Items.Item("ckStaTodos").Specific).Checked = true;
                                     }
@@ -261,10 +261,10 @@ namespace ChessIT.KuricaUtils.View
 		                                    '' AS ""Contrato"",
 		                                    '' AS ""Placa""
                                     from OWDD
-                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DocEntry""
-                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BplId""
+                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DocEntry"" AND OWDD.""ObjType"" = 22
+                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
                                     inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
-                                    where ODRF.""ObjType"" = 22 AND OWDD.""ObjType"" = 112
+                                    where ODRF.""ObjType"" = 22
                                     and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
                                     and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')                                    
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")

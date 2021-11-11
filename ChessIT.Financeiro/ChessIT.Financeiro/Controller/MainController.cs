@@ -158,26 +158,45 @@ namespace ChessIT.Financeiro.Controller
 
                         Item _grid = form.Items.Item("20");
 
+                        Item _porcMulta = form.Items.Add("PORCMULTA", BoFormItemTypes.it_EDIT);
+                        _porcMulta.Top = _grid.Top - 20;
+                        _porcMulta.Left = _grid.Left + _grid.Width - 270;
+                        _porcMulta.Width = 80;
+
+                        EditText porcMulta = (EditText)_porcMulta.Specific;
+                        porcMulta.DataBind.SetBound(true, "", "porcMulta");
+
+                        Item _staticMulta = form.Items.Add("SPORCMULTA", BoFormItemTypes.it_STATIC);
+                        _staticMulta.Top = _grid.Top - 20;
+                        _staticMulta.Left = _grid.Left + _grid.Width - 330;
+                        _staticMulta.Width = 60;
+                        _staticMulta.LinkTo = "PORCMULTA";
+
+                        StaticText staticMulta = (StaticText)_staticMulta.Specific;
+                        staticMulta.Caption = "Multa";
+
                         Item _porcJuros = form.Items.Add("PORCJUROS", BoFormItemTypes.it_EDIT);
-                        _porcJuros.Top = _grid.Top - 10;
+                        _porcJuros.Top = _grid.Top - 20;
                         _porcJuros.Left = _grid.Left + _grid.Width - 80;
                         _porcJuros.Width = 80;
 
                         EditText porcJuros = (EditText)_porcJuros.Specific;
                         porcJuros.DataBind.SetBound(true, "", "porcJuros");
 
-                        Item _porcMulta = form.Items.Add("PORCMULTA", BoFormItemTypes.it_EDIT);
-                        _porcMulta.Top = _grid.Top - 10;
-                        _porcMulta.Left = _grid.Left + _grid.Width - 170;
-                        _porcMulta.Width = 80;
+                        Item _staticJuros = form.Items.Add("SPORCJUROS", BoFormItemTypes.it_STATIC);
+                        _staticJuros.Top = _grid.Top - 20;
+                        _staticJuros.Left = _grid.Left + _grid.Width - 170;
+                        _staticJuros.Width = 60;
+                        _staticJuros.LinkTo = "PORCJUROS";
 
-                        EditText porcMulta = (EditText)_porcMulta.Specific;
-                        porcMulta.DataBind.SetBound(true, "", "porcMulta");
+                        StaticText staticJuros = (StaticText) _staticJuros.Specific;
+                        staticJuros.Caption = "Juros";      
 
                         Item _aplicarMultaJuros = form.Items.Add("APLMJ", BoFormItemTypes.it_BUTTON);
-                        _aplicarMultaJuros.Top = _grid.Top - 10;
-                        _aplicarMultaJuros.Left = _grid.Left + _grid.Width - 250;
-                        _aplicarMultaJuros.Width = 80;
+                        _aplicarMultaJuros.Top = _grid.Top - 20;
+                        _aplicarMultaJuros.Left = _grid.Left + _grid.Width - 470;
+                        _aplicarMultaJuros.Width = 110;
+                        _aplicarMultaJuros.LinkTo = "SPORCMULTA";
 
                         Button aplicarMultaJuros = (Button)_aplicarMultaJuros.Specific;
                         aplicarMultaJuros.Caption = "Aplicar Multa e Juros";

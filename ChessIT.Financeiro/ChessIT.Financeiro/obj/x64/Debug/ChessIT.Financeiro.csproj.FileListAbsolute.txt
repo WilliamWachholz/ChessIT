@@ -1,0 +1,13 @@
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\Menu.xml
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\SrfFiles\FrmDocCP.srf
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\ChessIT.Financeiro.exe.config
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\ChessIT.Financeiro.exe
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\ChessIT.Financeiro.pdb
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\SAPBusinessOneSDK.dll
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.csprojAssemblyReference.cache
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.Properties.Resources.resources
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.csproj.GenerateResource.cache
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.csproj.CoreCompileInputs.cache
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.csproj.CopyComplete
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.exe
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.pdb

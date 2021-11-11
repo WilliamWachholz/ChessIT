@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using SAPbouiCOM;
 
 namespace ChessIT.Financeiro.View
@@ -52,15 +52,18 @@ namespace ChessIT.Financeiro.View
                             {
                                 if (pVal.ItemUID.Equals("etCNPJ"))
                                 {
-                                    string cnpj = ((EditText)Form.Items.Item("etCNPJ").Specific).String;
+                                    string cnpj = ((EditText)Form.Items.Item("etCNPJ").Specific).String.Trim();
 
-                                    SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                    recordSet.DoQuery(string.Format(@"select ""CardCode"", ""CardName"" from CRD7 where ""TaxId0"" = '{0}' or ""TaxId4"" = '{0}'", cnpj));
-
-                                    if (!recordSet.EoF)
+                                    if (cnpj != "")
                                     {
-                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("CodFor", 0, recordSet.Fields.Item(0).Value);
-                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, recordSet.Fields.Item(1).Value);
+                                        SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                        recordSet.DoQuery(string.Format(@"select OCRD.""CardCode"", OCRD.""CardName"" from CRD7 INNER JOIN OCRD ON OCRD.""CardCode"" = CRD7.""CardCode"" where ""TaxId0"" = '{0}' or ""TaxId4"" = '{0}'", cnpj));
+
+                                        if (!recordSet.EoF)
+                                        {
+                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("CodFor", 0, recordSet.Fields.Item(0).Value);
+                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, recordSet.Fields.Item(1).Value);
+                                        }
                                     }
                                 }
 
@@ -70,7 +73,10 @@ namespace ChessIT.Financeiro.View
 
                                     int numeroParcelas = Convert.ToInt32(Form.DataSources.DataTables.Item("dtFiltro").GetValue("NumPar", 0));
 
-                                    Form.DataSources.DataTables.Item("dtFiltro").SetValue("ValorPar", 0, totalDoc / numeroParcelas);
+                                    if (numeroParcelas > 0)
+                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("ValorPar", 0, totalDoc / numeroParcelas);
+                                    else
+                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("ValorPar", 0, 0);
                                 }
                             }
 
@@ -93,7 +99,7 @@ namespace ChessIT.Financeiro.View
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, chooseFromListEvent.SelectedObjects.GetValue("CardName", 0).ToString());
 
                                             SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                            recordSet.DoQuery(string.Format(@"select coalesce(""TaxId0"", ""TaxId4""), from CRD7 where ""CardCode"" = '{0}'", chooseFromListEvent.SelectedObjects.GetValue("CardCode", 0).ToString()));
+                                            recordSet.DoQuery(string.Format(@"select coalesce(""TaxId0"", ""TaxId4"") from CRD7 where ""CardCode"" = '{0}'", chooseFromListEvent.SelectedObjects.GetValue("CardCode", 0).ToString()));
 
                                             if (!recordSet.EoF)
                                             {
@@ -191,6 +197,25 @@ namespace ChessIT.Financeiro.View
             }
         }
 
+
+        System.Timers.Timer m_timerLC = new System.Timers.Timer(1000);
+
+        Form lcForm = null;
+
+        int numeroParcelas = 0;
+
+        int parcela = 0;
+
+        double valorJuros = 0;
+
+        double valorParcela = 0;
+
+        double diferenca = 0;
+
+        DateTime dataVcto1 = new DateTime();
+
+        DateTime dataVencimento = new DateTime();
+
         private void GerarLC()
         {
             if (((EditText)Form.Items.Item("etCodFor").Specific).String == "")
@@ -261,9 +286,7 @@ namespace ChessIT.Financeiro.View
 
             Controller.MainController.Application.ActivateMenuItem("1540");
 
-            Form lcForm = null;
-
-            for (int i = 5; i >= 0; i++)
+            for (int i = 5; i >= 0; i--)
             {
                 System.Threading.Thread.Sleep(200);
 
@@ -278,72 +301,128 @@ namespace ChessIT.Financeiro.View
 
             if (lcForm != null)
             {
-                lcForm.Freeze(true);
-                try
-                {
+#if !DEBUG
                     ((EditText)lcForm.Items.Item("U_NDocFin").Specific).String = ((EditText)Form.Items.Item("etNumDoc").Specific).String;
                     ((EditText)lcForm.Items.Item("U_FPagFin").Specific).String = ((EditText)Form.Items.Item("etForPgto").Specific).String;
+#endif
 
-                    ((EditText)lcForm.Items.Item("97").Specific).String = ((EditText)Form.Items.Item("etDataDoc").Specific).String;
-                    ((EditText)lcForm.Items.Item("6").Specific).String = ((EditText)Form.Items.Item("etDataLcto").Specific).String;
+                ((EditText)lcForm.Items.Item("97").Specific).String = ((EditText)Form.Items.Item("etDataDoc").Specific).String;
+                ((EditText)lcForm.Items.Item("6").Specific).String = ((EditText)Form.Items.Item("etDataLcto").Specific).String;
 
-                    ((ComboBox)lcForm.Items.Item("1320002034").Specific).Select(((ComboBox)Form.Items.Item("cbEmpresa").Specific).Selected.Value);
+                ((ComboBox)lcForm.Items.Item("1320002034").Specific).Select(((ComboBox)Form.Items.Item("cbEmpresa").Specific).Selected.Value);
 
-                    double valorJuros = Convert.ToDouble(Form.DataSources.DataTables.Item("dtFiltro").GetValue("ValorJuros", 0));
+                ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0)).AddMonths(numeroParcelas).ToString("dd/MM/yyyy");
 
-                    double valorParcela = Convert.ToDouble(Form.DataSources.DataTables.Item("dtFiltro").GetValue("ValorPar", 0));
+                ((EditText)lcForm.Items.Item("10").Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
 
-                    int numeroParcelas = Convert.ToInt32(Form.DataSources.DataTables.Item("dtFiltro").GetValue("NumPar", 0));
+                numeroParcelas = Convert.ToInt32(Form.DataSources.DataTables.Item("dtFiltro").GetValue("NumPar", 0));
 
-                    valorParcela = valorParcela + (valorJuros / numeroParcelas);
+                parcela = 1;
 
-                    DateTime dataVcto1 = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0));
+                double valorTotal = Convert.ToDouble(Form.DataSources.DataTables.Item("dtFiltro").GetValue("TotalDoc", 0));
 
-                    DateTime dataVencimento = dataVcto1;
+                valorJuros = Convert.ToDouble(Form.DataSources.DataTables.Item("dtFiltro").GetValue("ValorJuros", 0));
 
-                    Matrix grid = (Matrix)lcForm.Items.Item("76").Specific;
+                valorParcela = Convert.ToDouble(Form.DataSources.DataTables.Item("dtFiltro").GetValue("ValorPar", 0));
 
-                    for (int parcela = 1; parcela <= numeroParcelas; parcela++)
-                    {
-                        ((EditText)grid.Columns.Item("0").Cells.Item(parcela).Specific).String = ((EditText)Form.Items.Item("etCodFor").Specific).String;
+                valorParcela = valorParcela + (valorJuros / numeroParcelas);
 
-                        dataVencimento = dataVcto1.AddMonths(parcela - 1);
+                diferenca = Math.Round((valorTotal + valorJuros) - (Math.Round(valorParcela, 2) * numeroParcelas), 2);
 
-                        ((EditText)grid.Columns.Item("13").Cells.Item(parcela).Specific).String = dataVencimento.ToString("dd/MM/yyyy");
+                dataVcto1 = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0));
 
-                        ((EditText)grid.Columns.Item("6").Cells.Item(parcela).Specific).String = valorParcela.ToString();
+                dataVencimento = dataVcto1;
 
-                        ((EditText)grid.Columns.Item("9").Cells.Item(parcela).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String + " Contas a Pagar " + parcela.ToString() + "/" + numeroParcelas.ToString();
-                    }
+                m_timerLC.Elapsed += FinalizarLC;
+                m_timerLC.Enabled = true;
+            }          
+        }
 
-                    ((EditText)grid.Columns.Item("0").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etContaC").Specific).String;
 
-                    ((EditText)grid.Columns.Item("13").Cells.Item(numeroParcelas + 1).Specific).String = dataVencimento.ToString("dd/MM/yyyy");
+        private void FinalizarLC(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            m_timerLC.Enabled = false;
 
-                    ((EditText)grid.Columns.Item("5").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etTotalDoc").Specific).String;
+            if (lcForm != null)
+            {
+                lcForm.Select();
 
-                    ((EditText)grid.Columns.Item("9").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
+                Matrix grid = (Matrix)lcForm.Items.Item("76").Specific;
 
-                    if (((EditText)Form.Items.Item("etContaJ").Specific).String != "")
-                    {
-                        ((EditText)grid.Columns.Item("0").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etContaJ").Specific).String;
-
-                        ((EditText)grid.Columns.Item("13").Cells.Item(numeroParcelas + 2).Specific).String = dataVencimento.ToString("dd/MM/yyyy");
-
-                        ((EditText)grid.Columns.Item("5").Cells.Item(numeroParcelas + 2).Specific).String = valorJuros.ToString();
-
-                        ((EditText)grid.Columns.Item("9").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
-                    }
-
-                    ((EditText)lcForm.Items.Item("102").Specific).String = dataVencimento.ToString("dd/MM/yyyy");
-
-                    ((EditText)lcForm.Items.Item("10").Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
-                }
-                finally
+                if (parcela > 1)
                 {
-                    lcForm.Freeze(false);
+                    Controller.MainController.Application.SendKeys("^{TAB}");
+
+                    dataVencimento = dataVcto1.AddMonths(parcela - 2);
+
+                    ((EditText)grid.Columns.Item("13").Cells.Item(parcela - 1).Specific).String = dataVencimento.ToString("dd/MM/yyyy");
+
+                    if (parcela == numeroParcelas + 1)
+                        ((EditText)grid.Columns.Item("6").Cells.Item(parcela - 1).Specific).String = (valorParcela + diferenca).ToString();                   
+                    else
+                        ((EditText)grid.Columns.Item("6").Cells.Item(parcela - 1).Specific).String = valorParcela.ToString();
+
+                    ((EditText)grid.Columns.Item("9").Cells.Item(parcela - 1).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String + " Contas a Pagar " + parcela.ToString() + "/" + numeroParcelas.ToString();
+                }
+
+                if (parcela == numeroParcelas + 1)
+                {
+                    lcForm.Freeze(true);
+                    try
+                    {
+                        ((EditText)grid.Columns.Item("1").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etContaC").Specific).String;
+
+                        ((EditText)grid.Columns.Item("13").Cells.Item(numeroParcelas + 1).Specific).String = dataVencimento.ToString("dd/MM/yyyy");
+
+                        ((EditText)grid.Columns.Item("5").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etTotalDoc").Specific).String;
+
+                        ((EditText)grid.Columns.Item("9").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
+
+                        if (((EditText)Form.Items.Item("etContaJ").Specific).String != "")
+                        {
+                            ((EditText)grid.Columns.Item("1").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etContaJ").Specific).String;
+
+                            ((EditText)grid.Columns.Item("13").Cells.Item(numeroParcelas + 2).Specific).String = dataVencimento.ToString("dd/MM/yyyy");
+
+                            ((EditText)grid.Columns.Item("5").Cells.Item(numeroParcelas + 2).Specific).String = valorJuros.ToString();
+
+                            ((EditText)grid.Columns.Item("9").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
+                        }                        
+                    }
+                    finally
+                    {
+                        lcForm.Freeze(false);
+                    }
+                }
+                else
+                {
+                    grid.Columns.Item("1").Cells.Item(parcela).Click();
+
+                    SetarCodigoPNThread(((EditText)Form.Items.Item("etCodFor").Specific).String);
+
+                    System.Windows.Forms.SendKeys.SendWait("^{v}");                    
+
+                    parcela++;
+
+                    m_timerLC.Enabled = true;
                 }
             }
+        }
+
+        private void SetarCodigoPNThread(string valor)
+        {
+            Thread td = new Thread(new ParameterizedThreadStart(SetarCodigoPN));
+                        
+            td.SetApartmentState(ApartmentState.STA);
+            td.IsBackground = true;
+            td.Start(valor);
+        }
+
+        [STAThread]
+        private void SetarCodigoPN(object valor)
+        {
+            System.Windows.Forms.Clipboard.SetText(valor.ToString());            
+
         }
     }
 }
