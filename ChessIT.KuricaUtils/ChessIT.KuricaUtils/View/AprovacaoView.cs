@@ -130,8 +130,15 @@ namespace ChessIT.KuricaUtils.View
                         case BoEventTypes.et_VALIDATE:
                             if (!pVal.BeforeAction)
                             {
-                               
-                                
+
+                                if (pVal.ItemUID.Equals("etFornec"))
+                                {
+                                    if (((EditText)Form.Items.Item("etFornec").Specific).String.Trim() == "")
+                                    {
+                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("CodFor", 0, "");
+                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, "");
+                                    }
+                                }
                             }
 
                             break;
@@ -154,6 +161,12 @@ namespace ChessIT.KuricaUtils.View
                                         }
 
                                         if (pVal.ItemUID.Equals("etFornec"))
+                                        {
+                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("CodFor", 0, chooseFromListEvent.SelectedObjects.GetValue("CardCode", 0).ToString());
+                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, chooseFromListEvent.SelectedObjects.GetValue("CardName", 0).ToString());
+                                        }
+
+                                        if (pVal.ItemUID.Equals("etNomeFor"))
                                         {
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("CodFor", 0, chooseFromListEvent.SelectedObjects.GetValue("CardCode", 0).ToString());
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, chooseFromListEvent.SelectedObjects.GetValue("CardName", 0).ToString());
@@ -199,7 +212,7 @@ namespace ChessIT.KuricaUtils.View
                                         choose.SetConditions(conditions);
 
 #if !DEBUG
-                                        ((EditText)Form.Items.Item("etFilial").Specific).String = "Kurica Ambiental (M)";
+                                        ((EditText)Form.Items.Item("etFilial").Specific).String = "Kurica Ambiental (F)";
 #endif
                                         ((CheckBox)Form.Items.Item("ckStaTodos").Specific).Checked = true;
                                     }
@@ -261,7 +274,7 @@ namespace ChessIT.KuricaUtils.View
 		                                    '' AS ""Contrato"",
 		                                    '' AS ""Placa""
                                     from OWDD
-                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DocEntry"" AND OWDD.""ObjType"" = 22
+                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
                                     inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
                                     inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
                                     where ODRF.""ObjType"" = 22
@@ -290,7 +303,11 @@ namespace ChessIT.KuricaUtils.View
 		                                    ODRF.""CardName"" AS ""Fornecedor"",
 		                                    ODRF.""Comments"" AS ""Observação"",
 		                                    ODRF.""DocTotal"" AS ""Valor Total"",
-		                                    case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
+		                                    --case when (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y') then 'Aprovado' 
+			                                --     when (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'N') then 'Recusado'
+			                                --     else 'Pendente'
+		                                    --end as ""Decisão/Situação"",
+                                            case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
 			                                     when (OWDD.""Status"" = 'N') then 'Recusado'
 			                                     else 'Pendente'
 		                                    end as ""Decisão/Situação"",
@@ -302,15 +319,16 @@ namespace ChessIT.KuricaUtils.View
 		                                    '' AS ""Contrato"",
 		                                    '' AS ""Placa""
                                     from OWDD
-                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DocEntry""
-                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BplId""
+                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
+                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
                                     inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
-                                    where ODRF.""ObjType"" = 22 AND OWDD.""ObjType"" = 112
+                                    where ODRF.""ObjType"" = 22
                                     and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
                                     and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')                                    
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
                                     and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
-                                    and ('{5}' = 'Y' or ('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (OWDD.""Status"" = 'W')))
+                                    --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
+                                    and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or('{7}' = 'Y' and(OWDD.""Status"" = 'W')))
                                     union
                                     select  'N' AS ""#"",
                                         OWDD.""WddCode"",
@@ -327,16 +345,17 @@ namespace ChessIT.KuricaUtils.View
 		                                DRF1.""OcrCode"" AS ""CC"",
 		                                DRF1.""OcrCode3"" AS ""Contrato"",
 		                                DRF1.""OcrCode5"" AS ""Placa""
-                                from OWDD
-                                inner join ODRF on ODRF.""DocEntry"" = OWDD.""DocEntry""
-                                inner join OBPL on OBPL.""BPLId"" = ODRF.""BplId""
-                                inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
-                                where ODRF.""ObjType"" = 22 AND OWDD.""ObjType"" = 112
-                                and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
-                                and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')                                    
-                                and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
-                                and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
-                                and ('{5}' = 'Y' or ('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (OWDD.""Status"" = 'W')))
+                                    from OWDD
+                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
+                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
+                                    inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
+                                    where ODRF.""ObjType"" = 22
+                                    and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
+                                    and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')                                    
+                                    and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
+                                    and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
+                                    --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
+                                    and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or('{7}' = 'Y' and(OWDD.""Status"" = 'W')))
                                 ) vt order by ""WddCode"", ""Descrição Item""",
                                         selecionarTodos,
                                         dataDe == "" ? "1990-01-01" : Convert.ToDateTime(dataDe).ToString("yyyy-MM-dd"),

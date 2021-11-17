@@ -12,3 +12,4 @@ C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.Kuric
 C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.KuricaUtils.exe
 C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.KuricaUtils.pdb
 C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\Debug\Menu.xml
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\Debug\SrfFiles\FrmPropostaContrato.srf

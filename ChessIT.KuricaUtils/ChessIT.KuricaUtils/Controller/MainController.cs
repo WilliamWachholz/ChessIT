@@ -14,6 +14,8 @@ namespace ChessIT.KuricaUtils.Controller
         public static SAPbouiCOM.Application Application;
         public static SAPbobsCOM.Company Company;
 
+        private int m_UltimaProposta = 0;
+
         public MainController()
            : base()
         {
@@ -149,35 +151,54 @@ namespace ChessIT.KuricaUtils.Controller
                 {
                     Form form = Application.Forms.Item(pVal.FormUID);
 
-                    new View.ResultadoView(form, m_ResultadoList);
+                    if (m_ResultadoAprovacaoList.Count() > 0)
+                        new View.ResultadoView(form, m_ResultadoAprovacaoList);
+                    else
+                       new View.ResultadoView(form, m_ResultadoPropostaModel);
+                }
+
+                if (pVal.FormTypeEx == "FrmPropostaContrato")
+                {
+                    Form form = Application.Forms.Item(pVal.FormUID);
+
+                    Model.PropostaModel propostaModel = new Model.PropostaModel();
+                    propostaModel.Proposta = m_UltimaProposta;
+
+                    new View.PropostaContratoView(form, propostaModel);
+                }
+
+                //proposta (cotação de vendas)
+                if (pVal.FormTypeEx == "149")
+                {
+                    Form form = Application.Forms.Item(pVal.FormUID);
+
+                    form.Freeze(true);
+                    try
+                    {
+                        Item _buttonGerarContrato = form.Items.Add("BTCTR", BoFormItemTypes.it_BUTTON);
+                        _buttonGerarContrato.Top = form.Items.Item("10000329").Top - 20;
+                        _buttonGerarContrato.Left = form.Items.Item("10000329").Left;
+                        _buttonGerarContrato.Width = 90;                        
+
+                        Button buttonGerarContrato = (Button)_buttonGerarContrato.Specific;
+                        buttonGerarContrato.Caption = "Gerar Contrato";
+                    }
+                    finally
+                    {
+                        form.Freeze(false);
+                    }
                 }
             }
-
-            if (pVal.EventType == BoEventTypes.et_FORM_RESIZE)
+            else if (pVal.EventType == BoEventTypes.et_CLICK && !pVal.BeforeAction)
             {
-                //load do formulário aprovação de documento
-                if (pVal.FormTypeEx == "5013")
+                //proposta (cotação de vendas)
+                if (pVal.FormTypeEx == "149")
                 {
-                    string query = string.Format(@" select count(*)
-                                                    from OUSR 
-                                                    where (OUSR.""USER_CODE"" = 'manager'
-                                                    or exists(select * from USR3 where USR3.""UserLink"" = OUSR.""USERID"" and USR3.""PermId"" = 'FrmAprovacao'))
-                                                    and OUSR.""USER_CODE"" = '{0}'", Company.UserName);
-
-                    SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                    recordSet.DoQuery(query);
-
-                    bool aprovacaoCustomizada = Convert.ToInt32(recordSet.Fields.Item(0).Value) > 0;
-
-                    aprovacaoCustomizada = false;
-
-                    if (aprovacaoCustomizada)
+                    if (pVal.ItemUID == "BTCTR")
                     {
-                        Application.Forms.Item(pVal.FormUID).Close();
-
                         try
                         {
-                            string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmAprovacao.srf";
+                            string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmPropostaContrato.srf";
 
                             if (File.Exists(srfPath) == false)
                             {
@@ -186,13 +207,16 @@ namespace ChessIT.KuricaUtils.Controller
 
                             string xml = File.ReadAllText(srfPath);
 
-                            string aprovacaoUID = GerarFormUID("FrmAprovacao");
+                            string aprovacaoUID = GerarFormUID("FrmPropostaContrato");
 
-                            xml = xml.Replace("uid=\"FrmAprovacao\"", string.Format("uid=\"{0}\"", aprovacaoUID));
+                            xml = xml.Replace("uid=\"FrmPropostaContrato\"", string.Format("uid=\"{0}\"", aprovacaoUID));
 
 #if DEBUG
                         xml = xml.Replace("from dummy", "");
 #endif
+                            Form form = Application.Forms.Item(pVal.FormUID);
+
+                            m_UltimaProposta = Convert.ToInt32(form.DataSources.DBDataSources.Item("OQUT").GetValue("DocEntry", 0));
 
                             Application.LoadBatchActions(ref xml);
                         }
@@ -232,13 +256,48 @@ namespace ChessIT.KuricaUtils.Controller
             return result;
         }
 
-        public static List<Model.AprovacaoModel> m_ResultadoList = new List<Model.AprovacaoModel>();
+        public static List<Model.AprovacaoModel> m_ResultadoAprovacaoList = new List<Model.AprovacaoModel>();
+
+        public static Model.PropostaModel m_ResultadoPropostaModel = new Model.PropostaModel();
 
         public static void OpenResultadoView(List<Model.AprovacaoModel> aprovacaoList)
         {
             try
             {
-                m_ResultadoList = aprovacaoList;
+                m_ResultadoAprovacaoList = aprovacaoList;
+                m_ResultadoPropostaModel = new Model.PropostaModel();
+
+                string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmResultado.srf";
+
+                if (File.Exists(srfPath) == false)
+                {
+                    throw new Exception("Arquivo SRF não encontrado. Verifique a instalação do addOn.");
+                }
+
+                string xml = File.ReadAllText(srfPath);
+
+                string formUID = GerarFormUID("FrmResultado");
+
+                xml = xml.Replace("uid=\"FrmResultado\"", string.Format("uid=\"{0}\"", formUID));
+
+#if DEBUG
+                    xml = xml.Replace("from dummy", "");
+#endif
+
+                Application.LoadBatchActions(ref xml);
+            }
+            catch (Exception exception)
+            {
+                Application.StatusBar.SetText(exception.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+            }
+        }
+
+        public static void OpenResultadoView(Model.PropostaModel propostaModel)
+        {
+            try
+            {
+                m_ResultadoAprovacaoList = new List<Model.AprovacaoModel>();
+                m_ResultadoPropostaModel = propostaModel;
 
                 string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmResultado.srf";
 

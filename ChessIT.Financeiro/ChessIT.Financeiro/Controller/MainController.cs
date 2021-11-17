@@ -130,6 +130,35 @@ namespace ChessIT.Financeiro.Controller
                 }
             }
 
+            if (pVal.MenuUID.Equals("FrmBaixaCP") && !pVal.BeforeAction)
+            {
+                try
+                {
+                    string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmBaixaCP.srf";
+
+                    if (File.Exists(srfPath) == false)
+                    {
+                        throw new Exception("Arquivo SRF não encontrado. Verifique a instalação do addOn.");
+                    }
+
+                    string xml = File.ReadAllText(srfPath);
+
+                    string formUID = GerarFormUID("FrmBaixaCP");
+
+                    xml = xml.Replace("uid=\"FrmBaixaCP\"", string.Format("uid=\"{0}\"", formUID));
+
+#if DEBUG
+                    xml = xml.Replace("from dummy", "");
+#endif
+
+                    Application.LoadBatchActions(ref xml);
+                }
+                catch (Exception exception)
+                {
+                    Application.StatusBar.SetText(exception.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                }
+            }
+
         }
 
         private void HandleFormLoadEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
@@ -143,6 +172,13 @@ namespace ChessIT.Financeiro.Controller
                     Form form = Application.Forms.Item(pVal.FormUID);
 
                     new View.DocCPView(form);
+                }
+
+                if (pVal.FormTypeEx == "FrmBaixaCP")
+                {
+                    Form form = Application.Forms.Item(pVal.FormUID);
+
+                    new View.BaixaCPView(form);
                 }
 
                 //Contas a Receber
@@ -210,6 +246,10 @@ namespace ChessIT.Financeiro.Controller
                             porcMulta.String = recordSet.Fields.Item(1).Value.ToString();
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        Application.StatusBar.SetText("Verifique se a tabela de Configuração de Juros e Multa está criada");
+                    }
                     finally
                     {
                         form.Freeze(false);
@@ -253,6 +293,10 @@ namespace ChessIT.Financeiro.Controller
 
                                 ((EditText)_grid.Columns.Item("U_TotalAPagar").Cells.Item(row).Specific).String = totalPagar.ToString();
                             }
+                        }
+                        catch  (Exception ex)
+                        {
+                            Application.StatusBar.SetText("Erro ao calcular juros/multa: " + ex.Message);
                         }
                         finally
                         {

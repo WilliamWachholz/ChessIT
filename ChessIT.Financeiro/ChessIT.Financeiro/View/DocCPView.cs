@@ -26,6 +26,7 @@ namespace ChessIT.Financeiro.View
 
             Controller.MainController.Application.ItemEvent += HandleItemEvent;
         }
+
         private void HandleItemEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
         {
             bubbleEvent = true;
@@ -64,6 +65,15 @@ namespace ChessIT.Financeiro.View
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("CodFor", 0, recordSet.Fields.Item(0).Value);
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, recordSet.Fields.Item(1).Value);
                                         }
+                                    }
+                                }
+
+                                if (pVal.ItemUID.Equals("etCodFor"))
+                                {
+                                    if (((EditText)Form.Items.Item("etCodFor").Specific).String.Trim() == "")
+                                    {
+                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("NomeFor", 0, "");
+                                        Form.DataSources.DataTables.Item("dtFiltro").SetValue("CNPJ", 0, "");                                        
                                     }
                                 }
 
@@ -167,6 +177,30 @@ namespace ChessIT.Financeiro.View
                                         condition.Alias = "CardType";
                                         condition.Operation = BoConditionOperation.co_EQUAL;
                                         condition.CondVal = "S";
+
+                                        choose.SetConditions(conditions);
+
+                                        choose = (ChooseFromList)this.Form.ChooseFromLists.Item("CFL_4");
+
+                                        conditions = new Conditions();
+
+                                        condition = conditions.Add();
+
+                                        condition.Alias = "Postable";
+                                        condition.Operation = BoConditionOperation.co_EQUAL;
+                                        condition.CondVal = "Y";
+
+                                        choose.SetConditions(conditions);
+
+                                        choose = (ChooseFromList)this.Form.ChooseFromLists.Item("CFL_5");
+
+                                        conditions = new Conditions();
+
+                                        condition = conditions.Add();
+
+                                        condition.Alias = "Postable";
+                                        condition.Operation = BoConditionOperation.co_EQUAL;
+                                        condition.CondVal = "Y";
 
                                         choose.SetConditions(conditions);
 
@@ -362,7 +396,7 @@ namespace ChessIT.Financeiro.View
                     else
                         ((EditText)grid.Columns.Item("6").Cells.Item(parcela - 1).Specific).String = valorParcela.ToString();
 
-                    ((EditText)grid.Columns.Item("9").Cells.Item(parcela - 1).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String + " Contas a Pagar " + parcela.ToString() + "/" + numeroParcelas.ToString();
+                    ((EditText)grid.Columns.Item("9").Cells.Item(parcela - 1).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String + " Contas a Pagar " + (parcela - 1).ToString() + "/" + numeroParcelas.ToString();
                 }
 
                 if (parcela == numeroParcelas + 1)
