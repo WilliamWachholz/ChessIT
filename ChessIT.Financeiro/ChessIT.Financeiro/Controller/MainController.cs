@@ -14,6 +14,8 @@ namespace ChessIT.Financeiro.Controller
         public static SAPbouiCOM.Application Application;
         public static SAPbobsCOM.Company Company;
 
+        static Dictionary<string, View.BaixaCPView> m_BaixaCPViews = new Dictionary<string, View.BaixaCPView>();
+
         public MainController()
            : base()
         {
@@ -178,7 +180,16 @@ namespace ChessIT.Financeiro.Controller
                 {
                     Form form = Application.Forms.Item(pVal.FormUID);
 
-                    new View.BaixaCPView(form);
+                    View.BaixaCPView baixaCPView = new View.BaixaCPView(form);
+
+                    m_BaixaCPViews.Add(formUID, baixaCPView);
+                }
+
+                if (pVal.FormTypeEx == "FrmMeioPagto")
+                {
+                    Form form = Application.Forms.Item(pVal.FormUID);
+
+                    new View.MeioPagtoView(form);
                 }
 
                 //Contas a Receber
@@ -225,8 +236,8 @@ namespace ChessIT.Financeiro.Controller
                         _staticJuros.Width = 60;
                         _staticJuros.LinkTo = "PORCJUROS";
 
-                        StaticText staticJuros = (StaticText) _staticJuros.Specific;
-                        staticJuros.Caption = "Juros";      
+                        StaticText staticJuros = (StaticText)_staticJuros.Specific;
+                        staticJuros.Caption = "Juros";
 
                         Item _aplicarMultaJuros = form.Items.Add("APLMJ", BoFormItemTypes.it_BUTTON);
                         _aplicarMultaJuros.Top = _grid.Top - 20;
@@ -268,7 +279,7 @@ namespace ChessIT.Financeiro.Controller
                         form.Freeze(true);
                         try
                         {
-                            Matrix _grid = (Matrix) form.Items.Item("20").Specific;
+                            Matrix _grid = (Matrix)form.Items.Item("20").Specific;
 
                             int row = _grid.GetNextSelectedRow();
 
@@ -286,7 +297,7 @@ namespace ChessIT.Financeiro.Controller
                                 double totalPagar = total + valorMulta + valorMora;
 
                                 ((EditText)_grid.Columns.Item("U_PorcentMulta").Cells.Item(row).Specific).String = porcMulta.ToString();
-                                ((EditText)_grid.Columns.Item("U_ValorMulta").Cells.Item(row).Specific).String = valorMulta. ToString();
+                                ((EditText)_grid.Columns.Item("U_ValorMulta").Cells.Item(row).Specific).String = valorMulta.ToString();
 
                                 ((EditText)_grid.Columns.Item("U_PrcJurosMora").Cells.Item(row).Specific).String = porcJuros.ToString();
                                 ((EditText)_grid.Columns.Item("U_ValorDoJurosMora").Cells.Item(row).Specific).String = valorMora.ToString();
@@ -294,7 +305,7 @@ namespace ChessIT.Financeiro.Controller
                                 ((EditText)_grid.Columns.Item("U_TotalAPagar").Cells.Item(row).Specific).String = totalPagar.ToString();
                             }
                         }
-                        catch  (Exception ex)
+                        catch (Exception ex)
                         {
                             Application.StatusBar.SetText("Erro ao calcular juros/multa: " + ex.Message);
                         }
@@ -307,7 +318,17 @@ namespace ChessIT.Financeiro.Controller
             }
         }
 
-        private static string GerarFormUID(string formType)
+        public static View.BaixaCPView GetMeioPagtoParent(string formUID)
+        {
+            string parentUID = formUID.Split('/')[1];
+
+            if (m_BaixaCPViews.ContainsKey(parentUID))
+                return m_BaixaCPViews[parentUID];
+            else
+                return null;
+        }
+
+        private static string GerarFormUID(string formType, string parentUID = "")
         {
             string result = string.Empty;
 
@@ -329,7 +350,10 @@ namespace ChessIT.Financeiro.Controller
                 }
             }
 
-            result = string.Format("Frm{0}-{1}", count, new Random().Next(999));
+            if (parentUID == "")
+                result = string.Format("Frm{0}-{1}", count, new Random().Next(999));
+            else
+                result = string.Format("Frm{0}-{1}/{2}", count, new Random().Next(999), parentUID);
 
             return result;
         }
@@ -337,6 +361,244 @@ namespace ChessIT.Financeiro.Controller
         public static double ConvertDouble(string doubleValue)
         {
             return double.Parse((doubleValue.Contains(",") ? doubleValue.Replace(".", "").Replace(",", ".") : doubleValue).Replace("R$", "").Replace("%", ""), System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        public static int ConvertInt(string intValue)
+        {
+            try
+            {
+                return Convert.ToInt32(intValue);
+            }
+            catch { return 0; }
+        }
+
+        public static DateTime ConvertDate(string dateValue)
+        {
+            try
+            {
+                if (dateValue.Contains("/"))
+                    return DateTime.ParseExact(dateValue, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                else
+                    return DateTime.ParseExact(dateValue, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch { return DateTime.MinValue; }
+        }
+
+        public static int ConvertIntCombo(ComboBox combo)
+        {
+            return combo.Selected == null ? 0 : Convert.ToInt32(combo.Selected.Value);
+        }
+
+        public static string ConvertStringCombo(ComboBox combo)
+        {
+            return combo.Selected == null ? "" : combo.Selected.Value;
+        }
+
+        public static System.Globalization.NumberFormatInfo DefaultSQLNumberFormat
+        {
+            get
+            {
+                System.Globalization.NumberFormatInfo result = new System.Globalization.NumberFormatInfo();
+                result.NumberDecimalSeparator = ".";
+
+                return result;
+            }
+        }
+
+        public static void ModelToDataTable<T>(DataTable dataTable, T model)
+        {
+            Type type = typeof(T);
+
+            var props = type.GetProperties();
+
+            string select = string.Empty;
+
+            List<string> values = new List<string>();
+
+            foreach (var prop in props)
+            {
+                if (prop.PropertyType == typeof(Boolean))
+                {
+                    values.Add((bool)prop.GetValue(model) ? "'Y'" : "'N'" + " as " + prop.Name);
+                }
+                else if (prop.PropertyType.IsEnum)
+                {
+                    values.Add(((int)prop.GetValue(model)).ToString());
+                }
+                else if (prop.PropertyType == typeof(DateTime))
+                {
+                    if (Convert.ToDateTime(prop.GetValue(model)) == DateTime.MinValue || Convert.ToDateTime(prop.GetValue(model)) == new DateTime(1899, 12, 30))
+                    {
+#if DEBUG
+                        values.Add("cast(null as date)" + " as " + prop.Name);
+#else
+                            values.Add("to_date(null)" + " as " + prop.Name);
+
+#endif
+                    }
+                    else
+                    {
+                        values.Add("cast ('" + Convert.ToDateTime(prop.GetValue(model)).ToString("yyyy-MM-dd") + "' as date)" + " as " + prop.Name);
+                    }
+                }
+                else if (prop.PropertyType == typeof(Int32))
+                {
+                    values.Add(prop.GetValue(model).ToString() + " as " + prop.Name);
+                }
+                else if (prop.PropertyType == typeof(double))
+                {
+                    if (Convert.ToDouble(prop.GetValue(model)) == 0)
+                    {
+                        values.Add("0.0" + " as " + prop.Name);
+                    }
+                    else
+                    {
+                        values.Add(string.Format("cast({0} as decimal(15,4)) " + " as " + prop.Name, Convert.ToDouble(prop.GetValue(model)).ToString(DefaultSQLNumberFormat)));
+                    }
+                }
+                else if (prop.PropertyType == typeof(string))
+                {
+                    values.Add("cast('" + prop.GetValue(model).ToString() + "' as nvarchar)" + " as " + prop.Name);
+                }
+            }
+
+#if DEBUG
+            select = " select " + string.Join(",", values.ToArray());
+#else
+            select = " select " + string.Join(",", values.ToArray()) + " from dummy";
+#endif
+            try
+            {
+                dataTable.ExecuteQuery(select);
+            }
+            catch (Exception ex)
+            {
+                System.IO.File.WriteAllText("SQL.txt", select);
+            }
+
+        }
+
+        public static void ListToMatrix<T>(DataTable dataTable, Matrix matrix, List<T> list, bool addRow = true)
+        {
+            Type type = typeof(T);
+
+            List<string> selects = new List<string>();
+
+            foreach (T model in list)
+            {
+                selects.Add(ModelToSelect<T>(model));  
+            }
+
+            if (addRow)
+                selects.Add(ModelToSelect<T>((T)Activator.CreateInstance(typeof(T))));
+
+            if (list.Count == 0)
+                dataTable.Rows.Clear();
+            else
+            {
+                try
+                {
+                    dataTable.ExecuteQuery(string.Join("union all", selects.ToArray()));
+                }
+                catch (Exception ex)
+                {
+                    System.IO.File.WriteAllText("SQL.txt", string.Join("union all", selects.ToArray()));
+                }
+            }
+
+            matrix.LoadFromDataSource();
+        }
+
+        private static string ModelToSelect<T>(T model)
+        {
+            Type type = typeof(T);
+
+            var props = type.GetProperties();
+
+            List<string> values = new List<string>();
+
+            foreach (var prop in props)
+            {
+                if (prop.PropertyType == typeof(Boolean))
+                {
+                    values.Add((bool)prop.GetValue(model) ? "'Y'" : "'N'");
+                }
+                else if (prop.PropertyType.IsEnum)
+                {
+                    values.Add(((int)prop.GetValue(model)).ToString());
+                }
+                else if (prop.PropertyType == typeof(DateTime))
+                {
+                    if (Convert.ToDateTime(prop.GetValue(model)) == DateTime.MinValue || Convert.ToDateTime(prop.GetValue(model)) == new DateTime(1899, 12, 30))
+                    {
+#if DEBUG
+                        values.Add("cast(null as date)");
+#else
+                            values.Add("to_date(null)");
+
+#endif
+                    }
+                    else
+                    {
+                        values.Add("cast ('" + Convert.ToDateTime(prop.GetValue(model)).ToString("yyyy-MM-dd") + "' as date)");
+                    }
+                }
+                else if (prop.PropertyType == typeof(Int32))
+                {
+                    values.Add(prop.GetValue(model).ToString() + " as " + prop.Name);
+                }
+                else if (prop.PropertyType == typeof(double))
+                {
+                    if (Convert.ToDouble(prop.GetValue(model)) == 0)
+                    {
+                        values.Add("0.0");
+                    }
+                    else
+                    {
+                        values.Add(string.Format("cast({0} as decimal(15,4))", Convert.ToDouble(prop.GetValue(model)).ToString(DefaultSQLNumberFormat)));
+                    }
+                }
+                else if (prop.PropertyType == typeof(string))
+                {
+                    values.Add("cast('" + prop.GetValue(model).ToString() + "' as nvarchar)");
+                }
+            }
+
+#if DEBUG
+            return " select " + string.Join(",", values.ToArray()) + " ";
+#else
+            return " select " + string.Join(",", values.ToArray()) +  " from dummy ";
+
+#endif
+        }
+
+        public static void OpenMeioPagtoView(string parentUID)
+        {
+            try
+            {   
+                string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmMeioPagto.srf";
+
+                if (File.Exists(srfPath) == false)
+                {
+                    throw new Exception("Arquivo SRF não encontrado. Verifique a instalação do addOn.");
+                }
+
+                string xml = File.ReadAllText(srfPath);
+
+                string formUID = GerarFormUID("FrmMeioPagto", parentUID);
+
+                xml = xml.Replace("uid=\"FrmMeioPagto\"", string.Format("uid=\"{0}\"", formUID));
+
+#if DEBUG
+                    xml = xml.Replace("from dummy", "");
+#endif
+
+                Application.LoadBatchActions(ref xml);
+            }
+            catch (Exception exception)
+            {
+                Application.StatusBar.SetText(exception.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+            }
         }
     }
 }

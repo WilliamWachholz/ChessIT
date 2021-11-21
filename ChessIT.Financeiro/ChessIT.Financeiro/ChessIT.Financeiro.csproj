@@ -73,10 +73,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\MainController.cs" />
+    <Compile Include="Model\BoletoModel.cs" />
+    <Compile Include="Model\CartaoModel.cs" />
+    <Compile Include="Model\ChequeModel.cs" />
+    <Compile Include="Model\DinheiroModel.cs" />
+    <Compile Include="Model\TransferenciaModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\BaixaCPView.cs" />
     <Compile Include="View\DocCPView.cs" />
+    <Compile Include="View\MeioPagtoView.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -107,6 +113,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SrfFiles\FrmDocCP.srf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SrfFiles\FrmMeioPagto.srf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

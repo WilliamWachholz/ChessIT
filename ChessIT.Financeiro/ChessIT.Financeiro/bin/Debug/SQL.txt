@@ -1,0 +1,1 @@
+ select cast ('2021-11-18' as date),0.0union all select cast ('2021-12-10' as date),0.0union all select cast(null as date),0.0union all select cast(null as date),0.0

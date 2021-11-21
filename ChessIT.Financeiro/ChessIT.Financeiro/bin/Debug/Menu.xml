@@ -2,6 +2,7 @@
 	<Menus>
 		<action type="add">
 			<Menu Checked="0" Enabled="1" FatherUID="43538" Position="5" String="Criar CP – Doc Financeiro" Type="1" UniqueID="FrmDocCP" />
+			<Menu Checked="0" Enabled="1" FatherUID="43538" Position="6" String="Baixar Contas a Pagar" Type="1" UniqueID="FrmBaixaCP" />
 		</action>
 	</Menus>
 </Application>

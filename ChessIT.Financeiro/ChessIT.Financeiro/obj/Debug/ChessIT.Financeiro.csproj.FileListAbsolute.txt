@@ -11,3 +11,5 @@ C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Debug\ChessIT.Finance
 C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Debug\ChessIT.Financeiro.pdb
 C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Debug\Menu.xml
 C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Debug\SrfFiles\FrmDocCP.srf
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Debug\SrfFiles\FrmBaixaCP.srf
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Debug\SrfFiles\FrmMeioPagto.srf
