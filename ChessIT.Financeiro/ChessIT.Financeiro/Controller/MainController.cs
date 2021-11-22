@@ -419,7 +419,7 @@ namespace ChessIT.Financeiro.Controller
             {
                 if (prop.PropertyType == typeof(Boolean))
                 {
-                    values.Add((bool)prop.GetValue(model) ? "'Y'" : "'N'" + " as " + prop.Name);
+                    values.Add((bool)prop.GetValue(model) ? "'Y'" : "'N'" + " as " + @"""" + prop.Name + @"""");
                 }
                 else if (prop.PropertyType.IsEnum)
                 {
@@ -430,35 +430,35 @@ namespace ChessIT.Financeiro.Controller
                     if (Convert.ToDateTime(prop.GetValue(model)) == DateTime.MinValue || Convert.ToDateTime(prop.GetValue(model)) == new DateTime(1899, 12, 30))
                     {
 #if DEBUG
-                        values.Add("cast(null as date)" + " as " + prop.Name);
+                        values.Add("cast(null as date)" + " as " + @"""" + prop.Name + @"""");
 #else
-                            values.Add("to_date(null)" + " as " + prop.Name);
+                        values.Add("to_date(null)" + " as " + @"""" + prop.Name + @"""");
 
 #endif
                     }
                     else
                     {
-                        values.Add("cast ('" + Convert.ToDateTime(prop.GetValue(model)).ToString("yyyy-MM-dd") + "' as date)" + " as " + prop.Name);
+                        values.Add("cast ('" + Convert.ToDateTime(prop.GetValue(model)).ToString("yyyy-MM-dd") + "' as date)" + " as " + @"""" + prop.Name + @"""");
                     }
                 }
                 else if (prop.PropertyType == typeof(Int32))
                 {
-                    values.Add(prop.GetValue(model).ToString() + " as " + prop.Name);
+                    values.Add(prop.GetValue(model).ToString() + " as " + @"""" + prop.Name + @"""");
                 }
                 else if (prop.PropertyType == typeof(double))
                 {
                     if (Convert.ToDouble(prop.GetValue(model)) == 0)
                     {
-                        values.Add("0.0" + " as " + prop.Name);
+                        values.Add("0.0" + " as " + @"""" + prop.Name + @"""");
                     }
                     else
                     {
-                        values.Add(string.Format("cast({0} as decimal(15,4)) " + " as " + prop.Name, Convert.ToDouble(prop.GetValue(model)).ToString(DefaultSQLNumberFormat)));
+                        values.Add(string.Format("cast({0} as decimal(15,4)) " + " as " + @"""" + prop.Name + @"""", Convert.ToDouble(prop.GetValue(model)).ToString(DefaultSQLNumberFormat)));
                     }
                 }
                 else if (prop.PropertyType == typeof(string))
                 {
-                    values.Add("cast('" + prop.GetValue(model).ToString() + "' as nvarchar)" + " as " + prop.Name);
+                    values.Add("cast('" + prop.GetValue(model).ToString() + "' as varchar(254))" + " as " + @"""" + prop.Name + @"""");
                 }
             }
 

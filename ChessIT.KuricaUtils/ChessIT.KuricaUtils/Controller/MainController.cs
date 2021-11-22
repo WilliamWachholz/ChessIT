@@ -15,6 +15,7 @@ namespace ChessIT.KuricaUtils.Controller
         public static SAPbobsCOM.Company Company;
 
         private int m_UltimaProposta = 0;
+        private string m_UltimaPropostaCardCode = "";
 
         public MainController()
            : base()
@@ -163,6 +164,7 @@ namespace ChessIT.KuricaUtils.Controller
 
                     Model.PropostaModel propostaModel = new Model.PropostaModel();
                     propostaModel.Proposta = m_UltimaProposta;
+                    propostaModel.CardCode = m_UltimaPropostaCardCode;
 
                     new View.PropostaContratoView(form, propostaModel);
                 }
@@ -196,33 +198,43 @@ namespace ChessIT.KuricaUtils.Controller
                 {
                     if (pVal.ItemUID == "BTCTR")
                     {
-                        try
+                        Form form = Application.Forms.Item(pVal.FormUID);
+
+                        if (form.Mode == BoFormMode.fm_OK_MODE)
                         {
-                            string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmPropostaContrato.srf";
-
-                            if (File.Exists(srfPath) == false)
+                            try
                             {
-                                throw new Exception("Arquivo SRF não encontrado. Verifique a instalação do addOn.");
-                            }
+                                string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmPropostaContrato.srf";
 
-                            string xml = File.ReadAllText(srfPath);
+                                if (File.Exists(srfPath) == false)
+                                {
+                                    throw new Exception("Arquivo SRF não encontrado. Verifique a instalação do addOn.");
+                                }
 
-                            string aprovacaoUID = GerarFormUID("FrmPropostaContrato");
+                                string xml = File.ReadAllText(srfPath);
 
-                            xml = xml.Replace("uid=\"FrmPropostaContrato\"", string.Format("uid=\"{0}\"", aprovacaoUID));
+                                string aprovacaoUID = GerarFormUID("FrmPropostaContrato");
+
+                                xml = xml.Replace("uid=\"FrmPropostaContrato\"", string.Format("uid=\"{0}\"", aprovacaoUID));
 
 #if DEBUG
                         xml = xml.Replace("from dummy", "");
 #endif
-                            Form form = Application.Forms.Item(pVal.FormUID);
 
-                            m_UltimaProposta = Convert.ToInt32(form.DataSources.DBDataSources.Item("OQUT").GetValue("DocEntry", 0));
 
-                            Application.LoadBatchActions(ref xml);
+                                m_UltimaProposta = Convert.ToInt32(form.DataSources.DBDataSources.Item("OQUT").GetValue("DocEntry", 0));
+                                m_UltimaPropostaCardCode = form.DataSources.DBDataSources.Item("OQUT").GetValue("CardCode", 0);
+
+                                Application.LoadBatchActions(ref xml);
+                            }
+                            catch (Exception exception)
+                            {
+                                Application.StatusBar.SetText(exception.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                            }
                         }
-                        catch (Exception exception)
+                        else
                         {
-                            Application.StatusBar.SetText(exception.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                            Application.StatusBar.SetText("Adicione/atualize a proposta para gerar contrato.");
                         }
                     }
                 }

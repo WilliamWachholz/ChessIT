@@ -12,6 +12,8 @@ namespace ChessIT.KuricaUtils.Model
 
         public int Contrato { get; set; }
 
+        public string CardCode { get; set; }
+
         public string Resultado { get; set; }
     }
 }

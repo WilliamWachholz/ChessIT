@@ -517,7 +517,7 @@ namespace ChessIT.Financeiro.View
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
                                     OPCH.""DocDueDate"" AS ""Data Vcto."",
-		                            cast(PCH6.""InstlmntID"" as nvarchar(max)) || '/' || cast((select count(*) from PCH6 aux where aux.""DocEntry"" = OPCH.""DocEntry"") as nvarchar(max)) AS ""Parcela"",
+		                            cast(PCH6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from PCH6 aux where aux.""DocEntry"" = OPCH.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            PCH6.""InsTotal"" AS ""Valor Parcela"",
 		                            0.0 as ""Valor Desc."",
 		                            0.0 as ""Valor Multa"",
@@ -547,10 +547,10 @@ namespace ChessIT.Financeiro.View
                                     ODPO.""BPLName"" AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
 		                            ODPO.""DocEntry"" AS ""Nº SAP"",
-		                            '' AS ""Nº NF"",
+		                            0 AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
                                     ODPO.""DocDueDate"" AS ""Data Vcto."",
-		                            cast(DPO6.""InstlmntID"" as nvarchar(max)) || '/' || cast((select count(*) from DPO6 aux where aux.""DocEntry"" = ODPO.""DocEntry"") as nvarchar(max)) AS ""Parcela"",
+		                            cast(DPO6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from DPO6 aux where aux.""DocEntry"" = ODPO.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            DPO6.""InsTotal"" AS ""Valor Parcela"",
 		                            0.0 as ""Valor Desc."",
 		                            0.0 as ""Valor Multa"",
@@ -741,7 +741,7 @@ namespace ChessIT.Financeiro.View
             {
                 Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
 
-                int linha = 0;
+                int linha = -1;
 
                 try
                 {
@@ -749,7 +749,7 @@ namespace ChessIT.Financeiro.View
                 }
                 catch { }
 
-                if (linha == 0)
+                if (linha == -1)
                 {
                     Controller.MainController.Application.StatusBar.SetText("Nenhuma linha selecionada");
                     return;

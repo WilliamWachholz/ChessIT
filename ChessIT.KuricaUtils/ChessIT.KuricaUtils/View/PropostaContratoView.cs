@@ -143,7 +143,7 @@ namespace ChessIT.KuricaUtils.View
                                             return;
                                         }
 
-                                        Controller.MainController.Application.StatusBar.SetText("Criando contrato");
+                                        Controller.MainController.Application.StatusBar.SetText("Criando contrato", BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Warning);
 
                                         Form.Freeze(true);
                                         try
@@ -217,11 +217,11 @@ namespace ChessIT.KuricaUtils.View
                                                         linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(7).Value);
                                                         linha.UnitPrice = Convert.ToDouble(recordSet.Fields.Item(9).Value);
 
-#endif
+#else
                                                         linha.ItemNo = recordSet.Fields.Item(1).Value.ToString();
                                                         linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(2).Value);
                                                         linha.UnitPrice = Convert.ToDouble(recordSet.Fields.Item(4).Value);
-
+#endif
                                                         recordSet.MoveNext();
                                                     }
 
@@ -346,7 +346,10 @@ namespace ChessIT.KuricaUtils.View
 
                                         recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-                                        recordSet.DoQuery(@"select ""PayMethCod"", ""Descript"" from OPYM where ""Type"" = 'I' ORDER BY ""Descript""");
+                                        recordSet.DoQuery(string.Format(@"select ""PayMethCod"", ""Descript"" from OPYM 
+                                                                        inner join CRD2 ON CRD2.""PymCode"" = OPYM.""PayMethCod""
+                                                                        where CRD2.""CardCode"" = '{0}' AND OPYM.""Type"" = 'I' AND OPYM.""Active"" = 'Y'
+                                                                        order by OPYM.""Descript""", m_Proposta.CardCode));
 
                                         while (!recordSet.EoF)
                                         {
