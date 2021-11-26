@@ -211,6 +211,18 @@ namespace ChessIT.KuricaUtils.View
 
                                         choose.SetConditions(conditions);
 
+                                        choose = (ChooseFromList)this.Form.ChooseFromLists.Item("CFL_4");
+
+                                        conditions = new Conditions();
+
+                                        condition = conditions.Add();
+
+                                        condition.Alias = "CardType";
+                                        condition.Operation = BoConditionOperation.co_EQUAL;
+                                        condition.CondVal = "S";
+
+                                        choose.SetConditions(conditions);
+
 #if !DEBUG
                                         ((EditText)Form.Items.Item("etFilial").Specific).String = "Kurica Ambiental (F)";
 #endif
@@ -253,6 +265,7 @@ namespace ChessIT.KuricaUtils.View
             
             string query = string.Format(@" select  '{0}' AS ""#"",
                                             OWDD.""WddCode"",
+                                            ODRF.""DocEntry"" AS ""Nº Interno"",
 		                                    ODRF.""DocEntry"" AS ""Nº Doc"",
 		                                    ODRF.""DocDate"" AS ""Data"",
 		                                    ODRF.""CardName"" AS ""Fornecedor"",
@@ -298,7 +311,8 @@ namespace ChessIT.KuricaUtils.View
                 query = string.Format(@"select * from (
                                         select  '{0}' AS ""#"",
                                             OWDD.""WddCode"",
-		                                    ODRF.""DocEntry"" AS ""Nº Doc"",
+                                            ODRF.""DocEntry"" AS ""Nº Interno"",
+		                                    ODRF.""DocNum"" AS ""Nº Doc"",
 		                                    ODRF.""DocDate"" AS ""Data"",
 		                                    ODRF.""CardName"" AS ""Fornecedor"",
 		                                    ODRF.""Comments"" AS ""Observação"",
@@ -320,11 +334,10 @@ namespace ChessIT.KuricaUtils.View
 		                                    '' AS ""Placa""
                                     from OWDD
                                     inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
-                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
-                                    inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
+                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""                                    
                                     where ODRF.""ObjType"" = 22
                                     and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
-                                    and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')                                    
+                                    and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
                                     and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
                                     --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
@@ -332,6 +345,7 @@ namespace ChessIT.KuricaUtils.View
                                     union
                                     select  'N' AS ""#"",
                                         OWDD.""WddCode"",
+                                        NULL AS ""Nº Interno"",
 		                                NULL AS ""Nº Doc"",
 		                                NULL AS ""Data"",
 		                                '' AS ""Fornecedor"",
@@ -375,6 +389,7 @@ namespace ChessIT.KuricaUtils.View
                 Grid gridDetalhes = (Grid)Form.Items.Item("gdDetalhes").Specific;
 
                 gridDetalhes.Columns.Item("WddCode").Visible = false;
+                gridDetalhes.Columns.Item("Nº Interno").Editable = false;
                 gridDetalhes.Columns.Item("Nº Doc").Editable = false;
                 gridDetalhes.Columns.Item("Data").Editable = false;
                 gridDetalhes.Columns.Item("Fornecedor").Editable = false;
@@ -389,7 +404,10 @@ namespace ChessIT.KuricaUtils.View
                 gridDetalhes.Columns.Item("Contrato").Editable = false;
                 gridDetalhes.Columns.Item("Placa").Editable = false;
 
-                gridDetalhes.Columns.Item("#").Type = BoGridColumnType.gct_CheckBox;                
+                gridDetalhes.Columns.Item("#").Type = BoGridColumnType.gct_CheckBox;
+
+                ((EditTextColumn)gridDetalhes.Columns.Item("Nº Interno")).LinkedObjectType = "112";
+
             }
             catch (Exception ex)
             {

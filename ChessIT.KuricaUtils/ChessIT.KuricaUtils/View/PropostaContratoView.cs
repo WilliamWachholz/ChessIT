@@ -89,17 +89,17 @@ namespace ChessIT.KuricaUtils.View
                                             return;
                                         }
 
-                                        if (Form.DataSources.UserDataSources.Item("condPgto").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Condição Pagamento' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("condPgto").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Condição Pagamento' não informado");
+                                        //    return;
+                                        //}
 
-                                        if (Form.DataSources.UserDataSources.Item("forPgto").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Forma Pagamento' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("forPgto").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Forma Pagamento' não informado");
+                                        //    return;
+                                        //}
 
                                         if (Form.DataSources.UserDataSources.Item("clSeg").Value == "")
                                         {
@@ -143,6 +143,8 @@ namespace ChessIT.KuricaUtils.View
                                             return;
                                         }
 
+                                        Controller.MainController.Application.SendKeys("{TAB}");
+
                                         Controller.MainController.Application.StatusBar.SetText("Criando contrato", BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Warning);
 
                                         Form.Freeze(true);
@@ -156,19 +158,22 @@ namespace ChessIT.KuricaUtils.View
                                             {
                                                 SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-                                                string query = @"select OQUT.""CardCode"",
-                                                                        OQUT.""U_TitProp"",
-                                                                        OQUT.""U_ModPropGG"",
-						                                                OQUT.""U_ModPropCC"",
-						                                                OQUT.""U_ModPropID"",
-						                                                OQUT.""U_ModPropRE"",
-                                                                        QUT1.""ItemCode"",
-                                                                        QUT1.""Quantity"",
-                                                                        QUT1.""UomCode"",
-                                                                        QUT1.""Price""
-                                                                 from OQUT
-                                                                 inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
-                                                        where OQUT.""DocEntry"" = " + m_Proposta.Proposta.ToString();
+                                                string query = string.Format(@"select   OQUT.""CardCode"",
+                                                                                        OQUT.""U_TitProp"",
+                                                                                        OQUT.""U_ModPropGG"",
+						                                                                OQUT.""U_ModPropCC"",
+						                                                                OQUT.""U_ModPropID"",
+						                                                                OQUT.""U_ModPropRE"",
+                                                                                        QUT1.""ItemCode"",
+                                                                                        QUT1.""Quantity"",
+                                                                                        QUT1.""UomCode"",
+                                                                                        QUT1.""Price"",
+                                                                                        ""@ROTAS"".""U_RotaTransp"",
+                                                                                        ""@ROTAS"".""U_Motorista""
+                                                                                 from OQUT
+                                                                                 inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
+                                                                                 left join ""@ROTAS"" on ""@ROTAS"".""Code"" = '{0}'
+                                                                                 where OQUT.""DocEntry"" = {1}", Form.DataSources.UserDataSources.Item("rota").Value, m_Proposta.Proposta.ToString());
 
 #if DEBUG
                                                 query = @"select OQUT.""CardCode"",                                                                        
@@ -217,6 +222,21 @@ namespace ChessIT.KuricaUtils.View
                                                         linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(7).Value);
                                                         linha.UnitPrice = Convert.ToDouble(recordSet.Fields.Item(9).Value);
 
+
+                                                        if (!Form.DataSources.UserDataSources.Item("tpModal").Value.Equals(""))
+                                                            linha.UserFields.Item("U_TipoModal").Value = Form.DataSources.UserDataSources.Item("tpModal").Value;
+
+                                                        if (!Form.DataSources.UserDataSources.Item("numPM").Value.Equals(""))
+                                                        {
+                                                            linha.UserFields.Item("U_NumColetasMes").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value);
+                                                            linha.UserFields.Item("U_QtdColMes").Value = linha.PlannedQuantity * Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value);
+                                                            linha.UserFields.Item("U_NumColetasTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value) * Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
+                                                        }
+
+
+                                                        blanketAgreement.UserFields.Item("U_Transportadora").Value = recordSet.Fields.Item(10).Value;
+                                                        blanketAgreement.UserFields.Item("U_Motorista").Value = recordSet.Fields.Item(11).Value;
+
 #else
                                                         linha.ItemNo = recordSet.Fields.Item(1).Value.ToString();
                                                         linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(2).Value);
@@ -225,25 +245,28 @@ namespace ChessIT.KuricaUtils.View
                                                         recordSet.MoveNext();
                                                     }
 
+                                                    blanketAgreement.Status = SAPbobsCOM.BlanketAgreementStatusEnum.asApproved;
                                                     blanketAgreement.StartDate = Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtIni").Value);
                                                     blanketAgreement.EndDate = Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtFim").Value);
-                                                    blanketAgreement.PaymentTerms = Convert.ToInt32(Form.DataSources.UserDataSources.Item("condPgto").Value);
-                                                    blanketAgreement.PaymentMethod = Form.DataSources.UserDataSources.Item("forPgto").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("condPgto").Value.Equals(""))
+                                                        blanketAgreement.PaymentTerms = Convert.ToInt32(Form.DataSources.UserDataSources.Item("condPgto").Value);
+                                                    if (!Form.DataSources.UserDataSources.Item("forPgto").Value.Equals(""))
+                                                        blanketAgreement.PaymentMethod = Form.DataSources.UserDataSources.Item("forPgto").Value;
 
 #if !DEBUG
-
                                                     blanketAgreement.UserFields.Item("U_CentroCusto").Value = Form.DataSources.UserDataSources.Item("tpCtr").Value;
                                                     blanketAgreement.UserFields.Item("U_CCContrato").Value = Form.DataSources.UserDataSources.Item("contrato").Value;                                                    
                                                     blanketAgreement.UserFields.Item("U_MesesContrato").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);                                                    
                                                     blanketAgreement.UserFields.Item("U_Rota").Value = Form.DataSources.UserDataSources.Item("rota").Value;
                                                     blanketAgreement.UserFields.Item("U_HoraSaidaOS").Value = Form.DataSources.UserDataSources.Item("hrSaida").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetSeg").Value = Form.DataSources.UserDataSources.Item("clSeg").Value == "Y" ? "Sim" : "Não";
-                                                    blanketAgreement.UserFields.Item("U_DiaColetTerc").Value = Form.DataSources.UserDataSources.Item("clTerca").Value == "Y" ? "Sim" : "Não";
-                                                    blanketAgreement.UserFields.Item("U_DiaColetQuart").Value = Form.DataSources.UserDataSources.Item("clQuarta").Value == "Y" ? "Sim" : "Não";
-                                                    blanketAgreement.UserFields.Item("U_DiaColetQuin").Value = Form.DataSources.UserDataSources.Item("clQuinta").Value == "Y" ? "Sim" : "Não";
-                                                    blanketAgreement.UserFields.Item("U_DiaColetSext").Value = Form.DataSources.UserDataSources.Item("clSexta").Value == "Y" ? "Sim" : "Não";
-                                                    blanketAgreement.UserFields.Item("U_DiaColetSab").Value = Form.DataSources.UserDataSources.Item("clSab").Value == "Y" ? "Sim" : "Não";
-                                                    blanketAgreement.UserFields.Item("U_DiaColetDom").Value = Form.DataSources.UserDataSources.Item("clDom").Value == "Y" ? "Sim" : "Não";
+                                                    blanketAgreement.UserFields.Item("U_DiaColetSeg").Value = Form.DataSources.UserDataSources.Item("clSeg").Value;
+                                                    blanketAgreement.UserFields.Item("U_DiaColetTerc").Value = Form.DataSources.UserDataSources.Item("clTerca").Value;
+                                                    blanketAgreement.UserFields.Item("U_DiaColetQuart").Value = Form.DataSources.UserDataSources.Item("clQuarta").Value;
+                                                    blanketAgreement.UserFields.Item("U_DiaColetQuin").Value = Form.DataSources.UserDataSources.Item("clQuinta").Value;
+                                                    blanketAgreement.UserFields.Item("U_DiaColetSext").Value = Form.DataSources.UserDataSources.Item("clSexta").Value;
+                                                    blanketAgreement.UserFields.Item("U_DiaColetSab").Value = Form.DataSources.UserDataSources.Item("clSab").Value;
+                                                    blanketAgreement.UserFields.Item("U_DiaColetDom").Value = Form.DataSources.UserDataSources.Item("clDom").Value;
+
 
 #endif
 
@@ -268,6 +291,12 @@ namespace ChessIT.KuricaUtils.View
                                                 {
                                                     m_Proposta.Resultado = "Proposta não encontrada";
                                                 }
+
+                                                Controller.MainController.OpenResultadoView(m_Proposta);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                m_Proposta.Resultado = "Erro ao criar contrato: " + ex.Message;
 
                                                 Controller.MainController.OpenResultadoView(m_Proposta);
                                             }
@@ -400,6 +429,16 @@ namespace ChessIT.KuricaUtils.View
                                         ((ComboBox)Form.Items.Item("cbDomingo").Specific).ValidValues.Add("", "[Selecionar]");
                                         ((ComboBox)Form.Items.Item("cbDomingo").Specific).ValidValues.Add("Sim", "Sim");
                                         ((ComboBox)Form.Items.Item("cbDomingo").Specific).ValidValues.Add("Não", "Não");
+
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("", "[Selecionar]");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Toco/Truck", "Toco/Truck");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Basculante", "Basculante");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Compactador", "Compactador");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Pipa", "Pipa");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Poliguindaste", "Poliguindaste");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Rollon/Rolloff", "Rollon/Rolloff");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Tanque", "Tanque");
+                                        ((ComboBox)Form.Items.Item("cbTipMod").Specific).ValidValues.Add("Julieta", "Julieta");                                        
                                     }
                                     catch { }
                                     finally

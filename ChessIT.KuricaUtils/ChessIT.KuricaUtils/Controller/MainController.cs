@@ -180,7 +180,8 @@ namespace ChessIT.KuricaUtils.Controller
                         Item _buttonGerarContrato = form.Items.Add("BTCTR", BoFormItemTypes.it_BUTTON);
                         _buttonGerarContrato.Top = form.Items.Item("10000329").Top - 20;
                         _buttonGerarContrato.Left = form.Items.Item("10000329").Left;
-                        _buttonGerarContrato.Width = 90;                        
+                        _buttonGerarContrato.Width = 90;
+                        _buttonGerarContrato.BackColor = 14915841;
 
                         Button buttonGerarContrato = (Button)_buttonGerarContrato.Specific;
                         buttonGerarContrato.Caption = "Gerar Contrato";
