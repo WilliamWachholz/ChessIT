@@ -77,11 +77,11 @@ namespace ChessIT.KuricaUtils.View
                                             return;
                                         }
 
-                                        if (Form.DataSources.UserDataSources.Item("rota").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Rota' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("rota").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Rota' não informado");
+                                        //    return;
+                                        //}
 
                                         if (Form.DataSources.UserDataSources.Item("hrSaida").Value == "")
                                         {
@@ -173,7 +173,9 @@ namespace ChessIT.KuricaUtils.View
                                                                                  from OQUT
                                                                                  inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
                                                                                  left join ""@ROTAS"" on ""@ROTAS"".""Code"" = '{0}'
-                                                                                 where OQUT.""DocEntry"" = {1}", Form.DataSources.UserDataSources.Item("rota").Value, m_Proposta.Proposta.ToString());
+                                                                                 where OQUT.""DocEntry"" = {1}",
+                                                                                    Form.DataSources.UserDataSources.Item("rota").Value, 
+                                                                                    m_Proposta.Proposta.ToString());
 
 #if DEBUG
                                                 query = @"select OQUT.""CardCode"",                                                                        
@@ -231,12 +233,15 @@ namespace ChessIT.KuricaUtils.View
                                                             linha.UserFields.Item("U_NumColetasMes").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value);
                                                             linha.UserFields.Item("U_QtdColMes").Value = linha.PlannedQuantity * Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value);
                                                             linha.UserFields.Item("U_NumColetasTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value) * Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
+
+                                                            linha.UserFields.Item("U_QtdColTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value) * Convert.ToDouble(linha.UserFields.Item("U_QtdColMes").Value);
                                                         }
 
-
-                                                        blanketAgreement.UserFields.Item("U_Transportadora").Value = recordSet.Fields.Item(10).Value;
-                                                        blanketAgreement.UserFields.Item("U_Motorista").Value = recordSet.Fields.Item(11).Value;
-
+                                                        if (recordSet.Fields.Item(10).Value.ToString() != "")
+                                                            blanketAgreement.UserFields.Item("U_Transportadora").Value = recordSet.Fields.Item(10).Value;
+                                                        if (recordSet.Fields.Item(10).Value.ToString() != "")
+                                                            blanketAgreement.UserFields.Item("U_Motorista").Value = recordSet.Fields.Item(11).Value;
+                                                        
 #else
                                                         linha.ItemNo = recordSet.Fields.Item(1).Value.ToString();
                                                         linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(2).Value);
@@ -256,8 +261,9 @@ namespace ChessIT.KuricaUtils.View
 #if !DEBUG
                                                     blanketAgreement.UserFields.Item("U_CentroCusto").Value = Form.DataSources.UserDataSources.Item("tpCtr").Value;
                                                     blanketAgreement.UserFields.Item("U_CCContrato").Value = Form.DataSources.UserDataSources.Item("contrato").Value;                                                    
-                                                    blanketAgreement.UserFields.Item("U_MesesContrato").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);                                                    
-                                                    blanketAgreement.UserFields.Item("U_Rota").Value = Form.DataSources.UserDataSources.Item("rota").Value;
+                                                    blanketAgreement.UserFields.Item("U_MesesContrato").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
+                                                    if (!Form.DataSources.UserDataSources.Item("rota").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_Rota").Value = Form.DataSources.UserDataSources.Item("rota").Value;
                                                     blanketAgreement.UserFields.Item("U_HoraSaidaOS").Value = Form.DataSources.UserDataSources.Item("hrSaida").Value;
                                                     blanketAgreement.UserFields.Item("U_DiaColetSeg").Value = Form.DataSources.UserDataSources.Item("clSeg").Value;
                                                     blanketAgreement.UserFields.Item("U_DiaColetTerc").Value = Form.DataSources.UserDataSources.Item("clTerca").Value;

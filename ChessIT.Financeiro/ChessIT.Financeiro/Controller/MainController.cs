@@ -161,6 +161,34 @@ namespace ChessIT.Financeiro.Controller
                 }
             }
 
+            if (pVal.MenuUID.Equals("FrmRenegCP") && !pVal.BeforeAction)
+            {
+                try
+                {
+                    string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmRenegCP.srf";
+
+                    if (File.Exists(srfPath) == false)
+                    {
+                        throw new Exception("Arquivo SRF não encontrado. Verifique a instalação do addOn.");
+                    }
+
+                    string xml = File.ReadAllText(srfPath);
+
+                    string formUID = GerarFormUID("FrmRenegCP");
+
+                    xml = xml.Replace("uid=\"FrmRenegCP\"", string.Format("uid=\"{0}\"", formUID));
+
+#if DEBUG
+                    xml = xml.Replace("from dummy", "");
+#endif
+
+                    Application.LoadBatchActions(ref xml);
+                }
+                catch (Exception exception)
+                {
+                    Application.StatusBar.SetText(exception.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                }
+            }
         }
 
         private void HandleFormLoadEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
@@ -183,6 +211,13 @@ namespace ChessIT.Financeiro.Controller
                     View.BaixaCPView baixaCPView = new View.BaixaCPView(form);
 
                     m_BaixaCPViews.Add(formUID, baixaCPView);
+                }
+
+                if (pVal.FormTypeEx == "FrmRenegCP")
+                {
+                    Form form = Application.Forms.Item(pVal.FormUID);
+
+                    View.RenegCPView renegCPView = new View.RenegCPView(form);                    
                 }
 
                 if (pVal.FormTypeEx == "FrmMeioPagto")

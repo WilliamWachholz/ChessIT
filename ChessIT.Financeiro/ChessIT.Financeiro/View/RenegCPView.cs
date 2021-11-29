@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using SAPbouiCOM;
 
 namespace ChessIT.Financeiro.View
 {
-    class BaixaCPView
+    class RenegCPView
     {
         Form Form;
 
@@ -15,22 +16,13 @@ namespace ChessIT.Financeiro.View
 
         bool bloqueado = false;
 
-        private List<Model.ChequeModel> m_ChequeList = new List<Model.ChequeModel>();
-        private List<Model.CartaoModel> m_CartaoList = new List<Model.CartaoModel>();
-        private Model.TransferenciaModel m_TransferenciaModel = new Model.TransferenciaModel();
-        private Model.DinheiroModel m_DinheiroModel = new Model.DinheiroModel();
-        private Model.BoletoModel m_BoletoModel = new Model.BoletoModel();
-
-        private double m_Encargo = 0;
-
-        private bool m_DividirTransacoesCartao = false;
-
         private Dictionary<int, double> m_TotaisParcela = new Dictionary<int, double>();
         private Dictionary<int, double> m_TotaisDesconto = new Dictionary<int, double>();
         private Dictionary<int, double> m_TotaisJuros = new Dictionary<int, double>();
+        private Dictionary<int, double> m_TotaisMulta = new Dictionary<int, double>();
         private Dictionary<int, double> m_TotaisPagar = new Dictionary<int, double>();
 
-        public BaixaCPView(Form form)
+        public RenegCPView(Form form)
         {
             this.Form = form;
 
@@ -42,108 +34,6 @@ namespace ChessIT.Financeiro.View
             Form.EnableMenu("1286", false);
 
             Controller.MainController.Application.ItemEvent += HandleItemEvent;
-        }
-
-        public List<Model.ChequeModel> GetChequeList()
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            return m_ChequeList;
-        }
-
-        public void SetChequeList(List<Model.ChequeModel> chequeList)
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            m_ChequeList = chequeList;
-        }
-
-        public List<Model.CartaoModel> GetCartaoList()
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            return m_CartaoList;
-        }
-
-        public void SetCartaoList(List<Model.CartaoModel> cartaoList)
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            m_CartaoList = cartaoList;
-        }
-
-        public Model.TransferenciaModel GetTransferenciaModel()
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            return m_TransferenciaModel;
-        }
-
-        public void SetTransferenciaModel(Model.TransferenciaModel transferenciaModel)
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            m_TransferenciaModel = transferenciaModel;
-        }
-
-        public Model.BoletoModel GetBoletoModel()
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            return m_BoletoModel;
-        }
-
-        public void SetBoletoModel(Model.BoletoModel boletoModel)
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            m_BoletoModel = boletoModel;
-        }
-
-        public Model.DinheiroModel GetDinheiroModel()
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            return m_DinheiroModel;
-        }
-
-        public void SetDinheiroModel(Model.DinheiroModel dinheiroModel)
-        {
-            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-            m_DinheiroModel = dinheiroModel;
-        }
-
-        public double GetTotalPagar()
-        {
-            return Controller.MainController.ConvertDouble(Form.DataSources.UserDataSources.Item("totalPagar").Value);
-        }
-
-        public string GetFornecedor()
-        {
-            string fornecedor = ((EditText)Form.Items.Item("etForCod").Specific).String;
-
-            return fornecedor;
-        }
-
-        public double GetEncargo()
-        {
-            return m_Encargo;
-        }
-
-        public void SetEncargo(double valor)
-        {
-            m_Encargo = valor;
-        }
-
-        public bool GetDividirTransacoesCartao()
-        {
-            return m_DividirTransacoesCartao;
-        }
-
-        public void SetDividirTransacoesCartao(bool valor)
-        {
-            m_DividirTransacoesCartao = valor;
         }
 
         private void HandleItemEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
@@ -174,7 +64,7 @@ namespace ChessIT.Financeiro.View
                                 {
                                     if (pVal.ItemUID == "btPesquisa")
                                     {
-                                        Pesquisar();
+                                        Pesquisar();                                    
                                     }
 
                                     if (pVal.ItemUID == "btLimpar")
@@ -182,19 +72,14 @@ namespace ChessIT.Financeiro.View
                                         Limpar();
                                     }
 
-                                    if (pVal.ItemUID == "btMeioPgto")
-                                    {
-                                        Controller.MainController.OpenMeioPagtoView(Form.UniqueID);
-                                    }
-
                                     if (pVal.ItemUID == "btAplJM")
                                     {
                                         AplicarMultaJuros();
                                     }
 
-                                    if (pVal.ItemUID == "btPagar")
+                                    if (pVal.ItemUID == "btReneg")
                                     {
-                                        Pagar();
+                                        Renegociar();
                                     }
 
                                     if (pVal.ItemUID == "gridTitulo")
@@ -208,6 +93,7 @@ namespace ChessIT.Financeiro.View
                                                 double valorParcela = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Parcela")).GetText(pVal.Row));
                                                 double valorDesc = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Desc.")).GetText(pVal.Row));
                                                 double valorJuros = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Juros")).GetText(pVal.Row));
+                                                double valorMulta = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Multa")).GetText(pVal.Row));
                                                 double valorPagar = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(pVal.Row));
 
                                                 if (!m_TotaisParcela.ContainsKey(pVal.Row))
@@ -219,6 +105,11 @@ namespace ChessIT.Financeiro.View
                                                     m_TotaisJuros.Add(pVal.Row, 0);
 
                                                 m_TotaisJuros[pVal.Row] = valorJuros;
+
+                                                if (!m_TotaisMulta.ContainsKey(pVal.Row))
+                                                    m_TotaisMulta.Add(pVal.Row, 0);
+
+                                                m_TotaisMulta[pVal.Row] = valorMulta;
 
                                                 if (!m_TotaisDesconto.ContainsKey(pVal.Row))
                                                     m_TotaisDesconto.Add(pVal.Row, 0);
@@ -237,6 +128,9 @@ namespace ChessIT.Financeiro.View
 
                                                 if (m_TotaisJuros.ContainsKey(pVal.Row))
                                                     m_TotaisJuros.Remove(pVal.Row);
+
+                                                if (m_TotaisMulta.ContainsKey(pVal.Row))
+                                                    m_TotaisMulta.Remove(pVal.Row);
 
                                                 if (m_TotaisDesconto.ContainsKey(pVal.Row))
                                                     m_TotaisDesconto.Remove(pVal.Row);
@@ -257,7 +151,7 @@ namespace ChessIT.Financeiro.View
                                 if (pVal.ItemUID.Equals("etForCod"))
                                 {
                                     if (((EditText)Form.Items.Item("etForCod").Specific).String.Trim() == "")
-                                    {                                        
+                                    {
                                         Form.DataSources.DataTables.Item("dtFiltro").SetValue("forNome", 0, "");
                                     }
                                 }
@@ -287,6 +181,11 @@ namespace ChessIT.Financeiro.View
 
                                             m_TotaisJuros[pVal.Row] = valorJuros;
 
+                                            if (!m_TotaisMulta.ContainsKey(pVal.Row))
+                                                m_TotaisMulta.Add(pVal.Row, 0);
+
+                                            m_TotaisMulta[pVal.Row] = valorJuros;
+
                                             if (!m_TotaisDesconto.ContainsKey(pVal.Row))
                                                 m_TotaisDesconto.Add(pVal.Row, 0);
 
@@ -302,7 +201,6 @@ namespace ChessIT.Financeiro.View
                                     }
                                 }
                             }
-
                             break;
                         case BoEventTypes.et_CHOOSE_FROM_LIST:
                             {
@@ -316,6 +214,11 @@ namespace ChessIT.Financeiro.View
                                         {
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("forCod", 0, chooseFromListEvent.SelectedObjects.GetValue("CardCode", 0).ToString());
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("forNome", 0, chooseFromListEvent.SelectedObjects.GetValue("CardName", 0).ToString());
+                                        }
+
+                                        if (pVal.ItemUID.Equals("etContaJM"))
+                                        {
+                                            Form.DataSources.UserDataSources.Item("contaJM").Value = chooseFromListEvent.SelectedObjects.GetValue("AcctCode", 0).ToString();
                                         }
                                     }
                                 }
@@ -347,6 +250,18 @@ namespace ChessIT.Financeiro.View
                                         condition.Alias = "CardType";
                                         condition.Operation = BoConditionOperation.co_EQUAL;
                                         condition.CondVal = "S";
+
+                                        choose.SetConditions(conditions);
+
+                                        choose = (ChooseFromList)this.Form.ChooseFromLists.Item("CFL_3");
+
+                                        conditions = new Conditions();
+
+                                        condition = conditions.Add();
+
+                                        condition.Alias = "Postable";
+                                        condition.Operation = BoConditionOperation.co_EQUAL;
+                                        condition.CondVal = "Y";
 
                                         choose.SetConditions(conditions);
 
@@ -408,7 +323,7 @@ namespace ChessIT.Financeiro.View
         {
 #if DEBUG
 
-            string query = @"select '{14}' AS ""Check"",
+            string query = @"select '{8}' AS ""Check"",
                                     OPCH.""BPLName"" AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
 		                            OPCH.""DocEntry"" AS ""Nº SAP"",
@@ -430,18 +345,12 @@ namespace ChessIT.Financeiro.View
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= OPCH.""DocTotal"")
-                            and ({8} = 0 or {8} <= OPCH.""DocTotal"")
-                            and ({9} = 0 or {9} = OPCH.""BPLId"")
-                            and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
-                            and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
+                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))                            
+                            and ({5} = 0 or {5} = OPCH.""BPLId"")
+                            and ('{6}' = '' or '{6}' = OPCH.""CardCode"")
+                            and ('{7}' = '' or '{7}' = OPCH.""PeyMethod"")'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
                             union
-                            select  '{14}' AS ""Check"",
+                            select  '{8}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
 		                            ODPO.""DocEntry"" AS ""Nº SAP"",
@@ -463,16 +372,10 @@ namespace ChessIT.Financeiro.View
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= ODPO.""DocTotal"")
-                            and ({8} = 0 or {8} <= ODPO.""DocTotal"")
-                            and ({9} = 0 or {9} = ODPO.""BPLId"")
-                            and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
-                            and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
+                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))                            
+                            and ({5} = 0 or {5} = ODPO.""BPLId"")
+                            and ('{6}' = '' or '{6}' = ODPO.""CardCode"")
+                            and ('{7}' = '' or '{7}' = ODPO.""PeyMethod"")
                             union
                             select  '{14}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
@@ -511,7 +414,7 @@ namespace ChessIT.Financeiro.View
                             and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30)))";
 
 #else
-            string query = @"select '{14}' AS ""Check"",
+            string query = @"select '{8}' AS ""Check"",
                                     OPCH.""BPLName"" AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
 		                            OPCH.""DocEntry"" AS ""Nº SAP"",
@@ -534,17 +437,11 @@ namespace ChessIT.Financeiro.View
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) >= cast('{3}' as date))
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= OPCH.""DocTotal"")
-                            and ({8} = 0 or {8} <= OPCH.""DocTotal"")
-                            and ({9} = 0 or {9} = OPCH.""BPLId"")
-                            and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
-                            and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
+                            and ({5} = 0 or {5} = OPCH.""BPLId"")
+                            and ('{6}' = '' or '{6}' = OPCH.""CardCode"")
+                            and ('{7}' = '' or '{7}' = OPCH.""PeyMethod"")
                             union
-                            select  '{14}' AS ""Check"",
+                            select  '{8}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
 		                            ODPO.""DocEntry"" AS ""Nº SAP"",
@@ -566,18 +463,12 @@ namespace ChessIT.Financeiro.View
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= ODPO.""DocTotal"")
-                            and ({8} = 0 or {8} <= ODPO.""DocTotal"")
-                            and ({9} = 0 or {9} = ODPO.""BPLId"")
-                            and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
-                            and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
+                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))                            
+                            and ({5} = 0 or {5} = ODPO.""BPLId"")
+                            and ('{6}' = '' or '{6}' = ODPO.""CardCode"")
+                            and ('{7}' = '' or '{7}' = ODPO.""PeyMethod"")
                             union
-                            select  '{14}' AS ""Check"",
+                            select  '{8}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
 		                            'LC' AS ""Tipo Doc"",
 		                            OJDT.""TransId"" AS ""Nº SAP"",
@@ -601,62 +492,22 @@ namespace ChessIT.Financeiro.View
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))                            
-                            and ({7} = 0 or {7} >= JDT1.""Credit"")
-                            and ({8} = 0 or {8} <= JDT1.""Credit"")
-                            and ({9} = 0 or {9} = JDT1.""BPLId"")
-                            and ('{10}' = '' or '{10}' = JDT1.""ShortName"")
-                            and ('{11}' = '' or '{11}' = OJDT.""U_FPagFin"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30)))";
+                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))                            
+                            and ({5} = 0 or {5} = JDT1.""BPLId"")
+                            and ('{6}' = '' or '{6}' = JDT1.""ShortName"")
+                            and ('{7}' = '' or '{7}' = OJDT.""U_FPagFin"")";
 #endif
 
+            
             string numNF = ((EditText)Form.Items.Item("etNumNF").Specific).String;
             string dataEmissaoDe = ((EditText)Form.Items.Item("etDtEmiIni").Specific).String;
             string dataEmissaoAte = ((EditText)Form.Items.Item("etDtEmiFim").Specific).String;
             string dataVencimentoDe = ((EditText)Form.Items.Item("etDtVctIni").Specific).String;
-            string dataVencimentoAte = ((EditText)Form.Items.Item("etDtVctFim").Specific).String;
-            string dataBaixaDe = ((EditText)Form.Items.Item("etDtBaiDe").Specific).String;
-            string dataBaixaAte = ((EditText)Form.Items.Item("etDtBaiAte").Specific).String;
-            string valorDocDe = Controller.MainController.ConvertDouble(((EditText)Form.Items.Item("etValDocDe").Specific).String).ToString(System.Globalization.CultureInfo.InvariantCulture);
-            string valorDocAte = Controller.MainController.ConvertDouble(((EditText)Form.Items.Item("etValDocAt").Specific).String).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            string dataVencimentoAte = ((EditText)Form.Items.Item("etDtVctFim").Specific).String;            
             string empresa = Controller.MainController.ConvertStringCombo(((ComboBox)Form.Items.Item("cbEmpresa").Specific));
             string fornecedor = ((EditText)Form.Items.Item("etForCod").Specific).String;
             string formaPagto = ((ComboBox)Form.Items.Item("cbForPgto").Specific).Selected.Value;
-            string baixados = ((CheckBox)Form.Items.Item("ckBaixa").Specific).Checked ? "Y" : "N";
-            string pendentes = ((CheckBox)Form.Items.Item("ckPendente").Specific).Checked ? "Y" : "N";
-            string todos = ((CheckBox)Form.Items.Item("ckTodos").Specific).Checked ? "Y" : "N";
-
-            if (fornecedor == "")
-            {
-                Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar o fornecedor");
-                return;
-            }
-
-            if (empresa == "" || empresa == "0")
-            {
-                Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar a empresa");
-                return;
-            }
-
-            query = string.Format(query,
-                        numNF,
-                        dataEmissaoDe == "" ? "1990-01-01" : Convert.ToDateTime(dataEmissaoDe).ToString("yyyy-MM-dd"),
-                        dataEmissaoAte == "" ? "1990-01-01" : Convert.ToDateTime(dataEmissaoAte).ToString("yyyy-MM-dd"),
-                        dataVencimentoDe == "" ? "1990-01-01" : Convert.ToDateTime(dataVencimentoDe).ToString("yyyy-MM-dd"),
-                        dataVencimentoAte == "" ? "1990-01-01" : Convert.ToDateTime(dataVencimentoAte).ToString("yyyy-MM-dd"),
-                        dataBaixaDe == "" ? "1990-01-01" : Convert.ToDateTime(dataBaixaDe).ToString("yyyy-MM-dd"),
-                        dataBaixaAte == "" ? "1990-01-01" : Convert.ToDateTime(dataBaixaAte).ToString("yyyy-MM-dd"),
-                        valorDocDe,
-                        valorDocAte,
-                        empresa,
-                        fornecedor,
-                        formaPagto,
-                        baixados,
-                        pendentes,
-                        todos);
+            string selTodos = ((CheckBox)Form.Items.Item("ckSelTodos").Specific).Checked ? "Y" : "N";
 
             Form.Freeze(true);
             try
@@ -681,19 +532,10 @@ namespace ChessIT.Financeiro.View
 
                 PosicionarTotais();
 
-
-                m_BoletoModel = new Model.BoletoModel();
-                m_DinheiroModel = new Model.DinheiroModel();
-                m_TransferenciaModel = new Model.TransferenciaModel();
-                m_CartaoList = new List<Model.CartaoModel>();
-                m_ChequeList = new List<Model.ChequeModel>();
-
-                m_DividirTransacoesCartao = false;
-                m_Encargo = 0;
-
                 m_TotaisParcela = new Dictionary<int, double>();
                 m_TotaisDesconto = new Dictionary<int, double>();
                 m_TotaisJuros = new Dictionary<int, double>();
+                m_TotaisMulta = new Dictionary<int, double>();
                 m_TotaisPagar = new Dictionary<int, double>();
             }
             catch (Exception ex)
@@ -717,18 +559,10 @@ namespace ChessIT.Financeiro.View
 
             ((ComboBox)Form.Items.Item("cbEmpresa").Specific).Select("0");
 
-            m_BoletoModel = new Model.BoletoModel();
-            m_DinheiroModel = new Model.DinheiroModel();
-            m_TransferenciaModel = new Model.TransferenciaModel();
-            m_CartaoList = new List<Model.CartaoModel>();
-            m_ChequeList = new List<Model.ChequeModel>();
-
-            m_DividirTransacoesCartao = false;
-            m_Encargo = 0;
-
             m_TotaisParcela = new Dictionary<int, double>();
             m_TotaisDesconto = new Dictionary<int, double>();
             m_TotaisJuros = new Dictionary<int, double>();
+            m_TotaisMulta = new Dictionary<int, double>();
             m_TotaisPagar = new Dictionary<int, double>();
 
             Totalizar();
@@ -785,6 +619,11 @@ namespace ChessIT.Financeiro.View
 
                     m_TotaisJuros[linha] = valorJuros;
 
+                    if (!m_TotaisMulta.ContainsKey(linha))
+                        m_TotaisMulta.Add(linha, 0);
+
+                    m_TotaisMulta[linha] = valorMulta;
+
                     if (!m_TotaisPagar.ContainsKey(linha))
                         m_TotaisPagar.Add(linha, 0);
 
@@ -799,169 +638,16 @@ namespace ChessIT.Financeiro.View
                 Form.Freeze(false);
             }
         }
-
-        private void Pagar()
-        {
-            int empresa = Controller.MainController.ConvertIntCombo((ComboBox)Form.Items.Item("cbEmpresa").Specific);
-
-            string fornecedor = ((EditText)Form.Items.Item("etForCod").Specific).String;
-
-            Controller.MainController.Application.StatusBar.SetText("Criando contas a pagar", BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Warning);
-
-            SAPbobsCOM.Payments payments = (SAPbobsCOM.Payments) Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
-            try
-            {
-                payments.CardCode = fornecedor;
-
-                payments.BPLID = empresa;
-
-                payments.BankChargeAmount = m_Encargo;
-
-                if (m_DinheiroModel.valor > 0)
-                {
-                    payments.CashAccount = m_DinheiroModel.contaC;
-                    payments.CashSum = m_DinheiroModel.valor;
-                }
-
-                if (m_TransferenciaModel.valor > 0)
-                {
-                    payments.TransferAccount = m_TransferenciaModel.contaC;
-                    payments.TransferDate = m_TransferenciaModel.data;
-                    payments.TransferReference = m_TransferenciaModel.ref1;
-                    payments.TransferSum = m_TransferenciaModel.valor;
-                }
-
-                if (m_BoletoModel.valor > 0)
-                {
-                    payments.BoeAccount = m_BoletoModel.contaC;
-                    payments.BillOfExchangeAmount = m_BoletoModel.valor;
-                    payments.BillofExchangeStatus = SAPbobsCOM.BoBoeStatus.boes_Created;
-                    payments.BillOfExchange.BillOfExchangeNo = m_BoletoModel.numero.ToString();
-                    payments.BillOfExchange.ReferenceNo = m_BoletoModel.ref1;
-                    payments.BillOfExchange.BillOfExchangeDueDate = m_BoletoModel.vcto;
-                    payments.BillOfExchange.BPBankCountry = m_BoletoModel.pais;
-                    payments.BillOfExchange.BPBankCode = m_BoletoModel.banco;
-                    payments.BillOfExchange.BPBankAct = m_BoletoModel.conta;                    
-                    payments.BillOfExchange.Remarks = m_BoletoModel.obs;
-                    payments.BillOfExchange.PaymentMethodCode = m_BoletoModel.formaPagto;
-                }
-
-                int indice = 0;
-
-                foreach (Model.ChequeModel chequeModel in m_ChequeList)
-                {
-                    if (indice > 0)
-                        payments.Checks.Add();
-
-                    payments.Checks.SetCurrentLine(payments.Checks.Count - 1);
-
-                    payments.Checks.DueDate = chequeModel.vcto;
-                    payments.Checks.CheckSum = chequeModel.valor;
-                    payments.Checks.CountryCode = chequeModel.pais;
-                    payments.Checks.BankCode = chequeModel.banco;
-                    payments.Checks.Branch = chequeModel.filial;
-                    payments.Checks.AccounttNum = chequeModel.conta;
-                    payments.Checks.CheckNumber = chequeModel.numero;
-                    payments.Checks.Trnsfrable = chequeModel.endosso ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
-                    payments.Checks.CheckAccount = chequeModel.contaC;
-                    payments.Checks.ManualCheck = chequeModel.manual ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
-
-                    indice++;
-                }
-
-                indice = 0;
-
-                foreach (Model.CartaoModel cartaoModel in m_CartaoList)
-                {
-                    if (indice > 0)
-                    {
-                        payments.CreditCards.Add();
-                        payments.CreditCards.SetCurrentLine(indice);
-                    }
-
-                    payments.CreditCards.CreditCard = cartaoModel.nome;
-                    payments.CreditCards.CreditAcct = cartaoModel.contaC;
-                    payments.CreditCards.FirstPaymentDue = cartaoModel.primPagEm;
-                    payments.CreditCards.NumOfPayments = cartaoModel.pgtos;
-                    payments.CreditCards.NumOfCreditPayments = cartaoModel.pgtos;
-                    payments.CreditCards.VoucherNum = cartaoModel.comprov;
-                    payments.CreditCards.CreditSum = cartaoModel.valor;
-                    payments.CreditCards.FirstPaymentSum = cartaoModel.primPagVal;
-                    payments.CreditCards.AdditionalPaymentSum = cartaoModel.adcVal;
-                    payments.CreditCards.SplitPayments = cartaoModel.divComp ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
-
-                    indice++;
-                }
-
-                Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-                for (int linha = 0; linha < gridTitulos.Rows.Count; linha++)
-                {
-                    if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(linha))
-                    {
-                        int docEntry = Controller.MainController.ConvertInt(((EditTextColumn)gridTitulos.Columns.Item("Nº SAP")).GetText(linha));
-
-                        int parcela = Convert.ToInt32(((EditTextColumn)gridTitulos.Columns.Item("Parcela")).GetText(linha).Split('/')[0]);
-
-                        string tipoDoc = ((EditTextColumn)gridTitulos.Columns.Item("Tipo Doc")).GetText(linha).Trim();
-
-                        double totalPagar = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(linha));
-
-                        payments.Invoices.DocEntry = docEntry;
-
-                        switch (tipoDoc)
-                        {
-                            case "NE":
-                                payments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_PurchaseInvoice;
-                                break;
-                            case "ADT":
-                                payments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_PurchaseDownPayment;
-                                break;
-                            case "LC":
-                                payments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_JournalEntry;
-                                break;
-                        }
-
-                        payments.Invoices.InstallmentId = parcela;
-                        payments.Invoices.SumApplied = totalPagar;
-                    }
-                }
-
-                int erro = payments.Add();
-                
-                if (erro != 0)
-                {
-                    string msg = "";
-
-                    Controller.MainController.Company.GetLastError(out erro, out msg);
-
-                    throw new Exception(erro + " - " + msg);
-                }
-
-                Controller.MainController.Application.StatusBar.SetText("Operação completada com êxito", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Success);
-
-                Limpar();
-            }
-            catch (Exception ex)
-            {
-                Controller.MainController.Application.StatusBar.SetText(ex.Message);
-
-                System.IO.File.WriteAllText("payments.xml", payments.GetAsXML());
-            }
-            finally
-            {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(payments);
-                GC.Collect();
-            }
-        }
-
+        
         private void Totalizar()
-        {            
+        {
             Form.DataSources.UserDataSources.Item("totalDoc").Value = m_TotaisParcela.Count().ToString();
             Form.DataSources.UserDataSources.Item("totalParc").Value = m_TotaisParcela.Sum(r => r.Value).ToString();
             Form.DataSources.UserDataSources.Item("totalDesc").Value = m_TotaisDesconto.Sum(r => r.Value).ToString();
             Form.DataSources.UserDataSources.Item("totalJuros").Value = m_TotaisJuros.Sum(r => r.Value).ToString();
             Form.DataSources.UserDataSources.Item("totalPagar").Value = m_TotaisPagar.Sum(r => r.Value).ToString();
+
+            Form.DataSources.UserDataSources.Item("valJM").Value = (m_TotaisJuros.Sum(r => r.Value) + m_TotaisMulta.Sum(r => r.Value)).ToString();
         }
 
         private void PosicionarTotais()
@@ -1002,6 +688,216 @@ namespace ChessIT.Financeiro.View
 
             Form.Items.Item("etTotalPag").Left = left;
             Form.Items.Item("etTotalPag").Width = gridTitulos.Columns.Item("Total a Pagar").Width;
+        }
+
+        Dictionary<string, Form> lcForms = new Dictionary<string, Form>();
+
+        System.Timers.Timer m_timerLC = new System.Timers.Timer(1000);
+
+        private void Renegociar()
+        {
+            lcForms = new Dictionary<string, Form>();
+
+            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
+
+            for (int linha = 0; linha < gridTitulos.Rows.Count; linha++)
+            {
+                if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(linha))
+                {
+                    string tipoDoc = ((EditTextColumn)gridTitulos.Columns.Item("Tipo Doc")).GetText(linha).Trim();
+
+                    string docEntry = ((EditTextColumn)gridTitulos.Columns.Item("Nº Interno")).GetText(linha).Trim();
+
+                    string parcela = ((EditTextColumn)gridTitulos.Columns.Item("Parcela")).GetText(linha).Trim();
+
+                    string chave = tipoDoc + "-" + docEntry;
+
+                    Controller.MainController.Application.ActivateMenuItem("1540");
+
+                    Form lcForm = null;
+
+                    for (int i = 0; i <= 100; i++)
+                    {
+                        System.Threading.Thread.Sleep(200);
+
+                        try
+                        {
+                            lcForm = Controller.MainController.Application.Forms.GetFormByTypeAndCount(392, i);
+                        }
+                        catch
+                        {
+                            lcForms.Add(chave, lcForm);
+
+                            break;
+                        }
+                    }
+
+                    if (lcForm != null)
+                    {
+                        string query = @"select OPCH.""CardCode"",
+                                                OPCH.""CardName"",
+                                                OPCH.""TaxDate"", 
+                                                OPCH.""DocDate"",
+                                                OPCH.""DocDueDate"",
+                                                OPCH.""Serial"",
+                                                OPCH.""PeyMethod"" 
+                                        from OPCH where ""DocEntry"" = " + docEntry;
+
+                        if (tipoDoc == "ADT")
+                        {
+                            query = @"select    ODPO.""CardCode"",
+                                                ODPO.""CardName"",
+                                                ODPO.""TaxDate"", 
+                                                ODPO.""DocDate"",
+                                                ODPO.""DocDueDate"",
+                                                ODPO.""Serial"",
+                                                ODPO.""PeyMethod"" 
+                                        from ODPO where ""DocEntry"" = " + docEntry;
+                        }
+                        else if (tipoDoc == "LC")
+                        {
+                            query = @"select    OCRD.""CardCode"",
+                                                OCRD.""CardName"",
+                                                OJDT.""TaxDate"", 
+                                                OJDT.""DocDate"",
+                                                OJDT.""DueDate"",
+                                                OJDT.""U_NDocFin"",
+                                                OJDT.""U_FPagFin"" 
+                                        from OJDT
+                                        inner join JDT1 on JDT1.""TransId"" = OJDT.""TransId"" and JDT1.""LineNum"" = 0
+                                        inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
+                                        where OJDT.""TransId"" = " + docEntry;
+                        }
+
+                        SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        recordSet.DoQuery(query);
+
+                        if (!recordSet.EoF)
+                        {
+                            ((EditText)lcForm.Items.Item("10").Specific).String = recordSet.Fields.Item(1).Value.ToString();
+
+                            ((EditText)lcForm.Items.Item("97").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(2).Value).ToString("dd/MM/yyyy");
+                            ((EditText)lcForm.Items.Item("6").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(3).Value).ToString("dd/MM/yyyy");
+                            ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(4).Value).ToString("dd/MM/yyyy");
+#if !DEBUG
+                            ((EditText)lcForm.Items.Item("U_NDocFin").Specific).String = recordSet.Fields.Item(5).Value.ToString();
+                            ((EditText)lcForm.Items.Item("U_FPagFin").Specific).String = recordSet.Fields.Item(6).Value.ToString();
+#endif
+
+                            Matrix grid = (Matrix)lcForm.Items.Item("76").Specific;
+
+                            grid.Columns.Item("1").Cells.Item(parcela).Click();
+
+                            SetarCodigoPNThread(recordSet.Fields.Item(1).Value.ToString());
+
+                            System.Windows.Forms.SendKeys.SendWait("^{v}");
+                        }
+                    }
+                }
+            }
+
+            m_timerLC.Elapsed += FinalizarLC;
+            m_timerLC.Enabled = true;
+        }
+
+        private void FinalizarLC(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            m_timerLC.Enabled = false;
+
+            string contaJurosMulta = ((EditText)Form.Items.Item("etContaJM").Specific).String;
+
+            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
+
+            for (int linha = 0; linha < gridTitulos.Rows.Count; linha++)
+            {
+                if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(linha))
+                {
+                    string tipoDoc = ((EditTextColumn)gridTitulos.Columns.Item("Tipo Doc")).GetText(linha).Trim();
+
+                    string docEntry = ((EditTextColumn)gridTitulos.Columns.Item("Nº Interno")).GetText(linha).Trim();                    
+
+                    string chave = tipoDoc + "-" + docEntry;
+
+                    if (lcForms.ContainsKey(chave))
+                    {
+                        Form lcForm = lcForms[chave];
+
+                        lcForm.Select();
+
+                        string contaContrapartida = "";
+
+                        string query = string.Format(@"select PCH1.""AcctCode"" FROM PCH1 WHERE ""DocEntry"" = {0} AND ""LineNum"" = 0 ", docEntry);
+
+                        if (tipoDoc == "ADT")
+                        {
+                            query = string.Format(@"select DPO1.""AcctCode"" FROM DPO1 WHERE ""DocEntry"" = {0} AND ""LineNum"" = 0 ", docEntry);
+                        }
+                        else if (tipoDoc == "LC")
+                        {
+                            query = string.Format(@"select JDT1.""Account"" FROM JDT1 WHERE ""TransId"" = {0} AND ""Line_ID"" = 0 ", docEntry);
+                        }
+
+                        SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        recordSet.DoQuery(query);
+
+                        if (!recordSet.EoF)
+                        {
+                            contaContrapartida = recordSet.Fields.Item(0).Value.ToString();
+
+                            string parcela = ((EditTextColumn)gridTitulos.Columns.Item("Parcela")).GetText(linha).Trim();
+
+                            double valorParcela = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Parcela")).GetText(linha));
+
+                            double valorMulta = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Multa")).GetText(linha));
+
+                            double valorJuros = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Juros")).GetText(linha));
+
+                            double totalPagar = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(linha));
+                            
+
+                            Matrix grid = (Matrix)lcForm.Items.Item("76").Specific;
+
+                            //Linha crédito PN
+
+                            ((EditText)grid.Columns.Item("6").Cells.Item(1).Specific).String = totalPagar.ToString();
+
+                            ((EditText)grid.Columns.Item("9").Cells.Item(1).Specific).String = parcela;
+
+                            //Linha débito conta contrapartida
+
+                            ((EditText)grid.Columns.Item("1").Cells.Item(2).Specific).String = contaContrapartida;
+
+                            ((EditText)grid.Columns.Item("5").Cells.Item(2).Specific).String = valorParcela.ToString();
+
+                            ((EditText)grid.Columns.Item("9").Cells.Item(2).Specific).String = parcela;
+
+                            //Linha débito juros e multa
+
+                            ((EditText)grid.Columns.Item("1").Cells.Item(3).Specific).String = contaJurosMulta;
+
+                            ((EditText)grid.Columns.Item("5").Cells.Item(3).Specific).String = (valorJuros + valorMulta).ToString();
+
+                            ((EditText)grid.Columns.Item("9").Cells.Item(3).Specific).String = parcela;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetarCodigoPNThread(string valor)
+        {
+            Thread td = new Thread(new ParameterizedThreadStart(SetarCodigoPN));
+
+            td.SetApartmentState(ApartmentState.STA);
+            td.IsBackground = true;
+            td.Start(valor);
+        }
+
+        [STAThread]
+        private void SetarCodigoPN(object valor)
+        {
+            System.Windows.Forms.Clipboard.SetText(valor.ToString());
+
         }
     }
 }
