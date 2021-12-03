@@ -80,6 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\AprovacaoView.cs" />
     <Compile Include="View\PropostaContratoView.cs" />
+    <Compile Include="View\RecusaView.cs" />
     <Compile Include="View\ResultadoView.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -112,6 +113,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SrfFiles\FrmPropostaContrato.srf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SrfFiles\FrmRecusa.srf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SrfFiles\FrmResultado.srf">

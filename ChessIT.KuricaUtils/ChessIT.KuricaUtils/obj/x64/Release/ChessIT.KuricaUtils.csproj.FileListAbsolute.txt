@@ -12,4 +12,5 @@ C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT
 C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmResultado.srf
 C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\Menu.xml
 C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmPropostaContrato.srf
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmRecusa.srf
 C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csprojAssemblyReference.cache

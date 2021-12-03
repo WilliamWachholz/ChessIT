@@ -39,7 +39,7 @@ namespace ChessIT.KuricaUtils.Controller
             Controller.MainController.OpenResultadoView(aprovacaoList);
         }
 
-        public void Recusar(List<Model.AprovacaoModel> aprovacaoList)
+        public void Recusar(List<Model.AprovacaoModel> aprovacaoList, string observacao)
         {
             ApprovalRequestsService approvalRequestService = (ApprovalRequestsService)MainController.Company.GetCompanyService().GetBusinessService(ServiceTypes.ApprovalRequestsService);
 
@@ -54,7 +54,7 @@ namespace ChessIT.KuricaUtils.Controller
 
                     approvalRequest.ApprovalRequestDecisions.Add();
                     approvalRequest.ApprovalRequestDecisions.Item(0).Status = BoApprovalRequestDecisionEnum.ardNotApproved;
-                    approvalRequest.ApprovalRequestDecisions.Item(0).Remarks = "Recusado";
+                    approvalRequest.ApprovalRequestDecisions.Item(0).Remarks = observacao.Equals("") ? "Recusado" : observacao;
 
                     approvalRequestService.UpdateRequest(approvalRequest);
 

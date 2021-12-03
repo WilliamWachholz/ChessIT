@@ -372,7 +372,6 @@ namespace ChessIT.Financeiro.View
             }          
         }
 
-
         private void FinalizarLC(object sender, System.Timers.ElapsedEventArgs e)
         {
             m_timerLC.Enabled = false;

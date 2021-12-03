@@ -105,9 +105,9 @@ namespace ChessIT.KuricaUtils.View
                                             }
                                         }
 
-                                        new Controller.AprovacaoController().Recusar(aprovacaoList);
+                                        View.RecusaView.PosRecusaEventHandler posRecusaEvent = new RecusaView.PosRecusaEventHandler(Pesquisar);
 
-                                        Pesquisar(false);
+                                        Controller.MainController.OpenRecusaView(aprovacaoList, posRecusaEvent);
                                     }
                                     else if (pVal.ItemUID == "gdDetalhes")
                                     {
@@ -123,7 +123,16 @@ namespace ChessIT.KuricaUtils.View
                                                 Controller.MainController.Application.StatusBar.SetText("Não é possível marcar item de detalhe");
                                             }
                                         }
-                                    }
+                                    }                                    
+                                }
+                            }
+                            break;
+                        case BoEventTypes.et_ITEM_PRESSED:
+                            if (!pVal.BeforeAction)
+                            {
+                                if (pVal.ItemUID == "ckSelTodos")
+                                {
+                                    Pesquisar(false);
                                 }
                             }
                             break;
@@ -245,6 +254,11 @@ namespace ChessIT.KuricaUtils.View
             }
         }
 
+        private void Pesquisar()
+        {
+            Pesquisar(false);
+        }
+
         private void Pesquisar(bool detalhar)
         {
             string selecionarTodos = ((CheckBox)Form.Items.Item("ckSelTodos").Specific).Checked ? "Y" : "N";
@@ -289,10 +303,9 @@ namespace ChessIT.KuricaUtils.View
                                     from OWDD
                                     inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
                                     inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
-                                    inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
                                     where ODRF.""ObjType"" = 22
-                                    and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
-                                    and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')                                    
+                                    and ((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)))
+                                    and ((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)))                                    
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
                                     and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
                                     --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
@@ -336,8 +349,8 @@ namespace ChessIT.KuricaUtils.View
                                     inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
                                     inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""                                    
                                     where ODRF.""ObjType"" = 22
-                                    and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
-                                    and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
+                                    and ((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)))
+                                    and ((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)))
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
                                     and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
                                     --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
@@ -364,8 +377,8 @@ namespace ChessIT.KuricaUtils.View
                                     inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
                                     inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
                                     where ODRF.""ObjType"" = 22
-                                    and (((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)) and '{5}' = 'Y') or '{5}' = 'N')
-                                    and (((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)) and '{5}' = 'Y') or '{5}' = 'N')                                    
+                                    and ((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)))
+                                    and ((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)))                                    
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
                                     and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
                                     --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))

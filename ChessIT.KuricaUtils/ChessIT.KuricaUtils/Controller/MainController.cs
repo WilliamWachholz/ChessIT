@@ -148,6 +148,13 @@ namespace ChessIT.KuricaUtils.Controller
                     new View.AprovacaoView(form);
                 }
 
+                if (pVal.FormTypeEx == "FrmRecusa")
+                {
+                    Form form = Application.Forms.Item(pVal.FormUID);
+
+                    new View.RecusaView(form, m_RecusaList, m_PosRecusaEvent);
+                }
+
                 if (pVal.FormTypeEx == "FrmResultado")
                 {
                     Form form = Application.Forms.Item(pVal.FormUID);
@@ -269,6 +276,10 @@ namespace ChessIT.KuricaUtils.Controller
             return result;
         }
 
+        public static View.RecusaView.PosRecusaEventHandler m_PosRecusaEvent;
+
+        public static List<Model.AprovacaoModel> m_RecusaList = new List<Model.AprovacaoModel>();
+
         public static List<Model.AprovacaoModel> m_ResultadoAprovacaoList = new List<Model.AprovacaoModel>();
 
         public static Model.PropostaModel m_ResultadoPropostaModel = new Model.PropostaModel();
@@ -327,6 +338,39 @@ namespace ChessIT.KuricaUtils.Controller
 
 #if DEBUG
                     xml = xml.Replace("from dummy", "");
+#endif
+
+                Application.LoadBatchActions(ref xml);
+            }
+            catch (Exception exception)
+            {
+                Application.StatusBar.SetText(exception.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+            }
+        }
+
+        public static void OpenRecusaView(List<Model.AprovacaoModel> recusaList, View.RecusaView.PosRecusaEventHandler posRecusaEvent)
+        {
+            try
+            {
+                m_RecusaList = recusaList;
+
+                m_PosRecusaEvent = posRecusaEvent;
+
+                string srfPath = System.Environment.CurrentDirectory + "\\SrfFiles\\FrmRecusa.srf";
+
+                if (File.Exists(srfPath) == false)
+                {
+                    throw new Exception("Arquivo SRF não encontrado. Verifique a instalação do addOn.");
+                }
+
+                string xml = File.ReadAllText(srfPath);
+
+                string formUID = GerarFormUID("FrmRecusa");
+
+                xml = xml.Replace("uid=\"FrmRecusa\"", string.Format("uid=\"{0}\"", formUID));
+
+#if DEBUG
+                xml = xml.Replace("from dummy", "");
 #endif
 
                 Application.LoadBatchActions(ref xml);

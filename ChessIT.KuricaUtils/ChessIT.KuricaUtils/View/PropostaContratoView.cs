@@ -83,11 +83,11 @@ namespace ChessIT.KuricaUtils.View
                                         //    return;
                                         //}
 
-                                        if (Form.DataSources.UserDataSources.Item("hrSaida").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Hora Saída OS' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("hrSaida").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Hora Saída OS' não informado");
+                                        //    return;
+                                        //}
 
                                         //if (Form.DataSources.UserDataSources.Item("condPgto").Value == "")
                                         //{
@@ -101,47 +101,47 @@ namespace ChessIT.KuricaUtils.View
                                         //    return;
                                         //}
 
-                                        if (Form.DataSources.UserDataSources.Item("clSeg").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Segunda' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("clSeg").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Segunda' não informado");
+                                        //    return;
+                                        //}
 
-                                        if (Form.DataSources.UserDataSources.Item("clTerca").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Terça' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("clTerca").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Terça' não informado");
+                                        //    return;
+                                        //}
 
-                                        if (Form.DataSources.UserDataSources.Item("clQuarta").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Quarta' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("clQuarta").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Quarta' não informado");
+                                        //    return;
+                                        //}
 
-                                        if (Form.DataSources.UserDataSources.Item("clQuinta").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Quinta' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("clQuinta").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Quinta' não informado");
+                                        //    return;
+                                        //}
 
-                                        if (Form.DataSources.UserDataSources.Item("clSexta").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Sexta' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("clSexta").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Sexta' não informado");
+                                        //    return;
+                                        //}
 
-                                        if (Form.DataSources.UserDataSources.Item("clSab").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Sábado' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("clSab").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Sábado' não informado");
+                                        //    return;
+                                        //}
 
-                                        if (Form.DataSources.UserDataSources.Item("clDom").Value == "")
-                                        {
-                                            Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Domingo' não informado");
-                                            return;
-                                        }
+                                        //if (Form.DataSources.UserDataSources.Item("clDom").Value == "")
+                                        //{
+                                        //    Controller.MainController.Application.StatusBar.SetText("Campo obrigatório 'Coleta Domingo' não informado");
+                                        //    return;
+                                        //}
 
                                         Controller.MainController.Application.SendKeys("{TAB}");
 
@@ -169,7 +169,8 @@ namespace ChessIT.KuricaUtils.View
                                                                                         QUT1.""UomCode"",
                                                                                         QUT1.""Price"",
                                                                                         ""@ROTAS"".""U_RotaTransp"",
-                                                                                        ""@ROTAS"".""U_Motorista""
+                                                                                        ""@ROTAS"".""U_Motorista"",
+                                                                                        QUT1.""U_NumColetasMes""
                                                                                  from OQUT
                                                                                  inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
                                                                                  left join ""@ROTAS"" on ""@ROTAS"".""Code"" = '{0}'
@@ -228,11 +229,11 @@ namespace ChessIT.KuricaUtils.View
                                                         if (!Form.DataSources.UserDataSources.Item("tpModal").Value.Equals(""))
                                                             linha.UserFields.Item("U_TipoModal").Value = Form.DataSources.UserDataSources.Item("tpModal").Value;
 
-                                                        if (!Form.DataSources.UserDataSources.Item("numPM").Value.Equals(""))
+                                                        if (!recordSet.Fields.Item(12).Value.Equals(""))
                                                         {
-                                                            linha.UserFields.Item("U_NumColetasMes").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value);
-                                                            linha.UserFields.Item("U_QtdColMes").Value = linha.PlannedQuantity * Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value);
-                                                            linha.UserFields.Item("U_NumColetasTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("numPM").Value) * Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
+                                                            linha.UserFields.Item("U_NumColetasMes").Value = Convert.ToInt32(recordSet.Fields.Item(12).Value);
+                                                            linha.UserFields.Item("U_QtdColMes").Value = linha.PlannedQuantity * Convert.ToInt32(recordSet.Fields.Item(12).Value);
+                                                            linha.UserFields.Item("U_NumColetasTotal").Value = Convert.ToInt32(recordSet.Fields.Item(12).Value) * Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
 
                                                             linha.UserFields.Item("U_QtdColTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value) * Convert.ToDouble(linha.UserFields.Item("U_QtdColMes").Value);
                                                         }
@@ -260,18 +261,27 @@ namespace ChessIT.KuricaUtils.View
 
 #if !DEBUG
                                                     blanketAgreement.UserFields.Item("U_CentroCusto").Value = Form.DataSources.UserDataSources.Item("tpCtr").Value;
-                                                    blanketAgreement.UserFields.Item("U_CCContrato").Value = Form.DataSources.UserDataSources.Item("contrato").Value;                                                    
-                                                    blanketAgreement.UserFields.Item("U_MesesContrato").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
+                                                    blanketAgreement.UserFields.Item("U_CCContrato").Value = Form.DataSources.UserDataSources.Item("contrato").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("mesesCtr").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_MesesContrato").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
                                                     if (!Form.DataSources.UserDataSources.Item("rota").Value.Equals(""))
                                                         blanketAgreement.UserFields.Item("U_Rota").Value = Form.DataSources.UserDataSources.Item("rota").Value;
-                                                    blanketAgreement.UserFields.Item("U_HoraSaidaOS").Value = Form.DataSources.UserDataSources.Item("hrSaida").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetSeg").Value = Form.DataSources.UserDataSources.Item("clSeg").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetTerc").Value = Form.DataSources.UserDataSources.Item("clTerca").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetQuart").Value = Form.DataSources.UserDataSources.Item("clQuarta").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetQuin").Value = Form.DataSources.UserDataSources.Item("clQuinta").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetSext").Value = Form.DataSources.UserDataSources.Item("clSexta").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetSab").Value = Form.DataSources.UserDataSources.Item("clSab").Value;
-                                                    blanketAgreement.UserFields.Item("U_DiaColetDom").Value = Form.DataSources.UserDataSources.Item("clDom").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("hrSaida").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_HoraSaidaOS").Value = Form.DataSources.UserDataSources.Item("hrSaida").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("clSeg").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_DiaColetSeg").Value = Form.DataSources.UserDataSources.Item("clSeg").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("clTerca").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_DiaColetTerc").Value = Form.DataSources.UserDataSources.Item("clTerca").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("clQuarta").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_DiaColetQuart").Value = Form.DataSources.UserDataSources.Item("clQuarta").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("clQuinta").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_DiaColetQuin").Value = Form.DataSources.UserDataSources.Item("clQuinta").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("clSexta").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_DiaColetSext").Value = Form.DataSources.UserDataSources.Item("clSexta").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("clSab").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_DiaColetSab").Value = Form.DataSources.UserDataSources.Item("clSab").Value;
+                                                    if (!Form.DataSources.UserDataSources.Item("clDom").Value.Equals(""))
+                                                        blanketAgreement.UserFields.Item("U_DiaColetDom").Value = Form.DataSources.UserDataSources.Item("clDom").Value;
 
 
 #endif

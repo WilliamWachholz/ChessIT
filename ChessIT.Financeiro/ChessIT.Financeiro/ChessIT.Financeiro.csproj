@@ -110,7 +110,7 @@
     <Content Include="Menu.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SrfFiles\FrmRenegCPView.srf">
+    <Content Include="SrfFiles\FrmRenegCP.srf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SrfFiles\FrmBaixaCP.srf">
