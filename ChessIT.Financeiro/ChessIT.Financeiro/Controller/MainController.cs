@@ -82,7 +82,8 @@ namespace ChessIT.Financeiro.Controller
 
             Application.AppEvent += HandleAppEvent;
             Application.MenuEvent += HandleMenuEvent;
-            Application.ItemEvent += HandleFormLoadEvent;
+            Application.ItemEvent += HandleItemEvent;
+            Application.FormDataEvent += HandleFormData;
         }
 
         private void HandleAppEvent(SAPbouiCOM.BoAppEventTypes EventType)
@@ -191,7 +192,7 @@ namespace ChessIT.Financeiro.Controller
             }
         }
 
-        private void HandleFormLoadEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
+        private void HandleItemEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
         {
             bubbleEvent = true;
 
@@ -277,11 +278,20 @@ namespace ChessIT.Financeiro.Controller
                         Item _aplicarMultaJuros = form.Items.Add("APLMJ", BoFormItemTypes.it_BUTTON);
                         _aplicarMultaJuros.Top = _grid.Top - 20;
                         _aplicarMultaJuros.Left = _grid.Left + _grid.Width - 470;
-                        _aplicarMultaJuros.Width = 110;
+                        _aplicarMultaJuros.Width = 130;
                         _aplicarMultaJuros.LinkTo = "SPORCMULTA";
 
                         Button aplicarMultaJuros = (Button)_aplicarMultaJuros.Specific;
                         aplicarMultaJuros.Caption = "Aplicar Multa e Juros";
+
+                        Item _definirMeioPagamento = form.Items.Add("DEFMP", BoFormItemTypes.it_BUTTON);
+                        _definirMeioPagamento.Top = _aplicarMultaJuros.Top - 20;
+                        _definirMeioPagamento.Left = _grid.Left + _grid.Width - 470;
+                        _definirMeioPagamento.Width = 130;
+                        _definirMeioPagamento.LinkTo = "SPORCMULTA";
+
+                        Button definirMeioPagamento = (Button)_definirMeioPagamento.Specific;
+                        definirMeioPagamento.Caption = "Definir Meio de Pagamento";
 
                         SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         recordSet.DoQuery(@"select ""U_CR_Porc_Juros"", ""U_CR_Porc_Multa"" from ""@CFG_JUROS_MULTA""");
@@ -347,6 +357,150 @@ namespace ChessIT.Financeiro.Controller
                         finally
                         {
                             form.Freeze(false);
+                        }
+                    }
+
+                    if (pVal.ItemUID == "DEFMP")
+                    {
+                        Application.ActivateMenuItem("5892");
+
+                        Form form = Application.Forms.Item(pVal.FormUID);
+
+                        Matrix _grid = (Matrix)form.Items.Item("20").Specific;
+
+                        int row = _grid.GetNextSelectedRow();
+
+                        if (row > 0)
+                        {
+                            Form mpForm = null;
+
+                            for (int i = 0; i <= 100; i++)
+                            {
+                                System.Threading.Thread.Sleep(200);
+
+                                try
+                                {
+                                    mpForm = Controller.MainController.Application.Forms.GetFormByTypeAndCount(146, i);
+                                }
+                                catch
+                                {
+                                    break;
+                                }
+                            }
+
+                            mpForm.Freeze(true);
+                            try
+                            {
+                                ((EditText)mpForm.Items.Item("44").Specific).String = DateTime.Now.ToString("dd/MM/yyyy");
+
+                                double totalPagar = ConvertDouble(((EditText)_grid.Columns.Item("U_TotalAPagar").Cells.Item(row).Specific).String);
+
+                                if (totalPagar > 0)
+                                {
+                                    ((EditText)mpForm.Items.Item("34").Specific).String = ((EditText)_grid.Columns.Item("U_TotalAPagar").Cells.Item(row).Specific).String;
+
+                                    ((EditText)mpForm.Items.Item("12").Specific).String = ((EditText)_grid.Columns.Item("U_TotalAPagar").Cells.Item(row).Specific).String;
+                                }
+                                else
+                                {
+                                    ((EditText)mpForm.Items.Item("34").Specific).String = ((EditText)_grid.Columns.Item("24").Cells.Item(row).Specific).String;
+
+                                    ((EditText)mpForm.Items.Item("12").Specific).String = ((EditText)_grid.Columns.Item("24").Cells.Item(row).Specific).String;
+                                }
+                            }
+                            finally
+                            {
+                                mpForm.Freeze(false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleFormData(ref BusinessObjectInfo pVal, out bool bubbleEvent)
+        {
+            bubbleEvent = true;
+
+            if (!pVal.BeforeAction && pVal.ActionSuccess)
+            {
+                if (pVal.EventType == BoEventTypes.et_FORM_DATA_ADD)
+                {
+                    if (pVal.FormTypeEx == "170")
+                    {
+                        try
+                        {
+                            string objectXml = pVal.ObjectKey;
+
+                            int docEntry = Convert.ToInt32(objectXml.Substring(objectXml.IndexOf("<DocEntry>") + 10, objectXml.IndexOf("</DocEntry>") - (objectXml.IndexOf("<DocEntry>") + 10)));
+
+                            string query = @"select ORCT.""DocNum"",
+		                                        ORCT.""CardName"",
+		                                        RCT2.""U_ValorDoJurosMora"" as ""ValorJuros"",
+		                                        CFGJ.""U_CR_Conta_Juros"" as ""Conta"",
+		                                        CFGJ.""U_CR_ContraPartida_Juros"" as ""Contrapartida"",
+                                                RCT2.""baseAbs"",
+                                                ORCT.""BPLId""
+                                        from RCT2
+                                        inner join ORCT on ORCT.""DocEntry"" = RCT2.""DocNum""
+                                        inner join ""@CFG_JUROS_MULTA"" CFGJ on CFGJ.""Code"" = '1'
+                                        where RCT2.""U_ValorDoJurosMora"" > 0
+                                        and CFGJ.""U_CR_Conta_Juros"" <> ''
+                                        and CFGJ.""U_CR_ContraPartida_Juros"" <> ''
+                                        and ORCT.""DocEntry"" = {0}";
+
+                            SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                            recordSet.DoQuery(string.Format(query, docEntry.ToString()));
+
+                            while (!recordSet.EoF)
+                            {
+                                SAPbobsCOM.JournalEntries journalEntry = (SAPbobsCOM.JournalEntries)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+
+                                journalEntry.Reference = recordSet.Fields.Item(0).Value.ToString();
+
+                                string memo = string.Format("Juros Doc. {0} - Contas a Receber {1} - Fornecedor {2}", recordSet.Fields.Item(5).Value.ToString(), recordSet.Fields.Item(0).Value.ToString(), recordSet.Fields.Item(1).Value.ToString());
+
+                                if (memo.Length > 50)
+                                {
+                                    memo = memo.Substring(0, 50);
+                                }
+
+                                journalEntry.Memo = memo;
+
+                                journalEntry.Lines.BPLID = Convert.ToInt32(recordSet.Fields.Item(6).Value);
+
+                                journalEntry.Lines.AccountCode = recordSet.Fields.Item(3).Value.ToString();
+
+                                journalEntry.Lines.Debit = Convert.ToDouble(recordSet.Fields.Item(2).Value);
+
+                                journalEntry.Lines.Add();
+
+                                journalEntry.Lines.SetCurrentLine(1);
+
+                                journalEntry.Lines.BPLID = Convert.ToInt32(recordSet.Fields.Item(6).Value);
+
+                                journalEntry.Lines.AccountCode = recordSet.Fields.Item(4).Value.ToString();
+
+                                journalEntry.Lines.Credit = Convert.ToDouble(recordSet.Fields.Item(2).Value);
+
+                                int erro = journalEntry.Add();
+
+                                if (erro != 0)
+                                {
+                                    string msg = "";
+
+                                    Controller.MainController.Company.GetLastError(out erro, out msg);
+
+                                    throw new Exception(erro + " - " + msg);
+                                }
+
+                                recordSet.MoveNext();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Controller.MainController.Application.StatusBar.SetText(ex.Message);
                         }
                     }
                 }

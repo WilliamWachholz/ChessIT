@@ -643,7 +643,6 @@ namespace ChessIT.Financeiro.View
             }
         }
 
-
         private void Totalizar()
         {
             Form.DataSources.UserDataSources.Item("totalDoc").Value = m_TotaisParcela.Count().ToString();
@@ -694,7 +693,7 @@ namespace ChessIT.Financeiro.View
             Form.Items.Item("etTotalPag").Left = left;
             Form.Items.Item("etTotalPag").Width = gridTitulos.Columns.Item("Total a Pagar").Width;
         }
-
+        
         private void Renegociar()
         {
             Controller.MainController.Application.StatusBar.SetText("Gerando reconciliação", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Warning);
