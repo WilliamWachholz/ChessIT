@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\MainController.cs" />
+    <Compile Include="Model\BaixaCPModel.cs" />
     <Compile Include="Model\BoletoModel.cs" />
     <Compile Include="Model\CartaoModel.cs" />
     <Compile Include="Model\ChequeModel.cs" />

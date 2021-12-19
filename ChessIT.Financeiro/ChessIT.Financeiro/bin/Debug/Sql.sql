@@ -1,7 +1,10 @@
-select '{8}' AS "Check",
+select 'N' AS "Check",
                                     OPCH."BPLName" AS "Filial",
 		                            'NE' AS "Tipo Doc",
-		                            OPCH."DocEntry" AS "Nº SAP",
+                                    OPCH."BPLId" AS "Nº Empresa",
+                                    OPCH."CardCode" AS "Nº Fornecedor",
+		                            OPCH."DocEntry" AS "Nº Interno",
+		                            OPCH."DocNum" AS "Nº SAP",
 		                            OPCH."Serial" AS "Nº NF",
 		                            OPCH."CardName" AS "Fornecedor",
                                     OPCH."DocDueDate" AS "Data Vcto.",
@@ -14,21 +17,31 @@ select '{8}' AS "Check",
 		                            OPCH."PeyMethod" AS "Forma Pgto."
                             from OPCH
                             inner join PCH6 on PCH6."DocEntry" = OPCH."DocEntry"                                                        
-                            where "DocStatus" = 'O'
-                            and PCH6."PaidToDate" < PCH6."InsTotal"
-                            and ('{0}' = '' or OPCH."Serial" = '{0}')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDate" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDate" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDueDate" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDueDate" as date) <= cast('{4}' as date))                            
-                            and ({5} = 0 or {5} = OPCH."BPLId")
-                            and ('{6}' = '' or '{6}' = OPCH."CardCode")
-                            and ('{7}' = '' or '{7}' = OPCH."PeyMethod")'Y' and not exists (select * from VPM2 where VPM2."DocEntry" = OPCH."DocEntry" AND VPM2."InvType" = 18)))
+                            where OPCH."CANCELED" = 'N'
+                            -- and OPCH."DocStatus" = 'O'
+                            -- and PCH6."PaidToDate" < PCH6."InsTotal"
+                            and ('' = '' or OPCH."Serial" = '')
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDate" as date) >= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDate" as date) <= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDueDate" as date) >= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OPCH."DocDueDate" as date) <= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = OPCH."DocEntry" AND VPM2."InvType" = 18 and cast(OVPM."DocDate" as date) >= cast('1990-01-01' as date)))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = OPCH."DocEntry" AND VPM2."InvType" = 18 and cast(OVPM."DocDate" as date) <= cast('1990-01-01' as date)))
+                            and (0 = 0 or PCH6."InsTotal" >= 0)
+                            and (0 = 0 or PCH6."InsTotal" <= 0)
+                            and (0 = 0 or 0 = OPCH."BPLId")
+                            and ('' = '' or '' = OPCH."CardCode")
+                            and ('' = '' or '' = OPCH."PeyMethod")
+                            and ('N' = 'N' or ('N' = 'Y' and exists (select * from VPM2 where VPM2."DocEntry" = OPCH."DocEntry" AND VPM2."InvType" = 18)))
+                            and ('N' = 'N' or ('N' = 'Y' and not exists (select * from VPM2 where VPM2."DocEntry" = OPCH."DocEntry" AND VPM2."InvType" = 18)))
                             union
-                            select  '{8}' AS "Check",
+                            select  'N' AS "Check",
                                     ODPO."BPLName" AS "Filial",
 		                            'ADT' AS "Tipo Doc",
-		                            ODPO."DocEntry" AS "Nº SAP",
+		                            ODPO."BPLId" AS "Nº Empresa",
+                                    ODPO."CardCode" AS "Nº Fornecedor",
+                                    ODPO."DocEntry" AS "Nº Interno",
+		                            ODPO."DocNum" AS "Nº SAP",
 		                            '' AS "Nº NF",
 		                            ODPO."CardName" AS "Fornecedor",
                                     ODPO."DocDueDate" AS "Data Vcto.",
@@ -41,25 +54,35 @@ select '{8}' AS "Check",
 		                            ODPO."PeyMethod" AS "Forma Pgto."
                             from ODPO
                             inner join DPO6 on DPO6."DocEntry" = ODPO."DocEntry"                            
-                            where "DocStatus" = 'O'
-                            and DPO6."PaidToDate" < DPO6."InsTotal"
-                            and ('{0}' = '')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDate" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDate" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDueDate" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDueDate" as date) <= cast('{4}' as date))                            
-                            and ({5} = 0 or {5} = ODPO."BPLId")
-                            and ('{6}' = '' or '{6}' = ODPO."CardCode")
-                            and ('{7}' = '' or '{7}' = ODPO."PeyMethod")
+                            where ODPO."CANCELED" = 'N'
+                            --and ODPO."DocStatus" = 'O'
+                            --and DPO6."PaidToDate" < DPO6."InsTotal"
+                            and ('' = '')
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDate" as date) >= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDate" as date) <= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDueDate" as date) >= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(ODPO."DocDueDate" as date) <= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = ODPO."DocEntry" AND VPM2."InvType" = 204 and cast(OVPM."DocDate" as date) >= cast('1990-01-01' as date)))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = ODPO."DocEntry" AND VPM2."InvType" = 204 and cast(OVPM."DocDate" as date) <= cast('1990-01-01' as date)))
+                            and (0 = 0 or DPO6."InsTotal" >= 0)
+                            and (0 = 0 or DPO6."InsTotal" <= 0)
+                            and (0 = 0 or 0 = ODPO."BPLId")
+                            and ('' = '' or '' = ODPO."CardCode")
+                            and ('' = '' or '' = ODPO."PeyMethod")
+                            and ('N' = 'N' or ('N' = 'Y' and exists (select * from VPM2 where VPM2."DocEntry" = ODPO."DocEntry" AND VPM2."InvType" = 204)))
+                            and ('N' = 'N' or ('N' = 'Y' and not exists (select * from VPM2 where VPM2."DocEntry" = ODPO."DocEntry" AND VPM2."InvType" = 204)))
                             union
-                            select  '{14}' AS "Check",
+                            select  'N' AS "Check",
                                     JDT1."BPLName" AS "Filial",
 		                            'LC' AS "Tipo Doc",
+		                            JDT1."BPLId" AS "Nº Empresa",
+                                    OCRD."CardCode" AS "Nº Fornecedor",
+                                    OJDT."TransId" AS "Nº Interno",
 		                            OJDT."TransId" AS "Nº SAP",
 		                            '' AS "Nº NF",
-		                            JDT1."ShortName" AS "Fornecedor",
+		                            OCRD."CardName" AS "Fornecedor",
                                     OJDT."DueDate" AS "Data Vcto.",
-		                            '1/1' as "Parcela",
+		                            cast((JDT1."LineNum" + 1) as varchar(10)) + '/' + cast((select count(*) from JDT1 TX where TX."TransId" = JDT1."TransId" and TX."ShortName" LIKE 'FOR%') as varchar(10)) as "Parcela",
 		                            JDT1."Credit" AS "Valor Parcela",
 		                            0.0 as "Valor Desc.",
 		                            0.0 as "Valor Multa",
@@ -68,22 +91,24 @@ select '{8}' AS "Check",
 		                            '' AS "Forma Pgto."
                             from JDT1
                             inner join OJDT on OJDT."TransId" = JDT1."TransId"
-                            where "BalDueCred" > 0
-                            and "MthDate" is null
+                            inner join OCRD on OCRD."CardCode" = JDT1."ShortName"
+                            where "MthDate" is null 
+                            --and "BalDueCred" > 0
                             and OJDT."TransType" <> 18
+                            and JDT1."ShortName" LIKE 'FOR%'
                             and OJDT."StornoToTr" IS NULL
                             and not exists (select * from OJDT aux where aux."StornoToTr" = OJDT."TransId")
-                            and ('{0}' = '' or '' = '{0}')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OJDT."RefDate" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OJDT."RefDate" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OJDT."DueDate" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT."DueDate" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30 and cast(OVPM."DocDate" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30 and cast(OVPM."DocDate" as date) <= cast('{6}' as date)))                            
-                            and ({7} = 0 or {7} >= JDT1."Credit")
-                            and ({8} = 0 or {8} <= JDT1."Credit")
-                            and ({9} = 0 or {9} = JDT1."BPLId")
-                            and ('{10}' = '' or '{10}' = JDT1."ShortName")
-                            and ('{11}' = '' or '{11}' = '')
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30)))
+                            and ('' = '' or '' = '')
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OJDT."RefDate" as date) >= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OJDT."RefDate" as date) <= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OJDT."DueDate" as date) >= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or cast(OJDT."DueDate" as date) <= cast('1990-01-01' as date))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30 and cast(OVPM."DocDate" as date) >= cast('1990-01-01' as date)))
+                            and (cast('1990-01-01' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM."DocEntry" = VPM2."DocNum" where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30 and cast(OVPM."DocDate" as date) <= cast('1990-01-01' as date)))                            
+                            and (0 = 0 or JDT1."Credit" >= 0)
+                            and (0 = 0 or JDT1."Credit" <= 0)
+                            and (0 = 0 or 0 = JDT1."BPLId")
+                            and ('' = '' or '' = JDT1."ShortName")
+                            and ('' = '' or '' = '')
+                            and ('N' = 'N' or ('N' = 'Y' and exists (select * from VPM2 where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30)))
+                            and ('N' = 'N' or ('N' = 'Y' and not exists (select * from VPM2 where VPM2."DocEntry" = JDT1."TransId" AND VPM2."InvType" = 30)))

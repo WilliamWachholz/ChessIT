@@ -443,7 +443,7 @@ namespace ChessIT.Financeiro.Controller
                                                 ORCT.""BPLId""
                                         from RCT2
                                         inner join ORCT on ORCT.""DocEntry"" = RCT2.""DocNum""
-                                        inner join ""@CFG_JUROS_MULTA"" CFGJ on CFGJ.""Code"" = '1'
+                                        inner join ""@CFG_JUROS_MULTA"" CFGJ on 1 = 1
                                         where RCT2.""U_ValorDoJurosMora"" > 0
                                         and CFGJ.""U_CR_Conta_Juros"" <> ''
                                         and CFGJ.""U_CR_ContraPartida_Juros"" <> ''

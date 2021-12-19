@@ -246,7 +246,53 @@ namespace ChessIT.Financeiro.View
                                             }
 
                                             Totalizar();
+                                        }       
+                                    }
+                                }
+                            }
+                            break;
+                        case BoEventTypes.et_MATRIX_LINK_PRESSED:
+                            if (pVal.BeforeAction)
+                            {
+                                if (pVal.ItemUID == "gridTitulo")
+                                {
+                                    if (pVal.ColUID == "Nº SAP")
+                                    {
+                                        string numeroInterno = ((EditTextColumn)((Grid)Form.Items.Item("gridTitulo").Specific).Columns.Item("Nº Interno")).GetText(pVal.Row);
+
+                                        switch (((EditTextColumn)((Grid)Form.Items.Item("gridTitulo").Specific).Columns.Item("Tipo Doc")).GetText(pVal.Row))
+                                        {
+                                            case "NE":
+                                                Controller.MainController.Application.OpenForm(BoFormObjectEnum.fo_PurchaseInvoice, "18", numeroInterno);
+                                                break;
+                                            case "ADT":
+                                                Controller.MainController.Application.OpenForm((BoFormObjectEnum)204, "204", numeroInterno);
+                                                break;
+                                            case "LC":
+                                                Controller.MainController.Application.OpenForm(BoFormObjectEnum.fo_JournalPosting, "30", numeroInterno);
+                                                break;
                                         }
+
+                                        bubbleEvent = false;
+                                    }
+                                }
+                            }
+                            break;
+                        case BoEventTypes.et_ITEM_PRESSED:
+                            if (!pVal.BeforeAction)
+                            {
+                                if (pVal.ItemUID == "ckTodos")
+                                {
+                                    Pesquisar();
+                                }
+                                else if (pVal.ItemUID == "gridTitulo" && pVal.ColUID == "Check")
+                                {
+                                    if (!pVal.BeforeAction)
+                                    {
+                                        if (((CheckBoxColumn)((Grid)Form.Items.Item("gridTitulo").Specific).Columns.Item("Check")).IsChecked(pVal.Row))
+                                            ((Grid)Form.Items.Item("gridTitulo").Specific).Rows.SelectedRows.Add(pVal.Row);
+                                        else
+                                            ((Grid)Form.Items.Item("gridTitulo").Specific).Rows.SelectedRows.Remove(pVal.Row);
                                     }
                                 }
                             }
@@ -411,7 +457,10 @@ namespace ChessIT.Financeiro.View
             string query = @"select '{14}' AS ""Check"",
                                     OPCH.""BPLName"" AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
-		                            OPCH.""DocEntry"" AS ""Nº SAP"",
+                                    OPCH.""BPLId"" AS ""Nº Empresa"",
+                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
+		                            OPCH.""DocEntry"" AS ""Nº Interno"",
+		                            OPCH.""DocNum"" AS ""Nº SAP"",
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
                                     OPCH.""DocDueDate"" AS ""Data Vcto."",
@@ -424,8 +473,9 @@ namespace ChessIT.Financeiro.View
 		                            OPCH.""PeyMethod"" AS ""Forma Pgto.""
                             from OPCH
                             inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""                                                        
-                            where ""DocStatus"" = 'O'
-                            and PCH6.""PaidToDate"" < PCH6.""InsTotal""
+                            where OPCH.""CANCELED"" = 'N'
+                            -- and OPCH.""DocStatus"" = 'O'
+                            -- and PCH6.""PaidToDate"" < PCH6.""InsTotal""
                             and ('{0}' = '' or OPCH.""Serial"" = '{0}')
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
@@ -433,18 +483,21 @@ namespace ChessIT.Financeiro.View
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
                             and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
                             and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= OPCH.""DocTotal"")
-                            and ({8} = 0 or {8} <= OPCH.""DocTotal"")
+                            and ({7} = 0 or PCH6.""InsTotal"" >= {7})
+                            and ({8} = 0 or PCH6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = OPCH.""BPLId"")
                             and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
                             and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" = PCH6.""InsTotal""))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" < PCH6.""InsTotal""))
                             union
                             select  '{14}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
-		                            ODPO.""DocEntry"" AS ""Nº SAP"",
+		                            ODPO.""BPLId"" AS ""Nº Empresa"",
+                                    ODPO.""CardCode"" AS ""Nº Fornecedor"",
+                                    ODPO.""DocEntry"" AS ""Nº Interno"",
+		                            ODPO.""DocNum"" AS ""Nº SAP"",
 		                            '' AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
                                     ODPO.""DocDueDate"" AS ""Data Vcto."",
@@ -457,8 +510,9 @@ namespace ChessIT.Financeiro.View
 		                            ODPO.""PeyMethod"" AS ""Forma Pgto.""
                             from ODPO
                             inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""                            
-                            where ""DocStatus"" = 'O'
-                            and DPO6.""PaidToDate"" < DPO6.""InsTotal""
+                            where ODPO.""CANCELED"" = 'N'
+                            --and ODPO.""DocStatus"" = 'O'
+                            --and DPO6.""PaidToDate"" < DPO6.""InsTotal""
                             and ('{0}' = '')
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
@@ -466,22 +520,25 @@ namespace ChessIT.Financeiro.View
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))
                             and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
                             and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= ODPO.""DocTotal"")
-                            and ({8} = 0 or {8} <= ODPO.""DocTotal"")
+                            and ({7} = 0 or DPO6.""InsTotal"" >= {7})
+                            and ({8} = 0 or DPO6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = ODPO.""BPLId"")
                             and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
                             and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" = DPO6.""InsTotal""))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" < DPO6.""InsTotal""))
                             union
                             select  '{14}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
 		                            'LC' AS ""Tipo Doc"",
+		                            JDT1.""BPLId"" AS ""Nº Empresa"",
+                                    OCRD.""CardCode"" AS ""Nº Fornecedor"",
+                                    OJDT.""TransId"" AS ""Nº Interno"",
 		                            OJDT.""TransId"" AS ""Nº SAP"",
 		                            '' AS ""Nº NF"",
-		                            JDT1.""ShortName"" AS ""Fornecedor"",
+		                            OCRD.""CardName"" AS ""Fornecedor"",
                                     OJDT.""DueDate"" AS ""Data Vcto."",
-		                            '1/1' as ""Parcela"",
+		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) + '/' + cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and TX.""ShortName"" LIKE 'FOR%') as varchar(10)) as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
 		                            0.0 as ""Valor Desc."",
 		                            0.0 as ""Valor Multa"",
@@ -490,9 +547,11 @@ namespace ChessIT.Financeiro.View
 		                            '' AS ""Forma Pgto.""
                             from JDT1
                             inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
-                            where ""BalDueCred"" > 0
-                            and ""MthDate"" is null
+                            inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
+                            where ""MthDate"" is null 
+                            --and ""BalDueCred"" > 0
                             and OJDT.""TransType"" <> 18
+                            and JDT1.""ShortName"" LIKE 'FOR%'
                             and OJDT.""StornoToTr"" IS NULL
                             and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
                             and ('{0}' = '' or '' = '{0}')
@@ -502,19 +561,22 @@ namespace ChessIT.Financeiro.View
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))
                             and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
                             and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))                            
-                            and ({7} = 0 or {7} >= JDT1.""Credit"")
-                            and ({8} = 0 or {8} <= JDT1.""Credit"")
+                            and ({7} = 0 or JDT1.""Credit"" >= {7})
+                            and ({8} = 0 or JDT1.""Credit"" <= {8})
                             and ({9} = 0 or {9} = JDT1.""BPLId"")
                             and ('{10}' = '' or '{10}' = JDT1.""ShortName"")
                             and ('{11}' = '' or '{11}' = '')
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30)))";
+                            and ('{12}' = 'N' or ('{12}' = 'Y' ""BalDueCred"" = 0))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' ""BalDueCred"" > 0))";
 
 #else
             string query = @"select '{14}' AS ""Check"",
                                     OPCH.""BPLName"" AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
-		                            OPCH.""DocEntry"" AS ""Nº SAP"",
+                                    OPCH.""BPLId"" AS ""Nº Empresa"",
+                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
+		                            OPCH.""DocEntry"" AS ""Nº Interno"",
+                                    OPCH.""DocNum"" AS ""Nº SAP"",
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
                                     OPCH.""DocDueDate"" AS ""Data Vcto."",
@@ -527,8 +589,9 @@ namespace ChessIT.Financeiro.View
 		                            OPCH.""PeyMethod"" AS ""Forma Pgto.""
                             from OPCH
                             inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""                                                        
-                            where ""DocStatus"" = 'O'
-                            and PCH6.""PaidToDate"" < PCH6.""InsTotal""
+                            where OPCH.""CANCELED"" = 'N'
+                            --and OPCH.""DocStatus"" = 'O'
+                            --and PCH6.""PaidToDate"" < PCH6.""InsTotal""
                             and ('{0}' = '' or OPCH.""Serial"" = '{0}')
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
@@ -536,18 +599,21 @@ namespace ChessIT.Financeiro.View
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
                             and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
                             and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= OPCH.""DocTotal"")
-                            and ({8} = 0 or {8} <= OPCH.""DocTotal"")
+                            and ({7} = 0 or PCH6.""InsTotal"" >= {7})
+                            and ({8} = 0 or PCH6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = OPCH.""BPLId"")
                             and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
                             and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18)))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" = PCH6.""InsTotal""))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" < PCH6.""InsTotal""))
                             union
                             select  '{14}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
-		                            ODPO.""DocEntry"" AS ""Nº SAP"",
+                                    ODPO.""BPLId"" AS ""Nº Empresa"",
+                                    ODPO.""CardCode"" AS ""Nº Fornecedor"",
+		                            ODPO.""DocEntry"" AS ""Nº Interno"",
+                                    ODPO.""DocNum"" AS ""Nº SAP"",
 		                            0 AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
                                     ODPO.""DocDueDate"" AS ""Data Vcto."",
@@ -560,8 +626,9 @@ namespace ChessIT.Financeiro.View
 		                            ODPO.""PeyMethod"" AS ""Forma Pgto.""
                             from ODPO
                             inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""                            
-                            where ""DocStatus"" = 'O'
-                            and DPO6.""PaidToDate"" < DPO6.""InsTotal""
+                            where ODPO.""CANCELED"" = 'N'
+                            --and ""DocStatus"" = 'O'
+                            --and DPO6.""PaidToDate"" < DPO6.""InsTotal""
                             and ('{0}' = '')
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
@@ -569,22 +636,25 @@ namespace ChessIT.Financeiro.View
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))
                             and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
                             and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or {7} >= ODPO.""DocTotal"")
-                            and ({8} = 0 or {8} <= ODPO.""DocTotal"")
+                            and ({7} = 0 or DPO6.""InsTotal"" >= {7})
+                            and ({8} = 0 or DPO6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = ODPO.""BPLId"")
                             and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
                             and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204)))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" = DPO6.""InsTotal""))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" < DPO6.""InsTotal""))
                             union
                             select  '{14}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
 		                            'LC' AS ""Tipo Doc"",
-		                            OJDT.""TransId"" AS ""Nº SAP"",
+		                            JDT1.""BPLId"" AS ""Nº Empresa"",
+                                    OCRD.""CardCode"" AS ""Nº Fornecedor"",
+                                    OJDT.""TransId"" AS ""Nº Interno"",
+                                    OJDT.""TransId"" AS ""Nº SAP"",
 		                            OJDT.""U_NDocFin"" AS ""Nº NF"",
-		                            JDT1.""ShortName"" AS ""Fornecedor"",
+		                            OCRD.""CardName"" AS ""Fornecedor"",
                                     OJDT.""DueDate"" AS ""Data Vcto."",
-		                            '1/1' as ""Parcela"",
+		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) || '/' || cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and TX.""ShortName"" LIKE 'FOR%') as varchar(10)) as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
 		                            0.0 as ""Valor Desc."",
 		                            0.0 as ""Valor Multa"",
@@ -593,8 +663,11 @@ namespace ChessIT.Financeiro.View
 		                            OJDT.""U_FPagFin"" AS ""Forma Pgto.""
                             from JDT1
                             inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
-                            where ""BalDueCred"" > 0
-                            and ""MthDate"" is null
+                            inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
+                            where ""MthDate"" is null
+                            --and ""BalDueCred"" > 0                             
+                            and OJDT.""TransType"" <> 18
+                            and JDT1.""ShortName"" LIKE 'FOR%'
                             and OJDT.""StornoToTr"" IS NULL
                             and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
                             and ('{0}' = '' or OJDT.""U_NDocFin"" = '{0}')
@@ -604,13 +677,13 @@ namespace ChessIT.Financeiro.View
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))
                             and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
                             and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))                            
-                            and ({7} = 0 or {7} >= JDT1.""Credit"")
-                            and ({8} = 0 or {8} <= JDT1.""Credit"")
+                            and ({7} = 0 or JDT1.""Credit"" >= {7})
+                            and ({8} = 0 or JDT1.""Credit"" <= {8})
                             and ({9} = 0 or {9} = JDT1.""BPLId"")
                             and ('{10}' = '' or '{10}' = JDT1.""ShortName"")
                             and ('{11}' = '' or '{11}' = OJDT.""U_FPagFin"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and exists (select * from VPM2 where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30)))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and not exists (select * from VPM2 where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30)))";
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and ""BalDueCred"" = 0))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and ""BalDueCred"" > 0))";
 #endif
 
             string numNF = ((EditText)Form.Items.Item("etNumNF").Specific).String;
@@ -631,14 +704,14 @@ namespace ChessIT.Financeiro.View
 
             if (fornecedor == "")
             {
-                Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar o fornecedor");
-                return;
+                //Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar o fornecedor");
+                //return;
             }
 
             if (empresa == "" || empresa == "0")
             {
-                Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar a empresa");
-                return;
+                //Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar a empresa");
+                //return;
             }
 
             query = string.Format(query,
@@ -668,6 +741,12 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Check").Type = BoGridColumnType.gct_CheckBox;
                 gridTitulos.Columns.Item("Check").TitleObject.Caption = "#";
 
+                ((EditTextColumn)gridTitulos.Columns.Item("Nº SAP")).LinkedObjectType = "30";
+
+                gridTitulos.Columns.Item("Nº Empresa").Visible = false;
+                gridTitulos.Columns.Item("Nº Fornecedor").Visible = false;
+                gridTitulos.Columns.Item("Nº Interno").Visible = false;
+
                 gridTitulos.Columns.Item("Filial").Editable = false;
                 gridTitulos.Columns.Item("Tipo Doc").Editable = false;
                 gridTitulos.Columns.Item("Nº SAP").Editable = false;
@@ -680,7 +759,6 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Forma Pgto.").Editable = false;
 
                 PosicionarTotais();
-
 
                 m_BoletoModel = new Model.BoletoModel();
                 m_DinheiroModel = new Model.DinheiroModel();
@@ -802,114 +880,150 @@ namespace ChessIT.Financeiro.View
 
         private void Pagar()
         {
-            int empresa = Controller.MainController.ConvertIntCombo((ComboBox)Form.Items.Item("cbEmpresa").Specific);
-
-            string fornecedor = ((EditText)Form.Items.Item("etForCod").Specific).String;
-
             Controller.MainController.Application.StatusBar.SetText("Criando contas a pagar", BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Warning);
 
-            SAPbobsCOM.Payments payments = (SAPbobsCOM.Payments) Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
-            try
+            bool erroLog = false;
+
+            List<Model.BaixaCPModel> baixaCPList = new List<Model.BaixaCPModel>();
+
+            Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
+
+            for (int linha = 0; linha < gridTitulos.Rows.Count; linha++)
             {
-                payments.CardCode = fornecedor;
-
-                payments.BPLID = empresa;
-
-                payments.BankChargeAmount = m_Encargo;
-
-                if (m_DinheiroModel.valor > 0)
+                if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(linha))
                 {
-                    payments.CashAccount = m_DinheiroModel.contaC;
-                    payments.CashSum = m_DinheiroModel.valor;
+                    string fornecedor = ((EditTextColumn)gridTitulos.Columns.Item("Nº Fornecedor")).GetText(linha);
+
+                    int empresa = Controller.MainController.ConvertInt(((EditTextColumn)gridTitulos.Columns.Item("Nº Empresa")).GetText(linha));
+
+                    int docEntry = Controller.MainController.ConvertInt(((EditTextColumn)gridTitulos.Columns.Item("Nº Interno")).GetText(linha));
+
+                    int parcela = Convert.ToInt32(((EditTextColumn)gridTitulos.Columns.Item("Parcela")).GetText(linha).Split('/')[0]);
+
+                    string tipoDoc = ((EditTextColumn)gridTitulos.Columns.Item("Tipo Doc")).GetText(linha).Trim();
+
+                    double valorParcela = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Parcela")).GetText(linha));
+
+                    double totalPagar = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(linha));
+
+                    double valorDesc = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Desc.")).GetText(linha));
+
+                    double totalJuros = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Juros")).GetText(linha));
+
+                    double valorMulta = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Valor Multa")).GetText(linha));
+
+                    Model.BaixaCPModel baixaCPModel = new Model.BaixaCPModel();
+
+                    baixaCPModel.Fornecedor = fornecedor;
+                    baixaCPModel.Empresa = empresa;
+                    baixaCPModel.DocEntry = docEntry;
+                    baixaCPModel.Parcela = parcela;
+                    baixaCPModel.TipoDoc = tipoDoc;
+                    baixaCPModel.TotalPagar = totalPagar;
+                    baixaCPModel.ValorDesconto = valorDesc;
+                    baixaCPModel.ValorJuros = totalJuros;
+                    baixaCPModel.ValorMulta = valorMulta;
+
+                    baixaCPList.Add(baixaCPModel);                        
                 }
+            }
 
-                if (m_TransferenciaModel.valor > 0)
+            var baixaCPGroupList = baixaCPList.GroupBy(r => new { fornecedor = r.Fornecedor, empresa = r.Empresa }).ToList();
+
+            foreach (var baixaCPGroup in baixaCPGroupList)
+            {
+                double proporcionalGrupo = baixaCPGroup.Sum(r => r.TotalPagar) / baixaCPList.Sum(r => r.TotalPagar);
+
+                SAPbobsCOM.Payments payments = (SAPbobsCOM.Payments) Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
+                try
                 {
-                    payments.TransferAccount = m_TransferenciaModel.contaC;
-                    payments.TransferDate = m_TransferenciaModel.data;
-                    payments.TransferReference = m_TransferenciaModel.ref1;
-                    payments.TransferSum = m_TransferenciaModel.valor;
-                }
+                    payments.CardCode = baixaCPGroup.Key.fornecedor;
 
-                if (m_BoletoModel.valor > 0)
-                {
-                    payments.BoeAccount = m_BoletoModel.contaC;
-                    payments.BillOfExchangeAmount = m_BoletoModel.valor;
-                    payments.BillofExchangeStatus = SAPbobsCOM.BoBoeStatus.boes_Created;
-                    payments.BillOfExchange.BillOfExchangeNo = m_BoletoModel.numero.ToString();
-                    payments.BillOfExchange.ReferenceNo = m_BoletoModel.ref1;
-                    payments.BillOfExchange.BillOfExchangeDueDate = m_BoletoModel.vcto;
-                    payments.BillOfExchange.BPBankCountry = m_BoletoModel.pais;
-                    payments.BillOfExchange.BPBankCode = m_BoletoModel.banco;
-                    payments.BillOfExchange.BPBankAct = m_BoletoModel.conta;                    
-                    payments.BillOfExchange.Remarks = m_BoletoModel.obs;
-                    payments.BillOfExchange.PaymentMethodCode = m_BoletoModel.formaPagto;
-                }
+                    payments.BPLID = baixaCPGroup.Key.empresa;
 
-                int indice = 0;
+                    payments.BankChargeAmount = m_Encargo;
 
-                foreach (Model.ChequeModel chequeModel in m_ChequeList)
-                {
-                    if (indice > 0)
-                        payments.Checks.Add();
-
-                    payments.Checks.SetCurrentLine(payments.Checks.Count - 1);
-
-                    payments.Checks.DueDate = chequeModel.vcto;
-                    payments.Checks.CheckSum = chequeModel.valor;
-                    payments.Checks.CountryCode = chequeModel.pais;
-                    payments.Checks.BankCode = chequeModel.banco;
-                    payments.Checks.Branch = chequeModel.filial;
-                    payments.Checks.AccounttNum = chequeModel.conta;
-                    payments.Checks.CheckNumber = chequeModel.numero;
-                    payments.Checks.Trnsfrable = chequeModel.endosso ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
-                    payments.Checks.CheckAccount = chequeModel.contaC;
-                    payments.Checks.ManualCheck = chequeModel.manual ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
-
-                    indice++;
-                }
-
-                indice = 0;
-
-                foreach (Model.CartaoModel cartaoModel in m_CartaoList)
-                {
-                    if (indice > 0)
+                    if (m_DinheiroModel.valor > 0)
                     {
-                        payments.CreditCards.Add();
-                        payments.CreditCards.SetCurrentLine(indice);
+                        payments.CashAccount = m_DinheiroModel.contaC;
+                        payments.CashSum = m_DinheiroModel.valor * proporcionalGrupo;
                     }
 
-                    payments.CreditCards.CreditCard = cartaoModel.nome;
-                    payments.CreditCards.CreditAcct = cartaoModel.contaC;
-                    payments.CreditCards.FirstPaymentDue = cartaoModel.primPagEm;
-                    payments.CreditCards.NumOfPayments = cartaoModel.pgtos;
-                    payments.CreditCards.NumOfCreditPayments = cartaoModel.pgtos;
-                    payments.CreditCards.VoucherNum = cartaoModel.comprov;
-                    payments.CreditCards.CreditSum = cartaoModel.valor;
-                    payments.CreditCards.FirstPaymentSum = cartaoModel.primPagVal;
-                    payments.CreditCards.AdditionalPaymentSum = cartaoModel.adcVal;
-                    payments.CreditCards.SplitPayments = cartaoModel.divComp ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
-
-                    indice++;
-                }
-
-                Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-                for (int linha = 0; linha < gridTitulos.Rows.Count; linha++)
-                {
-                    if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(linha))
+                    if (m_TransferenciaModel.valor > 0)
                     {
-                        int docEntry = Controller.MainController.ConvertInt(((EditTextColumn)gridTitulos.Columns.Item("Nº SAP")).GetText(linha));
+                        payments.TransferAccount = m_TransferenciaModel.contaC;
+                        payments.TransferDate = m_TransferenciaModel.data;
+                        payments.TransferReference = m_TransferenciaModel.ref1;
+                        payments.TransferSum = m_TransferenciaModel.valor * proporcionalGrupo;
+                    }
 
-                        int parcela = Convert.ToInt32(((EditTextColumn)gridTitulos.Columns.Item("Parcela")).GetText(linha).Split('/')[0]);
+                    if (m_BoletoModel.valor > 0)
+                    {
+                        payments.BoeAccount = m_BoletoModel.contaC;
+                        payments.BillOfExchangeAmount = m_BoletoModel.valor * proporcionalGrupo;
+                        payments.BillofExchangeStatus = SAPbobsCOM.BoBoeStatus.boes_Created;
+                        payments.BillOfExchange.BillOfExchangeNo = m_BoletoModel.numero.ToString();
+                        payments.BillOfExchange.ReferenceNo = m_BoletoModel.ref1;
+                        payments.BillOfExchange.BillOfExchangeDueDate = m_BoletoModel.vcto;
+                        payments.BillOfExchange.BPBankCountry = m_BoletoModel.pais;
+                        payments.BillOfExchange.BPBankCode = m_BoletoModel.banco;
+                        payments.BillOfExchange.BPBankAct = m_BoletoModel.conta;
+                        payments.BillOfExchange.Remarks = m_BoletoModel.obs;
+                        payments.BillOfExchange.PaymentMethodCode = m_BoletoModel.formaPagto;
+                    }
 
-                        string tipoDoc = ((EditTextColumn)gridTitulos.Columns.Item("Tipo Doc")).GetText(linha).Trim();
+                    int indice = 0;
 
-                        double totalPagar = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(linha));
+                    foreach (Model.ChequeModel chequeModel in m_ChequeList)
+                    {
+                        if (indice > 0)
+                            payments.Checks.Add();
 
-                        payments.Invoices.DocEntry = docEntry;
+                        payments.Checks.SetCurrentLine(payments.Checks.Count - 1);
 
-                        switch (tipoDoc)
+                        payments.Checks.DueDate = chequeModel.vcto;
+                        payments.Checks.CheckSum = chequeModel.valor * proporcionalGrupo;
+                        payments.Checks.CountryCode = chequeModel.pais;
+                        payments.Checks.BankCode = chequeModel.banco;
+                        payments.Checks.Branch = chequeModel.filial;
+                        payments.Checks.AccounttNum = chequeModel.conta;
+                        payments.Checks.CheckNumber = chequeModel.numero;
+                        payments.Checks.Trnsfrable = chequeModel.endosso ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                        payments.Checks.CheckAccount = chequeModel.contaC;
+                        payments.Checks.ManualCheck = chequeModel.manual ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+
+                        indice++;
+                    }
+
+                    indice = 0;
+
+                    foreach (Model.CartaoModel cartaoModel in m_CartaoList)
+                    {
+                        if (indice > 0)
+                        {
+                            payments.CreditCards.Add();
+                            payments.CreditCards.SetCurrentLine(indice);
+                        }
+
+                        payments.CreditCards.CreditCard = cartaoModel.nome;
+                        payments.CreditCards.CreditAcct = cartaoModel.contaC;
+                        payments.CreditCards.FirstPaymentDue = cartaoModel.primPagEm;
+                        payments.CreditCards.NumOfPayments = cartaoModel.pgtos;
+                        payments.CreditCards.NumOfCreditPayments = cartaoModel.pgtos;
+                        payments.CreditCards.VoucherNum = cartaoModel.comprov;
+                        payments.CreditCards.CreditSum = cartaoModel.valor;
+                        payments.CreditCards.FirstPaymentSum = cartaoModel.primPagVal * proporcionalGrupo;
+                        payments.CreditCards.AdditionalPaymentSum = cartaoModel.adcVal * proporcionalGrupo;
+                        payments.CreditCards.SplitPayments = cartaoModel.divComp ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+
+                        indice++;
+                    }
+
+                    foreach (Model.BaixaCPModel baixaCPModel in baixaCPGroup)
+                    {
+                        payments.Invoices.DocEntry = baixaCPModel.DocEntry;
+
+                        switch (baixaCPModel.TipoDoc)
                         {
                             case "NE":
                                 payments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_PurchaseInvoice;
@@ -922,37 +1036,47 @@ namespace ChessIT.Financeiro.View
                                 break;
                         }
 
-                        payments.Invoices.InstallmentId = parcela;
-                        payments.Invoices.SumApplied = totalPagar;
+                        payments.Invoices.InstallmentId = baixaCPModel.Parcela;
+                        payments.Invoices.SumApplied = baixaCPModel.ValorParcela;
+
+                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorDoJurosMora").Value = baixaCPModel.ValorJuros;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorMulta").Value = baixaCPModel.ValorMulta;
+                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
+
+                    }
+
+                    int erro = payments.Add();
+
+                    if (erro != 0)
+                    {
+                        string msg = "";
+
+                        Controller.MainController.Company.GetLastError(out erro, out msg);
+
+                        throw new Exception(erro + " - " + msg);
                     }
                 }
-
-                int erro = payments.Add();
-                
-                if (erro != 0)
+                catch (Exception ex)
                 {
-                    string msg = "";
+                    Controller.MainController.Application.StatusBar.SetText(ex.Message);
 
-                    Controller.MainController.Company.GetLastError(out erro, out msg);
-
-                    throw new Exception(erro + " - " + msg);
+                    System.IO.File.WriteAllText("payments.xml", payments.GetAsXML());
                 }
+                finally
+                {
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(payments);
+                    GC.Collect();
+                }
+            }
 
+            if (erroLog)    
                 Controller.MainController.Application.StatusBar.SetText("Operação completada com êxito", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Success);
+            else
+                Controller.MainController.Application.StatusBar.SetText("Operação completada com erros. Consulte o log de mensagens.", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Error);
 
-                Limpar();
-            }
-            catch (Exception ex)
-            {
-                Controller.MainController.Application.StatusBar.SetText(ex.Message);
-
-                System.IO.File.WriteAllText("payments.xml", payments.GetAsXML());
-            }
-            finally
-            {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(payments);
-                GC.Collect();
-            }
+            Limpar();
         }
 
         private void Totalizar()

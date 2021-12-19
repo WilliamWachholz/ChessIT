@@ -145,6 +145,52 @@ namespace ChessIT.Financeiro.View
                                 }
                             }
                             break;
+                        case BoEventTypes.et_MATRIX_LINK_PRESSED:
+                            if (pVal.BeforeAction)
+                            {
+                                if (pVal.ItemUID == "gridTitulo")
+                                {
+                                    if (pVal.ColUID == "Nº SAP")
+                                    {
+                                        string numeroInterno = ((EditTextColumn)((Grid)Form.Items.Item("gridTitulo").Specific).Columns.Item("Nº Interno")).GetText(pVal.Row);
+
+                                        switch (((EditTextColumn)((Grid)Form.Items.Item("gridTitulo").Specific).Columns.Item("Tipo Doc")).GetText(pVal.Row))
+                                        {
+                                            case "NE":
+                                                Controller.MainController.Application.OpenForm(BoFormObjectEnum.fo_PurchaseInvoice, "18", numeroInterno);
+                                                break;
+                                            case "ADT":
+                                                Controller.MainController.Application.OpenForm((BoFormObjectEnum)204, "204", numeroInterno);
+                                                break;
+                                            case "LC":
+                                                Controller.MainController.Application.OpenForm(BoFormObjectEnum.fo_JournalPosting, "30", numeroInterno);
+                                                break;
+                                        }
+
+                                        bubbleEvent = false;
+                                    }
+                                }
+                            }
+                            break;
+                        case BoEventTypes.et_ITEM_PRESSED:
+                            if (!pVal.BeforeAction)
+                            {
+                                if (pVal.ItemUID == "ckSelTodos")
+                                {
+                                    Pesquisar();
+                                }
+                                else if (pVal.ItemUID == "gridTitulo" && pVal.ColUID == "Check")
+                                {
+                                    if (!pVal.BeforeAction)
+                                    {
+                                        if (((CheckBoxColumn)((Grid)Form.Items.Item("gridTitulo").Specific).Columns.Item("Check")).IsChecked(pVal.Row))
+                                            ((Grid)Form.Items.Item("gridTitulo").Specific).Rows.SelectedRows.Add(pVal.Row);
+                                        else
+                                            ((Grid)Form.Items.Item("gridTitulo").Specific).Rows.SelectedRows.Remove(pVal.Row);
+                                    }
+                                }
+                            }
+                            break;
                         case BoEventTypes.et_VALIDATE:
                             if (!pVal.BeforeAction)
                             {
@@ -326,7 +372,9 @@ namespace ChessIT.Financeiro.View
             string query = @"select '{8}' AS ""Check"",
                                     OPCH.""BPLName"" AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
-		                            OPCH.""DocEntry"" AS ""Nº SAP"",
+                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
+		                            OPCH.""DocEntry"" AS ""Nº Interno"",
+		                            OPCH.""DocNum"" AS ""Nº SAP"",
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
                                     OPCH.""DocDueDate"" AS ""Data Vcto."",
@@ -353,7 +401,9 @@ namespace ChessIT.Financeiro.View
                             select  '{8}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
-		                            ODPO.""DocEntry"" AS ""Nº SAP"",
+                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
+		                            ODPO.""DocEntry"" AS ""Nº Interno"",
+		                            ODPO.""DocNum"" AS ""Nº SAP"",
 		                            0 AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
                                     ODPO.""DocDueDate"" AS ""Data Vcto."",
@@ -380,9 +430,11 @@ namespace ChessIT.Financeiro.View
                             select  '{8}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
 		                            'LC' AS ""Tipo Doc"",
+                                    OCRD.""CardCode"" AS ""Nº Fornecedor"",
+		                            OJDT.""TransId"" AS ""Nº Interno"",
 		                            OJDT.""TransId"" AS ""Nº SAP"",
 		                            0 AS ""Nº NF"",
-		                            JDT1.""ShortName"" AS ""Fornecedor"",
+		                            OCRD.""CardName"" AS ""Fornecedor"",
                                     OJDT.""DueDate"" AS ""Data Vcto."",
 		                            '1/1' as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
@@ -393,8 +445,11 @@ namespace ChessIT.Financeiro.View
 		                            '' AS ""Forma Pgto.""
                             from JDT1
                             inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
+                            inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
                             where ""BalDueCred"" > 0
                             and ""MthDate"" is null
+                            and OJDT.""TransType"" <> 18
+                            and JDT1.""ShortName"" LIKE 'FOR%'
                             and OJDT.""StornoToTr"" IS NULL
                             and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
                             and ('{0}' = '' or '' = '{0}')
@@ -410,7 +465,9 @@ namespace ChessIT.Financeiro.View
             string query = @"select '{8}' AS ""Check"",
                                     OPCH.""BPLName"" AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
-		                            OPCH.""DocEntry"" AS ""Nº SAP"",
+                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
+		                            OPCH.""DocEntry"" AS ""Nº Interno"",
+                                    OPCH.""DocNum"" AS ""Nº SAP"",
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
                                     OPCH.""DocDueDate"" AS ""Data Vcto."",
@@ -437,7 +494,9 @@ namespace ChessIT.Financeiro.View
                             select  '{8}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
-		                            ODPO.""DocEntry"" AS ""Nº SAP"",
+                                    ODPO.""CardCode"" AS ""Nº Fornecedor"",
+		                            ODPO.""DocEntry"" AS ""Nº Interno"",
+                                    ODPO.""DocNum"" AS ""Nº SAP"",
 		                            0 AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
                                     ODPO.""DocDueDate"" AS ""Data Vcto."",
@@ -464,9 +523,11 @@ namespace ChessIT.Financeiro.View
                             select  '{8}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
 		                            'LC' AS ""Tipo Doc"",
-		                            OJDT.""TransId"" AS ""Nº SAP"",
+                                    OCRD.""CardCode"" AS ""Nº Fornecedor"",                                        
+		                            OJDT.""TransId"" AS ""Nº Interno"",
+                                    OJDT.""TransId"" AS ""Nº SAP"",
 		                            OJDT.""U_NDocFin"" AS ""Nº NF"",
-		                            JDT1.""ShortName"" AS ""Fornecedor"",
+		                            OCRD.""CardName"" AS ""Fornecedor"",
                                     OJDT.""DueDate"" AS ""Data Vcto."",
 		                            '1/1' as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
@@ -477,8 +538,11 @@ namespace ChessIT.Financeiro.View
 		                            OJDT.""U_FPagFin"" AS ""Forma Pgto.""
                             from JDT1
                             inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
+                            inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
                             where ""BalDueCred"" > 0
                             and ""MthDate"" is null
+                            and OJDT.""TransType"" <> 18
+                            and JDT1.""ShortName"" LIKE 'FOR%'
                             and OJDT.""StornoToTr"" IS NULL
                             and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
                             and ('{0}' = '' or OJDT.""U_NDocFin"" = '{0}')
@@ -522,6 +586,11 @@ namespace ChessIT.Financeiro.View
 
                 gridTitulos.Columns.Item("Check").Type = BoGridColumnType.gct_CheckBox;
                 gridTitulos.Columns.Item("Check").TitleObject.Caption = "#";
+
+                ((EditTextColumn)gridTitulos.Columns.Item("Nº SAP")).LinkedObjectType = "30";
+
+                gridTitulos.Columns.Item("Nº Fornecedor").Visible = false;
+                gridTitulos.Columns.Item("Nº Interno").Visible = false;
 
                 gridTitulos.Columns.Item("Filial").Editable = false;
                 gridTitulos.Columns.Item("Tipo Doc").Editable = false;
@@ -708,7 +777,9 @@ namespace ChessIT.Financeiro.View
                 {
                     string tipoDoc = ((EditTextColumn)gridTitulos.Columns.Item("Tipo Doc")).GetText(linha).Trim();
 
-                    int docEntry = Convert.ToInt32(((EditTextColumn)gridTitulos.Columns.Item("Nº SAP")).GetText(linha));
+                    int docEntry = Convert.ToInt32(((EditTextColumn)gridTitulos.Columns.Item("Nº Interno")).GetText(linha));
+
+                    int docNum = Convert.ToInt32(((EditTextColumn)gridTitulos.Columns.Item("Nº SAP")).GetText(linha));
 
                     string parcela = ((EditTextColumn)gridTitulos.Columns.Item("Parcela")).GetText(linha).Trim();
 
@@ -835,7 +906,21 @@ namespace ChessIT.Financeiro.View
 
                         if (!recordSet.EoF)
                         {
-                            ((EditText)lcForm.Items.Item("10").Specific).String = recordSet.Fields.Item(1).Value.ToString();
+                            string memo = string.Format("Renegociação Doc ({0}) - Fornecedor {1}", docNum, recordSet.Fields.Item(1).Value.ToString());
+
+                            if (memo.Length > 50)
+                            {
+                                memo = memo.Substring(0, 50);
+                            }
+
+                            string memoLinha = string.Format("Renegociação Doc ({0}) - Parcela {1}", docNum, parcela);
+
+                            if (memoLinha.Length > 50)
+                            {
+                                memoLinha = memoLinha.Substring(0, 50);
+                            }
+
+                            ((EditText)lcForm.Items.Item("10").Specific).String = memo;
 
                             ((EditText)lcForm.Items.Item("97").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(2).Value).ToString("dd/MM/yyyy");
                             ((EditText)lcForm.Items.Item("6").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(3).Value).ToString("dd/MM/yyyy");
@@ -856,7 +941,7 @@ namespace ChessIT.Financeiro.View
 
                             ((EditText)grid.Columns.Item("6").Cells.Item(1).Specific).String = totalPagar.ToString();
 
-                            ((EditText)grid.Columns.Item("9").Cells.Item(1).Specific).String = parcela;
+                            ((EditText)grid.Columns.Item("9").Cells.Item(1).Specific).String = memoLinha;
 
                             //Linha débito conta contrapartida
 
@@ -864,7 +949,7 @@ namespace ChessIT.Financeiro.View
 
                             ((EditText)grid.Columns.Item("5").Cells.Item(2).Specific).String = valorParcela.ToString();
 
-                            ((EditText)grid.Columns.Item("9").Cells.Item(2).Specific).String = parcela;
+                            ((EditText)grid.Columns.Item("9").Cells.Item(2).Specific).String = memoLinha;
 
                             //Linha débito juros e multa
                             if (contaJurosMulta != "")
@@ -873,7 +958,7 @@ namespace ChessIT.Financeiro.View
 
                                 ((EditText)grid.Columns.Item("5").Cells.Item(3).Specific).String = (valorJuros + valorMulta).ToString();
 
-                                ((EditText)grid.Columns.Item("9").Cells.Item(3).Specific).String = parcela;
+                                ((EditText)grid.Columns.Item("9").Cells.Item(3).Specific).String = memoLinha;
                             }
                         }
                     }
