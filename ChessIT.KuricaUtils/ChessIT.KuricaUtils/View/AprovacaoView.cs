@@ -261,6 +261,8 @@ namespace ChessIT.KuricaUtils.View
 
         private void Pesquisar(bool detalhar)
         {
+            Grid gridDetalhes = (Grid)Form.Items.Item("gdDetalhes").Specific;
+
             string selecionarTodos = ((CheckBox)Form.Items.Item("ckSelTodos").Specific).Checked ? "Y" : "N";
 
             string dataDe = ((EditText)Form.Items.Item("3").Specific).String;
@@ -276,53 +278,75 @@ namespace ChessIT.KuricaUtils.View
             string statusAprovados = ((CheckBox)Form.Items.Item("ckStaAprov").Specific).Checked ? "Y" : "N";
 
             string statusPendentes = ((CheckBox)Form.Items.Item("ckStaPend").Specific).Checked ? "Y" : "N";
-            
+
+            string statusRecusados = ((CheckBox)Form.Items.Item("ckStaRec").Specific).Checked ? "Y" : "N";
+
+            string selecionados = "";
+
+            List<int> selecionadoList = new List<int>();
+
+            for (int row = 0; row < gridDetalhes.Rows.Count; row++)
+            {
+
+                if (((CheckBoxColumn)gridDetalhes.Columns.Item("#")).IsChecked(row))
+                {
+                    Model.AprovacaoModel aprovacaoModel = new Model.AprovacaoModel();
+                    selecionadoList.Add(Convert.ToInt32(((EditTextColumn)gridDetalhes.Columns.Item("WddCode")).GetText(row)));
+                }
+            }
+
+            if (selecionadoList.Count == 0)
+                selecionados = "0";
+            else
+                selecionados = string.Join(",", selecionadoList.ToArray());
+
             string query = string.Format(@" select  '{0}' AS ""#"",
-                                            OWDD.""WddCode"",
-                                            ODRF.""DocEntry"" AS ""Nº Interno"",
-		                                    ODRF.""DocNum"" AS ""Nº Doc"",
-		                                    ODRF.""DocDate"" AS ""Data"",
-		                                    ODRF.""CardName"" AS ""Fornecedor"",
-		                                    ODRF.""Comments"" AS ""Observação"",
-		                                    ODRF.""DocTotal"" AS ""Valor Total"",
-		                                    --case when (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y') then 'Aprovado' 
-			                                --     when (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'N') then 'Recusado'
-			                                --     else 'Pendente'
-		                                    --end as ""Decisão/Situação"",
-                                            case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
-			                                     when (OWDD.""Status"" = 'N') then 'Recusado'
-			                                     else 'Pendente'
-		                                    end as ""Decisão/Situação"",
-		                                    '' AS ""Descrição Item"",
-		                                    NULL AS ""Quantidade"",
-		                                    NULL AS ""Preço Unitário"",
-		                                    NULL AS ""Total Item"",
-		                                    '' AS ""CC"",
-		                                    '' AS ""Contrato"",
-		                                    '' AS ""Placa""
-                                    from OWDD
-                                    inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
-                                    inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
-                                    where ODRF.""ObjType"" = 22
-                                    and ((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)))
-                                    and ((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)))                                    
-                                    and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
-                                    and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
-                                    --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
-                                    and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or('{7}' = 'Y' and(OWDD.""Status"" = 'W')))",
-                                    selecionarTodos,
-                                    dataDe == "" ? "1990-01-01" : Convert.ToDateTime(dataDe).ToString("yyyy-MM-dd"),
-                                    dataAte == "" ? "1990-01-01" : Convert.ToDateTime(dataAte).ToString("yyyy-MM-dd"),
-                                    filial,
-                                    fornecedor,
-                                    statusTodos,
-                                    statusAprovados,
-                                    statusPendentes);
+                                    OWDD.""WddCode"",
+                                    ODRF.""DocEntry"" AS ""Nº Interno"",
+		                            ODRF.""DocNum"" AS ""Nº Doc"",
+		                            ODRF.""DocDate"" AS ""Data"",
+		                            ODRF.""CardName"" AS ""Fornecedor"",
+		                            ODRF.""Comments"" AS ""Observação"",
+		                            ODRF.""DocTotal"" AS ""Valor Total"",
+                                    case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
+			                                when (OWDD.""Status"" = 'N') then 'Recusado'
+			                                else 'Pendente'
+		                            end as ""Decisão/Situação"",
+                                    (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Aprovador"",
+                                    (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Aprovação"",
+                                    (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Aprovação"",
+		                            '' AS ""Descrição Item"",
+		                            NULL AS ""Quantidade"",
+		                            NULL AS ""Preço Unitário"",
+		                            NULL AS ""Total Item"",
+		                            CASE (select count(*) from DRF1 where DRF1.""DocEntry"" = ODRF.""DocEntry"") WHEN 1 THEN (select max(coalesce(""OcrName"", '')) from DRF1 left join OOCR on OOCR.""OcrCode"" = DRF1.""OcrCode"" where DRF1.""DocEntry"" = ODRF.""DocEntry"") ELSE '' END AS ""CC"",
+		                            CASE (select count(*) from DRF1 where DRF1.""DocEntry"" = ODRF.""DocEntry"") WHEN 1 THEN (select max(coalesce(""OcrName"", '')) from DRF1 left join OOCR on OOCR.""OcrCode"" = DRF1.""OcrCode3"" where DRF1.""DocEntry"" = ODRF.""DocEntry"") ELSE '' END AS ""Contrato"",
+		                            CASE (select count(*) from DRF1 where DRF1.""DocEntry"" = ODRF.""DocEntry"") WHEN 1 THEN (select max(coalesce(""OcrName"", '')) from DRF1 left join OOCR on OOCR.""OcrCode"" = DRF1.""OcrCode5"" where DRF1.""DocEntry"" = ODRF.""DocEntry"") ELSE '' END AS ""Placa""
+                            from OWDD
+                            inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
+                            inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
+                            where ODRF.""ObjType"" = 22
+                            and ((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)))
+                            and ((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)))                                    
+                            and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
+                            and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
+                            --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
+                            and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or('{7}' = 'Y' and(OWDD.""Status"" = 'W')) or ('{8}' = 'Y' and (OWDD.""Status"" = 'N')))
+                            order by OWDD.""WddCode""",
+                            selecionarTodos,
+                            dataDe == "" ? "1990-01-01" : Convert.ToDateTime(dataDe).ToString("yyyy-MM-dd"),
+                            dataAte == "" ? "1990-01-01" : Convert.ToDateTime(dataAte).ToString("yyyy-MM-dd"),
+                            filial,
+                            fornecedor,
+                            statusTodos,
+                            statusAprovados,
+                            statusPendentes,
+                            statusRecusados);
 
             if (detalhar)
             {
                 query = string.Format(@"select * from (
-                                        select  '{0}' AS ""#"",
+                                        select case '{0}' when 'N' then (case when OWDD.""WddCode"" IN ({9}) then 'Y' else 'N' end) else 'Y' end AS ""#"",
                                             OWDD.""WddCode"",
                                             ODRF.""DocEntry"" AS ""Nº Interno"",
 		                                    ODRF.""DocNum"" AS ""Nº Doc"",
@@ -330,21 +354,20 @@ namespace ChessIT.KuricaUtils.View
 		                                    ODRF.""CardName"" AS ""Fornecedor"",
 		                                    ODRF.""Comments"" AS ""Observação"",
 		                                    ODRF.""DocTotal"" AS ""Valor Total"",
-		                                    --case when (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y') then 'Aprovado' 
-			                                --     when (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'N') then 'Recusado'
-			                                --     else 'Pendente'
-		                                    --end as ""Decisão/Situação"",
                                             case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
 			                                     when (OWDD.""Status"" = 'N') then 'Recusado'
 			                                     else 'Pendente'
 		                                    end as ""Decisão/Situação"",
+                                            (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Aprovador"",
+                                            (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Aprovação"",
+                                            (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Aprovação"",
 		                                    '' AS ""Descrição Item"",
 		                                    NULL AS ""Quantidade"",
 		                                    NULL AS ""Preço Unitário"",
 		                                    NULL AS ""Total Item"",
-		                                    '' AS ""CC"",
-		                                    '' AS ""Contrato"",
-		                                    '' AS ""Placa""
+		                                    CASE (select count(*) from DRF1 where DRF1.""DocEntry"" = ODRF.""DocEntry"") WHEN 1 THEN (select max(coalesce(""OcrName"", '')) from DRF1 left join OOCR on OOCR.""OcrCode"" = DRF1.""OcrCode"" where DRF1.""DocEntry"" = ODRF.""DocEntry"") ELSE '' END AS ""CC"",
+		                                    CASE (select count(*) from DRF1 where DRF1.""DocEntry"" = ODRF.""DocEntry"") WHEN 1 THEN (select max(coalesce(""OcrName"", '')) from DRF1 left join OOCR on OOCR.""OcrCode"" = DRF1.""OcrCode3"" where DRF1.""DocEntry"" = ODRF.""DocEntry"") ELSE '' END AS ""Contrato"",
+		                                    CASE (select count(*) from DRF1 where DRF1.""DocEntry"" = ODRF.""DocEntry"") WHEN 1 THEN (select max(coalesce(""OcrName"", '')) from DRF1 left join OOCR on OOCR.""OcrCode"" = DRF1.""OcrCode5"" where DRF1.""DocEntry"" = ODRF.""DocEntry"") ELSE '' END AS ""Placa""
                                     from OWDD
                                     inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
                                     inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""                                    
@@ -365,24 +388,30 @@ namespace ChessIT.KuricaUtils.View
 		                                '' AS ""Observação"",
 		                                NULL AS ""Valor Total"",
 		                                '' as ""Decisão/Situação"",
+		                                '' as ""Aprovador"",
+		                                '' as ""Data Aprovação"",
+		                                '' as ""Horário Aprovação"",
 		                                DRF1.""Dscription"" AS ""Descrição Item"",
 		                                DRF1.""Quantity"" AS ""Quantidade"",
 		                                DRF1.""Price"" AS ""Preço Unitário"",
 		                                DRF1.""LineTotal"" AS ""Total Item"",
-		                                DRF1.""OcrCode"" AS ""CC"",
-		                                DRF1.""OcrCode3"" AS ""Contrato"",
-		                                DRF1.""OcrCode5"" AS ""Placa""
+		                                C1.""OcrName"" AS ""CC"",
+		                                C2.""OcrName"" AS ""Contrato"",
+		                                C3.""OcrName"" AS ""Placa""
                                     from OWDD
                                     inner join ODRF on ODRF.""DocEntry"" = OWDD.""DraftEntry"" AND OWDD.""ObjType"" = 22
                                     inner join OBPL on OBPL.""BPLId"" = ODRF.""BPLId""
                                     inner join DRF1 on DRF1.""DocEntry"" = ODRF.""DocEntry""
+                                    left join OOCR C1 on C1.""OcrCode"" = DRF1.""OcrCode""
+                                    left join OOCR C2 on C2.""OcrCode"" = DRF1.""OcrCode3""
+                                    left join OOCR C3 on C3.""OcrCode"" = DRF1.""OcrCode5""
                                     where ODRF.""ObjType"" = 22
                                     and ((cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) >= cast('{1}' as date)))
                                     and ((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)))                                    
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
-                                    and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
-                                    --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
-                                    and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or('{7}' = 'Y' and(OWDD.""Status"" = 'W')))
+                                    and ('{4}' = '' or '{4}' = ODRF.""CardCode"")                                    
+                                    and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and(OWDD.""Status"" = 'W')) or('{8}' = 'Y' and (OWDD.""Status"" = 'N')))
+                                    and '{0}' = 'Y' or OWDD.""WddCode"" IN ({9})
                                 ) vt order by ""WddCode"", ""Descrição Item""",
                                         selecionarTodos,
                                         dataDe == "" ? "1990-01-01" : Convert.ToDateTime(dataDe).ToString("yyyy-MM-dd"),
@@ -391,15 +420,15 @@ namespace ChessIT.KuricaUtils.View
                                         fornecedor,
                                         statusTodos,
                                         statusAprovados,
-                                        statusPendentes);
+                                        statusPendentes,
+                                        statusRecusados,
+                                        selecionados);
             }
 
             Form.Freeze(true);
             try
             {
                 Form.DataSources.DataTables.Item("dtGrid").ExecuteQuery(query);
-
-                Grid gridDetalhes = (Grid)Form.Items.Item("gdDetalhes").Specific;
 
                 gridDetalhes.Columns.Item("WddCode").Visible = false;
                 gridDetalhes.Columns.Item("Nº Interno").Editable = false;
@@ -409,6 +438,9 @@ namespace ChessIT.KuricaUtils.View
                 gridDetalhes.Columns.Item("Observação").Editable = false;
                 gridDetalhes.Columns.Item("Valor Total").Editable = false;
                 gridDetalhes.Columns.Item("Decisão/Situação").Editable = false;
+                gridDetalhes.Columns.Item("Aprovador").Editable = false;
+                gridDetalhes.Columns.Item("Data Aprovação").Editable = false;
+                gridDetalhes.Columns.Item("Horário Aprovação").Editable = false;
                 gridDetalhes.Columns.Item("Descrição Item").Editable = false;
                 gridDetalhes.Columns.Item("Quantidade").Editable = false;
                 gridDetalhes.Columns.Item("Preço Unitário").Editable = false;

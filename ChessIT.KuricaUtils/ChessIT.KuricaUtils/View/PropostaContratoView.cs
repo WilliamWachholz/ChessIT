@@ -251,7 +251,11 @@ namespace ChessIT.KuricaUtils.View
                                                         recordSet.MoveNext();
                                                     }
 
-                                                    blanketAgreement.Status = SAPbobsCOM.BlanketAgreementStatusEnum.asApproved;
+                                                    blanketAgreement.AgreementType = SAPbobsCOM.BlanketAgreementTypeEnum.atSpecific;
+                                                    blanketAgreement.Renewal = SAPbobsCOM.BoYesNoEnum.tYES;
+                                                    blanketAgreement.RemindUnit = SAPbobsCOM.BoRemindUnits.reu_Days;
+                                                    blanketAgreement.RemindTime = 5;
+                                                    blanketAgreement.Status = SAPbobsCOM.BlanketAgreementStatusEnum.asOnHold;
                                                     blanketAgreement.StartDate = Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtIni").Value);
                                                     blanketAgreement.EndDate = Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtFim").Value);
                                                     if (!Form.DataSources.UserDataSources.Item("condPgto").Value.Equals(""))

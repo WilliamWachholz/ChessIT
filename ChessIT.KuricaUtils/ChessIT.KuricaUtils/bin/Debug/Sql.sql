@@ -1,7 +1,7 @@
  select  'N' AS "#",
                                             OWDD."WddCode",
                                             ODRF."DocEntry" AS "Nº Interno",
-		                                    ODRF."DocEntry" AS "Nº Doc",
+		                                    ODRF."DocNum" AS "Nº Doc",
 		                                    ODRF."DocDate" AS "Data",
 		                                    ODRF."CardName" AS "Fornecedor",
 		                                    ODRF."Comments" AS "Observação",

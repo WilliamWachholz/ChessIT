@@ -13,6 +13,8 @@ namespace ChessIT.Financeiro.View
 
         bool Loaded;
 
+        string caminhoAnexo = string.Empty;
+
         public DocCPView(Form form)
         {
             this.Form = form;
@@ -48,6 +50,24 @@ namespace ChessIT.Financeiro.View
                                 }
                             }
                             break;
+                        case BoEventTypes.et_ITEM_PRESSED:
+                            {
+                                if (!pVal.BeforeAction)
+                                {
+                                    if (pVal.ItemUID == "btAnexo")
+                                    {
+                                        string fileName = "";
+
+                                        if (new PromptDialogView().OpenFilePrompt(out fileName) == System.Windows.Forms.DialogResult.OK)
+                                        {
+                                            caminhoAnexo = fileName;
+
+                                            Form.DataSources.DataTables.Item("dtFiltro").Columns.Item("Anexo").Cells.Item(0).Value = System.IO.Path.GetFileName(fileName);
+                                        }
+                                    }
+                                }
+                            }
+                            break;                            
                         case BoEventTypes.et_VALIDATE:
                             if (!pVal.BeforeAction)
                             {
@@ -131,6 +151,21 @@ namespace ChessIT.Financeiro.View
                                         {
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("ForPgto", 0, chooseFromListEvent.SelectedObjects.GetValue("PayMethCod", 0).ToString());
                                         }
+
+                                        if (pVal.ItemUID.Equals("etCentroC"))
+                                        {
+                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("CentroC", 0, chooseFromListEvent.SelectedObjects.GetValue("OcrCode", 0).ToString());                                            
+                                        }
+
+                                        if (pVal.ItemUID.Equals("etContrato"))
+                                        {
+                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("Contrato", 0, chooseFromListEvent.SelectedObjects.GetValue("OcrCode", 0).ToString());
+                                        }
+
+                                        if (pVal.ItemUID.Equals("etPlaca"))
+                                        {
+                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("Placa", 0, chooseFromListEvent.SelectedObjects.GetValue("OcrCode", 0).ToString());
+                                        }
                                     }
                                 }
                             }
@@ -204,6 +239,42 @@ namespace ChessIT.Financeiro.View
 
                                         choose.SetConditions(conditions);
 
+                                        choose = (ChooseFromList)this.Form.ChooseFromLists.Item("CFL_7");
+
+                                        conditions = new Conditions();
+
+                                        condition = conditions.Add();
+
+                                        condition.Alias = "DimCode";
+                                        condition.Operation = BoConditionOperation.co_EQUAL;
+                                        condition.CondVal = "1";
+
+                                        choose.SetConditions(conditions);
+
+                                        choose = (ChooseFromList)this.Form.ChooseFromLists.Item("CFL_8");
+
+                                        conditions = new Conditions();
+
+                                        condition = conditions.Add();
+
+                                        condition.Alias = "DimCode";
+                                        condition.Operation = BoConditionOperation.co_EQUAL;
+                                        condition.CondVal = "3";
+
+                                        choose.SetConditions(conditions);
+
+                                        choose = (ChooseFromList)this.Form.ChooseFromLists.Item("CFL_9");
+
+                                        conditions = new Conditions();
+
+                                        condition = conditions.Add();
+
+                                        condition.Alias = "DimCode";
+                                        condition.Operation = BoConditionOperation.co_EQUAL;
+                                        condition.CondVal = "5";
+
+                                        choose.SetConditions(conditions);
+
                                         SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                                         recordSet.DoQuery(@"select ""BPLId"", ""BPLName"" from OBPL");
 
@@ -250,8 +321,14 @@ namespace ChessIT.Financeiro.View
 
         DateTime dataVencimento = new DateTime();
 
+        string tipoContrato = "";
+
+        string grupoPlaca = "";
+
         private void GerarLC()
         {
+            Controller.MainController.Application.SendKeys("{TAB}");
+
             if (((EditText)Form.Items.Item("etCodFor").Specific).String == "")
             {
                 Controller.MainController.Application.StatusBar.SetText("Campo obrigatório [Cód. Fornecedor] não preenchido");
@@ -336,8 +413,8 @@ namespace ChessIT.Financeiro.View
             if (lcForm != null)
             {
 #if !DEBUG
-                    ((EditText)lcForm.Items.Item("U_NDocFin").Specific).String = ((EditText)Form.Items.Item("etNumDoc").Specific).String;
-                    ((EditText)lcForm.Items.Item("U_FPagFin").Specific).String = ((EditText)Form.Items.Item("etForPgto").Specific).String;
+                ((EditText)lcForm.Items.Item("U_NDocFin").Specific).String = ((EditText)Form.Items.Item("etNumDoc").Specific).String;
+                ((EditText)lcForm.Items.Item("U_FPagFin").Specific).String = ((EditText)Form.Items.Item("etForPgto").Specific).String;
 #endif
 
                 ((EditText)lcForm.Items.Item("97").Specific).String = ((EditText)Form.Items.Item("etDataDoc").Specific).String;
@@ -348,6 +425,16 @@ namespace ChessIT.Financeiro.View
                 ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0)).AddMonths(numeroParcelas).ToString("dd/MM/yyyy");
 
                 ((EditText)lcForm.Items.Item("10").Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
+
+                ((EditText)lcForm.Items.Item("U_CodBarras").Specific).String = ((EditText)Form.Items.Item("etCodBarra").Specific).String;
+
+                Item _etAnexo = lcForm.Items.Add("etAnexo", BoFormItemTypes.it_EDIT);
+                _etAnexo.Visible = false;
+
+                EditText etAnexo = (EditText)_etAnexo.Specific;
+                etAnexo.DataBind.SetBound(true, "OJDT", "U_Anexo");
+
+                etAnexo.String = caminhoAnexo;
 
                 numeroParcelas = Convert.ToInt32(Form.DataSources.DataTables.Item("dtFiltro").GetValue("NumPar", 0));
 
@@ -366,6 +453,32 @@ namespace ChessIT.Financeiro.View
                 dataVcto1 = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0));
 
                 dataVencimento = dataVcto1;
+
+                string contrato = Form.DataSources.DataTables.Item("dtFiltro").GetValue("Contrato", 0).ToString();
+
+                string placa = Form.DataSources.DataTables.Item("dtFiltro").GetValue("Placa", 0).ToString();
+
+                string query = @"SELECT OPRC.""U_Dim2CC""
+                                 FROM OCR1
+                                 INNER JOIN OPRC ON OPRC.""PrcCode"" = OCR1.""PrcCode""
+                                 WHERE ""OcrCode"" = '{0}'";
+
+                SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                recordSet.DoQuery(string.Format(query, contrato));
+
+                if (!recordSet.EoF)
+                    tipoContrato = recordSet.Fields.Item(0).Value.ToString();
+
+                query = @"SELECT OPRC.""U_Dim4CC""
+                                 FROM OCR1
+                                 INNER JOIN OPRC ON OPRC.""PrcCode"" = OCR1.""PrcCode""
+                                 WHERE ""OcrCode"" = '{0}'";
+
+                recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                recordSet.DoQuery(string.Format(query, placa));
+
+                if (!recordSet.EoF)
+                    grupoPlaca = recordSet.Fields.Item(0).Value.ToString();
 
                 m_timerLC.Elapsed += FinalizarLC;
                 m_timerLC.Enabled = true;
@@ -396,6 +509,18 @@ namespace ChessIT.Financeiro.View
                         ((EditText)grid.Columns.Item("6").Cells.Item(parcela - 1).Specific).String = valorParcela.ToString();
 
                     ((EditText)grid.Columns.Item("9").Cells.Item(parcela - 1).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String + " Contas a Pagar " + (parcela - 1).ToString() + "/" + numeroParcelas.ToString();
+
+                    ((EditText)grid.Columns.Item("2006").Cells.Item(parcela - 1).Specific).String = ((EditText)Form.Items.Item("etCentroC").Specific).String;
+
+                    ((EditText)grid.Columns.Item("2003").Cells.Item(parcela - 1).Specific).String = ((EditText)Form.Items.Item("etContrato").Specific).String;
+
+                    ((EditText)grid.Columns.Item("2005").Cells.Item(parcela - 1).Specific).String = ((EditText)Form.Items.Item("etPlaca").Specific).String;
+
+                    if (tipoContrato != string.Empty)
+                        ((EditText)grid.Columns.Item("2001").Cells.Item(parcela - 1).Specific).String = tipoContrato;
+
+                    if (grupoPlaca != string.Empty)
+                        ((EditText)grid.Columns.Item("2004").Cells.Item(parcela - 1).Specific).String = grupoPlaca;
                 }
 
                 if (parcela == numeroParcelas + 1)
@@ -411,6 +536,18 @@ namespace ChessIT.Financeiro.View
 
                         ((EditText)grid.Columns.Item("9").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
 
+                        ((EditText)grid.Columns.Item("2006").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etCentroC").Specific).String;
+
+                        ((EditText)grid.Columns.Item("2003").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etContrato").Specific).String;
+
+                        ((EditText)grid.Columns.Item("2005").Cells.Item(numeroParcelas + 1).Specific).String = ((EditText)Form.Items.Item("etPlaca").Specific).String;
+
+                        if (tipoContrato != string.Empty)
+                            ((EditText)grid.Columns.Item("2001").Cells.Item(numeroParcelas + 1).Specific).String = tipoContrato;
+
+                        if (grupoPlaca != string.Empty)
+                            ((EditText)grid.Columns.Item("2004").Cells.Item(numeroParcelas + 1).Specific).String = grupoPlaca;
+
                         if (((EditText)Form.Items.Item("etContaJ").Specific).String != "")
                         {
                             ((EditText)grid.Columns.Item("1").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etContaJ").Specific).String;
@@ -420,12 +557,28 @@ namespace ChessIT.Financeiro.View
                             ((EditText)grid.Columns.Item("5").Cells.Item(numeroParcelas + 2).Specific).String = valorJuros.ToString();
 
                             ((EditText)grid.Columns.Item("9").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
+
+                            ((EditText)grid.Columns.Item("2006").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etCentroC").Specific).String;
+
+                            ((EditText)grid.Columns.Item("2003").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etContrato").Specific).String;
+
+                            ((EditText)grid.Columns.Item("2005").Cells.Item(numeroParcelas + 2).Specific).String = ((EditText)Form.Items.Item("etPlaca").Specific).String;
+
+                            if (tipoContrato != string.Empty)
+                                ((EditText)grid.Columns.Item("2001").Cells.Item(numeroParcelas + 2).Specific).String = tipoContrato;
+
+                            if (grupoPlaca != string.Empty)
+                                ((EditText)grid.Columns.Item("2004").Cells.Item(numeroParcelas + 2).Specific).String = grupoPlaca;
                         }                        
                     }
                     finally
                     {
                         lcForm.Freeze(false);
                     }
+
+                    //lcForm.Resize(lcForm.Width + 1, lcForm.Height);
+                    lcForm.State = BoFormStateEnum.fs_Minimized;
+                    lcForm.State = BoFormStateEnum.fs_Restore;
                 }
                 else
                 {
@@ -440,6 +593,11 @@ namespace ChessIT.Financeiro.View
                     m_timerLC.Enabled = true;
                 }
             }
+
+
+            Form.DataSources.DataTables.Item("dtFiltro").Rows.Remove(0);
+
+            Form.DataSources.DataTables.Item("dtFiltro").Rows.Add();
         }
 
         private void SetarCodigoPNThread(string valor)

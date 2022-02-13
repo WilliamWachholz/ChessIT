@@ -79,7 +79,7 @@ namespace ChessIT.Financeiro.View
 
                                     if (pVal.ItemUID == "btReneg")
                                     {
-                                        Renegociar();
+                                        Renegociar();                                        
                                     }
 
                                     if (pVal.ItemUID == "gridTitulo")
@@ -347,6 +347,8 @@ namespace ChessIT.Financeiro.View
 
                                         gridTitulos.Columns.Item("Check").Type = BoGridColumnType.gct_CheckBox;
                                         gridTitulos.Columns.Item("Check").TitleObject.Caption = "#";
+
+                                        Form.DataSources.UserDataSources.Item("totalDoc").Value = "1";
                                     }
                                     catch { }
                                     finally
@@ -625,6 +627,8 @@ namespace ChessIT.Financeiro.View
 
         private void Limpar()
         {
+            Form.DataSources.UserDataSources.Item("totalDoc").Value = "1";
+
             Form.DataSources.DataTables.Item("dtFiltro").Rows.Clear();
             Form.DataSources.DataTables.Item("dtFiltro").Rows.Add();
 
@@ -714,7 +718,7 @@ namespace ChessIT.Financeiro.View
 
         private void Totalizar()
         {
-            Form.DataSources.UserDataSources.Item("totalDoc").Value = m_TotaisParcela.Count().ToString();
+            //Form.DataSources.UserDataSources.Item("totalDoc").Value = m_TotaisParcela.Count().ToString();
             Form.DataSources.UserDataSources.Item("totalParc").Value = m_TotaisParcela.Sum(r => r.Value).ToString();
             Form.DataSources.UserDataSources.Item("totalDesc").Value = m_TotaisDesconto.Sum(r => r.Value).ToString();
             Form.DataSources.UserDataSources.Item("totalJuros").Value = m_TotaisJuros.Sum(r => r.Value).ToString();
@@ -765,6 +769,8 @@ namespace ChessIT.Financeiro.View
         
         private void Renegociar()
         {
+            Controller.MainController.Application.SendKeys("{TAB}");
+
             Controller.MainController.Application.StatusBar.SetText("Gerando reconciliação", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Warning);
 
             string contaJurosMulta = ((EditText)Form.Items.Item("etContaJM").Specific).String;
@@ -932,38 +938,52 @@ namespace ChessIT.Financeiro.View
 
                             Matrix grid = (Matrix)lcForm.Items.Item("76").Specific;
 
-                            grid.Columns.Item("1").Cells.Item(1).Click();
+                            int parcelas = Convert.ToInt32(Form.DataSources.UserDataSources.Item("totalDoc").Value);
 
-                            foreach (char c in recordSet.Fields.Item(0).Value.ToString().ToArray())
-                                Controller.MainController.Application.SendKeys(c.ToString());
-                            
-                            Controller.MainController.Application.SendKeys("^{TAB}");
+                            double totalParcela = Math.Round(totalPagar / parcelas, 2);
 
-                            ((EditText)grid.Columns.Item("6").Cells.Item(1).Specific).String = totalPagar.ToString();
+                            double diferenca = totalPagar - (totalParcela * parcelas);
 
-                            ((EditText)grid.Columns.Item("9").Cells.Item(1).Specific).String = memoLinha;
+                            for (int linhaParcela = 1; linhaParcela <= parcelas; linhaParcela++)
+                            {
+                                grid.Columns.Item("1").Cells.Item(linhaParcela).Click();
+
+                                foreach (char c in recordSet.Fields.Item(0).Value.ToString().ToArray())
+                                    Controller.MainController.Application.SendKeys(c.ToString());
+
+                                Controller.MainController.Application.SendKeys("^{TAB}");
+
+                                if (diferenca > 0 && linhaParcela == parcelas)
+                                    totalParcela -= diferenca;
+
+                                ((EditText)grid.Columns.Item("6").Cells.Item(linhaParcela).Specific).String = totalParcela.ToString();
+
+                                ((EditText)grid.Columns.Item("9").Cells.Item(linhaParcela).Specific).String = memoLinha;
+                            }
 
                             //Linha débito conta contrapartida
 
-                            ((EditText)grid.Columns.Item("1").Cells.Item(2).Specific).String = recordSet.Fields.Item(7).Value.ToString();
+                            ((EditText)grid.Columns.Item("1").Cells.Item(parcelas + 1).Specific).String = recordSet.Fields.Item(7).Value.ToString();
 
-                            ((EditText)grid.Columns.Item("5").Cells.Item(2).Specific).String = valorParcela.ToString();
+                            ((EditText)grid.Columns.Item("5").Cells.Item(parcelas + 1).Specific).String = valorParcela.ToString();
 
-                            ((EditText)grid.Columns.Item("9").Cells.Item(2).Specific).String = memoLinha;
+                            ((EditText)grid.Columns.Item("9").Cells.Item(parcelas + 1).Specific).String = memoLinha;
 
                             //Linha débito juros e multa
                             if (contaJurosMulta != "")
                             {
-                                ((EditText)grid.Columns.Item("1").Cells.Item(3).Specific).String = contaJurosMulta;
+                                ((EditText)grid.Columns.Item("1").Cells.Item(parcelas + 2).Specific).String = contaJurosMulta;
 
-                                ((EditText)grid.Columns.Item("5").Cells.Item(3).Specific).String = (valorJuros + valorMulta).ToString();
+                                ((EditText)grid.Columns.Item("5").Cells.Item(parcelas + 2).Specific).String = (valorJuros + valorMulta).ToString();
 
-                                ((EditText)grid.Columns.Item("9").Cells.Item(3).Specific).String = memoLinha;
+                                ((EditText)grid.Columns.Item("9").Cells.Item(parcelas + 2).Specific).String = memoLinha;
                             }
                         }
                     }
                 }
             }
+
+            Limpar();
 
             Controller.MainController.Application.StatusBar.SetText("Operação completada com êxito", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Success);
         }

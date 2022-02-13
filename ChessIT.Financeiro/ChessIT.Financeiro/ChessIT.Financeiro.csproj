@@ -84,6 +84,7 @@
     <Compile Include="View\BaixaCPView.cs" />
     <Compile Include="View\DocCPView.cs" />
     <Compile Include="View\MeioPagtoView.cs" />
+    <Compile Include="View\PromptDialogView.cs" />
     <Compile Include="View\RenegCPView.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

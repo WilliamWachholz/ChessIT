@@ -470,9 +470,10 @@ namespace ChessIT.Financeiro.View
 		                            0.0 as ""Valor Multa"",
 		                            0.0 as ""Valor Juros"",
 		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Total a Pagar"",
-		                            OPCH.""PeyMethod"" AS ""Forma Pgto.""
+		                            OPYM.""Descript"" AS ""Forma Pgto.""
                             from OPCH
-                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""                                                        
+                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""
+							left join OPYM on OPYM.""PayMethCod"" = OPCH.""PeyMethod""
                             where OPCH.""CANCELED"" = 'N'
                             -- and OPCH.""DocStatus"" = 'O'
                             -- and PCH6.""PaidToDate"" < PCH6.""InsTotal""
@@ -488,8 +489,8 @@ namespace ChessIT.Financeiro.View
                             and ({9} = 0 or {9} = OPCH.""BPLId"")
                             and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
                             and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" = PCH6.""InsTotal""))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" < PCH6.""InsTotal""))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" > 0))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" = 0))
                             union
                             select  '{14}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
@@ -507,9 +508,10 @@ namespace ChessIT.Financeiro.View
 		                            0.0 as ""Valor Multa"",
 		                            0.0 as ""Valor Juros"",
 		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Total a Pagar"",
-		                            ODPO.""PeyMethod"" AS ""Forma Pgto.""
+		                            OPYM.""Descript"" AS ""Forma Pgto.""
                             from ODPO
-                            inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""                            
+                            inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""       
+							left join OPYM on OPYM.""PayMethCod"" = ODPO.""PeyMethod""
                             where ODPO.""CANCELED"" = 'N'
                             --and ODPO.""DocStatus"" = 'O'
                             --and DPO6.""PaidToDate"" < DPO6.""InsTotal""
@@ -525,8 +527,8 @@ namespace ChessIT.Financeiro.View
                             and ({9} = 0 or {9} = ODPO.""BPLId"")
                             and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
                             and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" = DPO6.""InsTotal""))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" < DPO6.""InsTotal""))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" > 0))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" = 0))
                             union
                             select  '{14}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
@@ -544,10 +546,11 @@ namespace ChessIT.Financeiro.View
 		                            0.0 as ""Valor Multa"",
 		                            0.0 as ""Valor Juros"",
 		                            JDT1.""BalDueCred"" AS ""Total A Pagar"",
-		                            '' AS ""Forma Pgto.""
+		                            OPYM.""Descript"" AS ""Forma Pgto.""
                             from JDT1
                             inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
                             inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
+							left join OPYM on OPYM.""PayMethCod"" = OJDT.""U_FPagFin""
                             where ""MthDate"" is null 
                             --and ""BalDueCred"" > 0
                             and OJDT.""TransType"" <> 18
@@ -580,15 +583,17 @@ namespace ChessIT.Financeiro.View
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
                                     OPCH.""DocDueDate"" AS ""Data Vcto."",
+                                    CASE WHEN PCH6.""PaidToDate"" > 0 THEN PCH6.""DueDate"" END as ""Data Baixa"",
 		                            cast(PCH6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from PCH6 aux where aux.""DocEntry"" = OPCH.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            PCH6.""InsTotal"" AS ""Valor Parcela"",
 		                            0.0 as ""Valor Desc."",
 		                            0.0 as ""Valor Multa"",
 		                            0.0 as ""Valor Juros"",
 		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Total a Pagar"",
-		                            OPCH.""PeyMethod"" AS ""Forma Pgto.""
+		                            OPYM.""Descript"" AS ""Forma Pgto.""
                             from OPCH
-                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""                                                        
+                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""      
+							left join OPYM on OPYM.""PayMethCod"" = OPCH.""PeyMethod""								
                             where OPCH.""CANCELED"" = 'N'
                             --and OPCH.""DocStatus"" = 'O'
                             --and PCH6.""PaidToDate"" < PCH6.""InsTotal""
@@ -604,8 +609,8 @@ namespace ChessIT.Financeiro.View
                             and ({9} = 0 or {9} = OPCH.""BPLId"")
                             and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
                             and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" = PCH6.""InsTotal""))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" < PCH6.""InsTotal""))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" > 0))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" = 0))
                             union
                             select  '{14}' AS ""Check"",
                                     ODPO.""BPLName"" AS ""Filial"",
@@ -617,15 +622,17 @@ namespace ChessIT.Financeiro.View
 		                            0 AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
                                     ODPO.""DocDueDate"" AS ""Data Vcto."",
+                                    CASE WHEN DPO6.""PaidToDate"" > 0 THEN DPO6.""DueDate"" END as ""Data Baixa"",
 		                            cast(DPO6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from DPO6 aux where aux.""DocEntry"" = ODPO.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            DPO6.""InsTotal"" AS ""Valor Parcela"",
 		                            0.0 as ""Valor Desc."",
 		                            0.0 as ""Valor Multa"",
 		                            0.0 as ""Valor Juros"",
 		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Total a Pagar"",
-		                            ODPO.""PeyMethod"" AS ""Forma Pgto.""
+		                            OPYM.""Descript"" AS ""Forma Pgto.""
                             from ODPO
-                            inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""                            
+                            inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""
+							left join OPYM on OPYM.""PayMethCod"" = ODPO.""PeyMethod""
                             where ODPO.""CANCELED"" = 'N'
                             --and ""DocStatus"" = 'O'
                             --and DPO6.""PaidToDate"" < DPO6.""InsTotal""
@@ -641,8 +648,8 @@ namespace ChessIT.Financeiro.View
                             and ({9} = 0 or {9} = ODPO.""BPLId"")
                             and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
                             and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" = DPO6.""InsTotal""))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" < DPO6.""InsTotal""))
+                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" > 0))
+                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" = 0))
                             union
                             select  '{14}' AS ""Check"",
                                     JDT1.""BPLName"" AS ""Filial"",
@@ -654,16 +661,18 @@ namespace ChessIT.Financeiro.View
 		                            OJDT.""U_NDocFin"" AS ""Nº NF"",
 		                            OCRD.""CardName"" AS ""Fornecedor"",
                                     OJDT.""DueDate"" AS ""Data Vcto."",
+                                    CASE WHEN ""BalDueCred"" = 0 THEN OJDT.""DueDate"" END as ""Data Baixa"",
 		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) || '/' || cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and TX.""ShortName"" LIKE 'FOR%') as varchar(10)) as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
 		                            0.0 as ""Valor Desc."",
 		                            0.0 as ""Valor Multa"",
 		                            0.0 as ""Valor Juros"",
 		                            JDT1.""BalDueCred"" AS ""Total A Pagar"",
-		                            OJDT.""U_FPagFin"" AS ""Forma Pgto.""
+		                            OPYM.""Descript"" AS ""Forma Pgto.""
                             from JDT1
                             inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
                             inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
+							left join OPYM on OPYM.""PayMethCod"" = OJDT.""U_FPagFin""
                             where ""MthDate"" is null
                             --and ""BalDueCred"" > 0                             
                             and OJDT.""TransType"" <> 18
@@ -701,18 +710,6 @@ namespace ChessIT.Financeiro.View
             string baixados = ((CheckBox)Form.Items.Item("ckBaixa").Specific).Checked ? "Y" : "N";
             string pendentes = ((CheckBox)Form.Items.Item("ckPendente").Specific).Checked ? "Y" : "N";
             string todos = ((CheckBox)Form.Items.Item("ckTodos").Specific).Checked ? "Y" : "N";
-
-            if (fornecedor == "")
-            {
-                //Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar o fornecedor");
-                //return;
-            }
-
-            if (empresa == "" || empresa == "0")
-            {
-                //Controller.MainController.Application.StatusBar.SetText("Obrigatório filtrar a empresa");
-                //return;
-            }
 
             query = string.Format(query,
                         numNF,
@@ -753,6 +750,7 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Nº NF").Editable = false;
                 gridTitulos.Columns.Item("Fornecedor").Editable = false;
                 gridTitulos.Columns.Item("Data Vcto.").Editable = false;
+                gridTitulos.Columns.Item("Data Baixa").Editable = false;
                 gridTitulos.Columns.Item("Parcela").Editable = false;
                 gridTitulos.Columns.Item("Valor Parcela").Editable = false;
                 gridTitulos.Columns.Item("Total a Pagar").Editable = false;
@@ -773,6 +771,27 @@ namespace ChessIT.Financeiro.View
                 m_TotaisDesconto = new Dictionary<int, double>();
                 m_TotaisJuros = new Dictionary<int, double>();
                 m_TotaisPagar = new Dictionary<int, double>();
+
+                if (todos == "Y")
+                {
+                    SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset) Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                    recordSet.DoQuery(query);
+
+                    int row = 0;
+
+                    while(!recordSet.EoF)
+                    {
+                        m_TotaisParcela.Add(row, Convert.ToDouble(recordSet.Fields.Item(12).Value));
+                        m_TotaisDesconto.Add(row, Convert.ToDouble(recordSet.Fields.Item(13).Value));
+                        m_TotaisJuros.Add(row, Convert.ToDouble(recordSet.Fields.Item(15).Value));
+                        m_TotaisPagar.Add(row, Convert.ToDouble(recordSet.Fields.Item(16).Value));
+
+                        row++;
+                        recordSet.MoveNext();
+                    }
+                }
+
+                Totalizar();
             }
             catch (Exception ex)
             {
@@ -794,6 +813,9 @@ namespace ChessIT.Financeiro.View
             Form.DataSources.DataTables.Item("dtTitulo").Rows.Clear();
 
             ((ComboBox)Form.Items.Item("cbEmpresa").Specific).Select("0");
+
+            Form.DataSources.UserDataSources.Item("percMulta").Value = "";
+            Form.DataSources.UserDataSources.Item("percJuros").Value = "";
 
             m_BoletoModel = new Model.BoletoModel();
             m_DinheiroModel = new Model.DinheiroModel();
@@ -920,6 +942,7 @@ namespace ChessIT.Financeiro.View
                     baixaCPModel.Parcela = parcela;
                     baixaCPModel.TipoDoc = tipoDoc;
                     baixaCPModel.TotalPagar = totalPagar;
+                    baixaCPModel.ValorParcela = valorParcela;
                     baixaCPModel.ValorDesconto = valorDesc;
                     baixaCPModel.ValorJuros = totalJuros;
                     baixaCPModel.ValorMulta = valorMulta;
@@ -1036,11 +1059,12 @@ namespace ChessIT.Financeiro.View
                                 break;
                         }
 
-                        payments.Invoices.InstallmentId = baixaCPModel.Parcela;
-                        payments.Invoices.SumApplied = baixaCPModel.ValorParcela;
+                        payments.Invoices.DocLine = baixaCPModel.Parcela - 1;
+                        payments.Invoices.SumApplied = baixaCPModel.TotalPagar;
+                        payments.Invoices.TotalDiscount = baixaCPModel.ValorDesconto;
 
-                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
-                        payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto;
+                        
+                        //payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto;
                         payments.Invoices.UserFields.Fields.Item("U_ValorDoJurosMora").Value = baixaCPModel.ValorJuros;
                         payments.Invoices.UserFields.Fields.Item("U_ValorMulta").Value = baixaCPModel.ValorMulta;
                         payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
@@ -1051,6 +1075,8 @@ namespace ChessIT.Financeiro.View
 
                     if (erro != 0)
                     {
+                        erroLog = true;
+
                         string msg = "";
 
                         Controller.MainController.Company.GetLastError(out erro, out msg);
@@ -1071,7 +1097,7 @@ namespace ChessIT.Financeiro.View
                 }
             }
 
-            if (erroLog)    
+            if (!erroLog)    
                 Controller.MainController.Application.StatusBar.SetText("Operação completada com êxito", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Success);
             else
                 Controller.MainController.Application.StatusBar.SetText("Operação completada com erros. Consulte o log de mensagens.", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Error);
@@ -1106,6 +1132,7 @@ namespace ChessIT.Financeiro.View
             left += gridTitulos.Columns.Item("Nº NF").Width;
             left += gridTitulos.Columns.Item("Fornecedor").Width;
             left += gridTitulos.Columns.Item("Data Vcto.").Width;
+            left += gridTitulos.Columns.Item("Data Baixa").Width;
             left += gridTitulos.Columns.Item("Parcela").Width;
 
             Form.Items.Item("etTotalPar").Left = left;

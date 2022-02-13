@@ -436,7 +436,7 @@ namespace ChessIT.Financeiro.Controller
 
                             string query = @"select ORCT.""DocNum"",
 		                                        ORCT.""CardName"",
-		                                        RCT2.""U_ValorDoJurosMora"" as ""ValorJuros"",
+		                                        RCT2.""U_ValorDoJurosMora"" + RCT2.""U_ValorMulta"" as ""ValorJuros"",
 		                                        CFGJ.""U_CR_Conta_Juros"" as ""Conta"",
 		                                        CFGJ.""U_CR_ContraPartida_Juros"" as ""Contrapartida"",
                                                 RCT2.""baseAbs"",
@@ -549,7 +549,9 @@ namespace ChessIT.Financeiro.Controller
 
         public static double ConvertDouble(string doubleValue)
         {
-            return double.Parse((doubleValue.Contains(",") ? doubleValue.Replace(".", "").Replace(",", ".") : doubleValue).Replace("R$", "").Replace("%", ""), System.Globalization.CultureInfo.InvariantCulture);
+            if (doubleValue == "")
+                return 0;
+            else return double.Parse((doubleValue.Contains(",") ? doubleValue.Replace(".", "").Replace(",", ".") : doubleValue).Replace("R$", "").Replace("%", ""), System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public static int ConvertInt(string intValue)
