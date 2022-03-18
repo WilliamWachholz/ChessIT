@@ -27,6 +27,8 @@ namespace ChessIT.Financeiro.View
 
         List<string> m_Menus = new List<string>();
 
+        int m_LastRowCheque = 0;
+
         public MeioPagtoView(Form form)
         {
             this.Form = form;
@@ -161,10 +163,60 @@ namespace ChessIT.Financeiro.View
                     {
                         case BoEventTypes.et_CLICK:
                             {
-                                if (!pVal.BeforeAction)
+                                if (pVal.BeforeAction)
                                 {
                                     if (pVal.ItemUID == "btOK")
                                     {
+                                        if (m_BoletoModel.valor > 0)
+                                        {
+                                            if (m_BoletoModel.contaC == "" || m_BoletoModel.vcto == DateTime.MinValue || m_BoletoModel.pais == "" || m_BoletoModel.banco == "" || m_BoletoModel.conta == "" || m_BoletoModel.formaPagto == "")
+                                            {
+                                                Controller.MainController.Application.StatusBar.SetText("Todos os dados do boleto devem ser preenchidos");
+                                                bubbleEvent = false;
+                                            }
+                                        }
+                                    }
+                                    else if (pVal.ItemUID == "mtCheque")
+                                    {
+                                        if (pVal.Row != m_LastRowCheque)
+                                        {
+                                            m_LastRowCheque = pVal.Row;
+
+                                            try
+                                            {
+                                                Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
+
+                                                if (((ComboBox)matrix.Columns.Item("banco").Cells.Item(pVal.Row).Specific).Selected != null)
+                                                {
+                                                    for (int i = matrix.Columns.Item("conta").ValidValues.Count - 1; i >= 0; i--)
+                                                    {
+                                                        matrix.Columns.Item("conta").ValidValues.Remove(i, BoSearchKey.psk_Index);
+                                                    }
+
+                                                    string query = @"select ""AbsEntry"", ""Account"" from DSC1 where ""BankCode"" = '" + m_ChequeList[pVal.Row - 1].banco + "'";
+
+                                                    SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                                    recordSet.DoQuery(query);
+
+                                                    while (!recordSet.EoF)
+                                                    {
+                                                        matrix.Columns.Item("conta").ValidValues.Add(recordSet.Fields.Item(1).Value.ToString(), "");
+
+                                                        recordSet.MoveNext();
+                                                    }
+                                                }
+                                            }
+                                            catch { }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (pVal.ItemUID == "btOK")
+                                    {
+                                        if (m_ChequeList.Count > 0)
+                                            m_ChequeList.Remove(m_ChequeList.Last());
+
                                         Controller.MainController.GetMeioPagtoParent(Form.UniqueID).SetChequeList(m_ChequeList);
 
                                         Controller.MainController.GetMeioPagtoParent(Form.UniqueID).SetCartaoList(m_CartaoList);
@@ -194,7 +246,7 @@ namespace ChessIT.Financeiro.View
 
                                     if (pVal.ItemUID == "flCartao")
                                     {
-                                        Form.PaneLevel = 3;                                        
+                                        Form.PaneLevel = 3;
                                     }
 
                                     if (pVal.ItemUID == "flDinheiro")
@@ -217,17 +269,7 @@ namespace ChessIT.Financeiro.View
                                             Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
 
                                             m_ChequeList[pVal.Row - 1].manual = ((CheckBox)matrix.Columns.Item("manual").Cells.Item(pVal.Row).Specific).Checked;
-                                        }
-
-                                        if (pVal.ColUID == "endosso")
-                                        {
-                                            if (m_ChequeList.Count < pVal.Row)
-                                                m_ChequeList.Add(new Model.ChequeModel());
-
-                                            Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
-
-                                            m_ChequeList[pVal.Row - 1].endosso = ((CheckBox)matrix.Columns.Item("endosso").Cells.Item(pVal.Row).Specific).Checked;
-                                        }
+                                        }                                                                            
                                     }
 
                                     if (pVal.ItemUID.Equals("mtComprov"))
@@ -249,7 +291,7 @@ namespace ChessIT.Financeiro.View
                                                 ((EditText)Form.Items.Item("etCarPriVl").Specific).String = "";
                                                 ((EditText)Form.Items.Item("etCarPriDt").Specific).String = "";
                                                 ((EditText)Form.Items.Item("etCarPgAd").Specific).String = "";
-                                                ((ComboBox)Form.Items.Item("cbCarDiv").Specific).Select(((CheckBox)Form.Items.Item("ckCarDiv").Specific).Checked ? "Y" : "N", BoSearchKey.psk_ByValue);                                                
+                                                ((ComboBox)Form.Items.Item("cbCarDiv").Specific).Select(((CheckBox)Form.Items.Item("ckCarDiv").Specific).Checked ? "Y" : "N", BoSearchKey.psk_ByValue);
                                             }
                                             finally
                                             {
@@ -289,14 +331,24 @@ namespace ChessIT.Financeiro.View
                             {
                                 if (pVal.ItemUID.Equals("mtCheque"))
                                 {
-                                    if (pVal.ColUID == "vcto")
+                                    if (pVal.ColUID == "filial")
                                     {
                                         if (m_ChequeList.Count < pVal.Row)
                                             m_ChequeList.Add(new Model.ChequeModel());
 
                                         Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
 
-                                        m_ChequeList[pVal.Row - 1].vcto = Convert.ToDateTime(((EditText)matrix.Columns.Item("vcto").Cells.Item(pVal.Row).Specific).String);
+                                        m_ChequeList[pVal.Row - 1].filial = ((EditText)matrix.Columns.Item("filial").Cells.Item(pVal.Row).Specific).String;
+                                    }
+
+                                    if (pVal.ColUID == "vcto")
+                                    {
+                                        if (m_ChequeList.Count < pVal.Row)
+                                            m_ChequeList.Add(new Model.ChequeModel());
+
+                                        Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
+                                                                                
+                                        m_ChequeList[pVal.Row - 1].vcto = Controller.MainController.ConvertDate(((EditText)matrix.Columns.Item("vcto").Cells.Item(pVal.Row).Specific).String);
                                     }
 
                                     if (pVal.ColUID == "valor")
@@ -309,29 +361,13 @@ namespace ChessIT.Financeiro.View
                                         m_ChequeList[pVal.Row - 1].valor = Convert.ToDouble(((EditText)matrix.Columns.Item("valor").Cells.Item(pVal.Row).Specific).String);
 
                                         if (matrix.RowCount == pVal.Row && m_ChequeList[pVal.Row - 1].valor > 0)
+                                        {
                                             matrix.AddRow();
+                                            ((ComboBox)matrix.Columns.Item("pais").Cells.Item(1).Specific).Select("BR");
+                                            ((ComboBox)matrix.Columns.Item("endosso").Cells.Item(1).Specific).Select("N");
+                                        }
 
                                         CalcularTotais();
-                                    }
-
-                                    if (pVal.ColUID == "filial")
-                                    {
-                                        if (m_ChequeList.Count < pVal.Row)
-                                            m_ChequeList.Add(new Model.ChequeModel());
-
-                                        Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
-
-                                        m_ChequeList[pVal.Row - 1].filial = ((EditText)matrix.Columns.Item("filial").Cells.Item(pVal.Row).Specific).String;
-                                    }
-
-                                    if (pVal.ColUID == "conta")
-                                    {
-                                        if (m_ChequeList.Count < pVal.Row)
-                                            m_ChequeList.Add(new Model.ChequeModel());
-
-                                        Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
-
-                                        m_ChequeList[pVal.Row - 1].filial = ((EditText)matrix.Columns.Item("filial").Cells.Item(pVal.Row).Specific).String;
                                     }
 
                                     if (pVal.ColUID == "numero")
@@ -361,7 +397,6 @@ namespace ChessIT.Financeiro.View
 
                                     m_CartaoList[matrixComprovante.GetNextSelectedRow() - 1].contaC = ((EditText)Form.Items.Item("etCarConta").Specific).String;
                                 }
-
 
                                 if (pVal.ItemUID.Equals("etCarValor"))
                                 {
@@ -403,7 +438,6 @@ namespace ChessIT.Financeiro.View
                                         CalcularTotais();
                                     }
                                 }
-
 
                                 if (pVal.ItemUID.Equals("etCarPgtos"))
                                 {
@@ -598,18 +632,71 @@ namespace ChessIT.Financeiro.View
 
                                         if (pVal.ItemChanged)
                                         {
-                                            string query = @"select ""DfltAcct"", ""DfltBranch"", ""NextChckNo"" from ODSC where ""BankCode"" = '" + m_ChequeList[pVal.Row - 1].banco + "'";
+                                            for (int i = matrix.Columns.Item("conta").ValidValues.Count - 1; i >= 0; i--)
+                                            {
+                                                matrix.Columns.Item("conta").ValidValues.Remove(i, BoSearchKey.psk_Index);
+                                            }
+
+                                            string query = @"select ""AbsEntry"", ""Account"" from DSC1 where ""BankCode"" = '" + m_ChequeList[pVal.Row - 1].banco + "'";
+
+                                            SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                            recordSet.DoQuery(query);
+
+                                            while (!recordSet.EoF)
+                                            {
+                                                matrix.Columns.Item("conta").ValidValues.Add(recordSet.Fields.Item(1).Value.ToString(), "");
+
+                                                recordSet.MoveNext();
+                                            }
+                                        }
+                                    }
+
+                                    if (pVal.ColUID == "conta")
+                                    {
+                                        if (m_ChequeList.Count < pVal.Row)
+                                            m_ChequeList.Add(new Model.ChequeModel());
+
+                                        Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
+
+                                        m_ChequeList[pVal.Row - 1].conta = ((ComboBox)matrix.Columns.Item("conta").Cells.Item(pVal.Row).Specific).Selected.Value;
+
+                                        if (pVal.ItemChanged)
+                                        {
+                                            string query = @"select ""Branch"", ""GLAccount"", COALESCE(""NextCheck"", 0) from DSC1 where ""BankCode"" = '" + m_ChequeList[pVal.Row - 1].banco + @"' and ""Account"" = '" + m_ChequeList[pVal.Row - 1].conta + "'";
 
                                             SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                                             recordSet.DoQuery(query);
 
                                             if (!recordSet.EoF)
                                             {
-                                                ((EditText)matrix.Columns.Item("conta").Cells.Item(pVal.Row).Specific).String = recordSet.Fields.Item(0).Value.ToString();
-                                                ((EditText)matrix.Columns.Item("filial").Cells.Item(pVal.Row).Specific).String = recordSet.Fields.Item(1).Value.ToString();
-                                                ((EditText)matrix.Columns.Item("numero").Cells.Item(pVal.Row).Specific).String = recordSet.Fields.Item(2).Value.ToString();
+                                                m_ChequeList[pVal.Row - 1].filial = recordSet.Fields.Item(0).Value.ToString();
+                                                m_ChequeList[pVal.Row - 1].contaC = recordSet.Fields.Item(1).Value.ToString();
+
+                                                ((EditText)matrix.Columns.Item("filial").Cells.Item(pVal.Row).Specific).String = recordSet.Fields.Item(0).Value.ToString();
+                                                ((EditText)matrix.Columns.Item("contaC").Cells.Item(pVal.Row).Specific).String = recordSet.Fields.Item(1).Value.ToString();
+                                                matrix.Columns.Item("numero").Editable = true;
+                                                try
+                                                {
+                                                    ((EditText)matrix.Columns.Item("numero").Cells.Item(pVal.Row).Specific).String = recordSet.Fields.Item(2).Value.ToString();
+
+                                                    Controller.MainController.Application.SendKeys("{TAB}");
+                                                }
+                                                finally
+                                                {
+                                                    matrix.Columns.Item("numero").Editable = false;
+                                                }
                                             }
                                         }
+                                    }
+
+                                    if (pVal.ColUID == "endosso")
+                                    {
+                                        if (m_ChequeList.Count < pVal.Row)
+                                            m_ChequeList.Add(new Model.ChequeModel());
+
+                                        Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
+
+                                        m_ChequeList[pVal.Row - 1].endosso = ((ComboBox)matrix.Columns.Item("endosso").Cells.Item(pVal.Row).Specific).Selected.Value == "Y";
                                     }
                                 }
 
@@ -646,7 +733,7 @@ namespace ChessIT.Financeiro.View
 
                                 if (pVal.ItemUID.Equals("cbBolSta"))
                                 {
-                                    m_BoletoModel.formaPagto = Controller.MainController.ConvertStringCombo((ComboBox)Form.Items.Item("cbBolSta").Specific);
+                                    m_BoletoModel.status = Controller.MainController.ConvertStringCombo((ComboBox)Form.Items.Item("cbBolSta").Specific);
                                 }
 
                                 if (pVal.ItemUID.Equals("cbBolPais"))
@@ -747,9 +834,12 @@ namespace ChessIT.Financeiro.View
 
                                         m_CartaoList = Controller.MainController.GetMeioPagtoParent(Form.UniqueID).GetCartaoList();
 
-                                        Controller.MainController.ListToMatrix<Model.ChequeModel>(Form.DataSources.DataTables.Item("dtCheque"), (Matrix)Form.Items.Item("mtCheque").Specific, Controller.MainController.GetMeioPagtoParent(Form.UniqueID).GetChequeList());
+                                        Controller.MainController.ListToMatrix<Model.ChequeModel>(Form.DataSources.DataTables.Item("dtCheque"), (Matrix)Form.Items.Item("mtCheque").Specific, Controller.MainController.GetMeioPagtoParent(Form.UniqueID).GetChequeList(), true);
 
                                         Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
+
+                                        if (matrix.RowCount == 0)
+                                            matrix.AddRow();
 
                                         string query = @"select ""Code"", ""Name"" from OCRY where exists (select * from ODSC where ""CountryCod"" = ""Code"")";
 
@@ -775,6 +865,18 @@ namespace ChessIT.Financeiro.View
                                             matrix.Columns.Item("banco").ValidValues.Add(recordSet.Fields.Item(0).Value.ToString(), recordSet.Fields.Item(1).Value.ToString());
 
                                             ((ComboBox)Form.Items.Item("cbBolBanco").Specific).ValidValues.Add(recordSet.Fields.Item(0).Value.ToString(), recordSet.Fields.Item(1).Value.ToString());
+
+                                            recordSet.MoveNext();
+                                        }
+
+                                        query = @"SELECT ""PayMethCod"", ""Descript"" FROM OPYM where ""Type"" = 'O'";
+
+                                        recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                        recordSet.DoQuery(query);
+
+                                        while (!recordSet.EoF)
+                                        {
+                                            ((ComboBox)Form.Items.Item("cbBolForp").Specific).ValidValues.Add(recordSet.Fields.Item(0).Value.ToString(), recordSet.Fields.Item(1).Value.ToString());
 
                                             recordSet.MoveNext();
                                         }
@@ -816,7 +918,10 @@ namespace ChessIT.Financeiro.View
 
                                         CalcularTotais();
                                     }
-                                    catch { }
+                                    catch (Exception exception)
+                                    {
+                                        //Controller.MainController.Application.StatusBar.SetText(exception.Message);
+                                    }
                                     finally
                                     {
                                         Loaded = true;
@@ -860,6 +965,70 @@ namespace ChessIT.Financeiro.View
             {
                 Controller.MainController.Application.StatusBar.SetText(exception.Message);
             }
+        }
+
+        private void CarregarMatrixCheque()
+        {
+            string query = "";
+
+            int linha = 1;
+
+            foreach (Model.ChequeModel chequeModel in m_ChequeList)
+            {
+                SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                query += @" select to_date('" + chequeModel.vcto.ToString("yyyy-MM-dd") + @"', 'yyyy-MM-dd') as ""vcto"", " +
+                                    chequeModel.valor.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) + @" as ""valor"", " +
+                                    "'" + chequeModel.pais + @"' as ""pais"", " +
+                                    "'" + chequeModel.banco + @"' as ""banco"", " +
+                                    "'" + chequeModel.filial + @"' as ""filial"", " +
+                                    "'" + chequeModel.conta + @"' as ""conta"", " +
+                                    (chequeModel.manual ? "'Y'" : "'N'") + @" as ""manual"", " +
+                                    chequeModel.numero + @" as ""numero"", " +
+                                    "'" + chequeModel.contaC + @"' as ""contaC"", " +
+                                    (chequeModel.endosso ? "'Y'" : "'N'") + @" as ""endosso"" ";
+
+#if !DEBUG
+
+                query += " from dummy ";
+#endif
+                query += "union all";
+
+                linha++;
+            }
+
+            if (m_ChequeList.Count == 0)
+            {
+                query += @" select      cast(null as date) as ""vcto"", " +
+                                        @"cast(0.0 as numeric(10,2)) as ""valor"", " +
+                                        @"cast('BR' as varchar(2)) as ""pais"", " +
+                                        @"cast('' as varchar(10)) as ""banco"", " +
+                                        @"cast('' as varchar(30)) as ""filial"", " +
+                                        @"cast('' as varchar(50)) as ""conta"", " +
+                                        @"'N' as ""manual"", " +
+                                        @"0 as ""numero"", " +
+                                        @"cast('' as varchar(15)) as ""contaC"", " +
+                                        @"'N' as ""endosso"" ";
+
+#if !DEBUG
+
+                query += " from dummy ";
+#endif
+            }
+            else
+            {
+                query = query.Substring(0, query.Length - 10);
+            }
+
+            System.IO.File.WriteAllText("query.sql", query);
+
+            Form.DataSources.DataTables.Item("dtCheque").ExecuteQuery(query);
+
+            Matrix matrix = (Matrix)Form.Items.Item("mtCheque").Specific;
+
+            matrix.LoadFromDataSource();
+
+            matrix.AutoResizeColumns();
         }
 
         private void CarregarMatrixComprovante()

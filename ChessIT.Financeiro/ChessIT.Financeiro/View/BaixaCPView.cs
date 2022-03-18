@@ -283,6 +283,9 @@ namespace ChessIT.Financeiro.View
                             {
                                 if (pVal.ItemUID == "ckTodos")
                                 {
+                                    ((CheckBox)Form.Items.Item("ckBaixa").Specific).Checked = ((CheckBox)Form.Items.Item("ckTodos").Specific).Checked;
+                                    ((CheckBox)Form.Items.Item("ckPendente").Specific).Checked = ((CheckBox)Form.Items.Item("ckTodos").Specific).Checked;
+
                                     Pesquisar();
                                 }
                                 else if (pVal.ItemUID == "gridTitulo" && pVal.ColUID == "Check")
@@ -452,129 +455,9 @@ namespace ChessIT.Financeiro.View
 
         private void Pesquisar()
         {
-#if DEBUG
-
             string query = @"select '{14}' AS ""Check"",
-                                    OPCH.""BPLName"" AS ""Filial"",
-		                            'NE' AS ""Tipo Doc"",
-                                    OPCH.""BPLId"" AS ""Nº Empresa"",
-                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
-		                            OPCH.""DocEntry"" AS ""Nº Interno"",
-		                            OPCH.""DocNum"" AS ""Nº SAP"",
-		                            OPCH.""Serial"" AS ""Nº NF"",
-		                            OPCH.""CardName"" AS ""Fornecedor"",
-                                    OPCH.""DocDueDate"" AS ""Data Vcto."",
-		                            cast(PCH6.""InstlmntID"" as nvarchar(max)) + '/' + cast((select count(*) from PCH6 aux where aux.""DocEntry"" = OPCH.""DocEntry"") as nvarchar(max)) AS ""Parcela"",
-		                            PCH6.""InsTotal"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Total a Pagar"",
-		                            OPYM.""Descript"" AS ""Forma Pgto.""
-                            from OPCH
-                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""
-							left join OPYM on OPYM.""PayMethCod"" = OPCH.""PeyMethod""
-                            where OPCH.""CANCELED"" = 'N'
-                            -- and OPCH.""DocStatus"" = 'O'
-                            -- and PCH6.""PaidToDate"" < PCH6.""InsTotal""
-                            and ('{0}' = '' or OPCH.""Serial"" = '{0}')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or PCH6.""InsTotal"" >= {7})
-                            and ({8} = 0 or PCH6.""InsTotal"" <= {8})
-                            and ({9} = 0 or {9} = OPCH.""BPLId"")
-                            and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
-                            and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" > 0))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" = 0))
-                            union
-                            select  '{14}' AS ""Check"",
-                                    ODPO.""BPLName"" AS ""Filial"",
-		                            'ADT' AS ""Tipo Doc"",
-		                            ODPO.""BPLId"" AS ""Nº Empresa"",
-                                    ODPO.""CardCode"" AS ""Nº Fornecedor"",
-                                    ODPO.""DocEntry"" AS ""Nº Interno"",
-		                            ODPO.""DocNum"" AS ""Nº SAP"",
-		                            '' AS ""Nº NF"",
-		                            ODPO.""CardName"" AS ""Fornecedor"",
-                                    ODPO.""DocDueDate"" AS ""Data Vcto."",
-		                            cast(DPO6.""InstlmntID"" as nvarchar(max)) + '/' + cast((select count(*) from DPO6 aux where aux.""DocEntry"" = ODPO.""DocEntry"") as nvarchar(max)) AS ""Parcela"",
-		                            DPO6.""InsTotal"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Total a Pagar"",
-		                            OPYM.""Descript"" AS ""Forma Pgto.""
-                            from ODPO
-                            inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""       
-							left join OPYM on OPYM.""PayMethCod"" = ODPO.""PeyMethod""
-                            where ODPO.""CANCELED"" = 'N'
-                            --and ODPO.""DocStatus"" = 'O'
-                            --and DPO6.""PaidToDate"" < DPO6.""InsTotal""
-                            and ('{0}' = '')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
-                            and ({7} = 0 or DPO6.""InsTotal"" >= {7})
-                            and ({8} = 0 or DPO6.""InsTotal"" <= {8})
-                            and ({9} = 0 or {9} = ODPO.""BPLId"")
-                            and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
-                            and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" > 0))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" = 0))
-                            union
-                            select  '{14}' AS ""Check"",
-                                    JDT1.""BPLName"" AS ""Filial"",
-		                            'LC' AS ""Tipo Doc"",
-		                            JDT1.""BPLId"" AS ""Nº Empresa"",
-                                    OCRD.""CardCode"" AS ""Nº Fornecedor"",
-                                    OJDT.""TransId"" AS ""Nº Interno"",
-		                            OJDT.""TransId"" AS ""Nº SAP"",
-		                            '' AS ""Nº NF"",
-		                            OCRD.""CardName"" AS ""Fornecedor"",
-                                    OJDT.""DueDate"" AS ""Data Vcto."",
-		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) + '/' + cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and TX.""ShortName"" LIKE 'FOR%') as varchar(10)) as ""Parcela"",
-		                            JDT1.""Credit"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            JDT1.""BalDueCred"" AS ""Total A Pagar"",
-		                            OPYM.""Descript"" AS ""Forma Pgto.""
-                            from JDT1
-                            inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
-                            inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
-							left join OPYM on OPYM.""PayMethCod"" = OJDT.""U_FPagFin""
-                            where ""MthDate"" is null 
-                            --and ""BalDueCred"" > 0
-                            and OJDT.""TransType"" <> 18
-                            and JDT1.""ShortName"" LIKE 'FOR%'
-                            and OJDT.""StornoToTr"" IS NULL
-                            and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
-                            and ('{0}' = '' or '' = '{0}')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))                            
-                            and ({7} = 0 or JDT1.""Credit"" >= {7})
-                            and ({8} = 0 or JDT1.""Credit"" <= {8})
-                            and ({9} = 0 or {9} = JDT1.""BPLId"")
-                            and ('{10}' = '' or '{10}' = JDT1.""ShortName"")
-                            and ('{11}' = '' or '{11}' = '')
-                            and ('{12}' = 'N' or ('{12}' = 'Y' ""BalDueCred"" = 0))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' ""BalDueCred"" > 0))";
-
-#else
-            string query = @"select '{14}' AS ""Check"",
-                                    OPCH.""BPLName"" AS ""Filial"",
+                                    --OPCH.""BPLName"" AS ""Filial"",
+                                    CASE OPCH.""BPLId"" WHEN 1 THEN 'M' ELSE 'F' END AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
                                     OPCH.""BPLId"" AS ""Nº Empresa"",
                                     OPCH.""CardCode"" AS ""Nº Fornecedor"",
@@ -582,38 +465,143 @@ namespace ChessIT.Financeiro.View
                                     OPCH.""DocNum"" AS ""Nº SAP"",
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
-                                    OPCH.""DocDueDate"" AS ""Data Vcto."",
-                                    CASE WHEN PCH6.""PaidToDate"" > 0 THEN PCH6.""DueDate"" END as ""Data Baixa"",
+                                    PCH6.""DueDate"" AS ""Data Vcto."",
+                                    (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
 		                            cast(PCH6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from PCH6 aux where aux.""DocEntry"" = OPCH.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            PCH6.""InsTotal"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Total a Pagar"",
-		                            OPYM.""Descript"" AS ""Forma Pgto.""
+		                            COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) as ""Valor Desc."",
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) as ""Valor Multa"",
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) as ""Valor Juros"",
+		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" -
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Total a Pagar"",                                    
+                                    PCH6.""PaidToDate"" +
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Pago"",
+                                    PCH6.""InsTotal"" - PCH6.""PaidToDate"" -
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Saldo"",
+                                    (SELECT ""AcctName"" FROM OACT WHERE ""AcctCode"" =
+                                    (select max(case 
+		                                    when ""CashSum"" > 0 then ""CashAcct""
+		                                    when ""CreditSum"" > 0 then (SELECT MAX(VPM3.""CreditAcct"") FROM VPM3 WHERE VPM3.""DocNum"" = OVPM.""DocEntry"")
+                                            when ""TrsfrSum"" > 0 then ""TrsfrAcct""
+		                                    when ""BoeSum"" > 0 then ""BoeAcc""
+		                                    end)
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N')) AS ""Conta"",
+                                    (select max(case 
+		                                    when ""CashSum"" > 0 then 'Dinheiro' 
+		                                    when ""CreditSum"" > 0 then 'Cartão' 
+		                                    when ""TrsfrSum"" > 0 then 'Transferência'
+		                                    when ""BoeSum"" > 0 then 'Boleto'
+		                                    end)
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
+                                    and VPM2.""InvType"" = 18
+                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
+                                    and ""Canceled"" = 'N') AS ""Carteira""
                             from OPCH
-                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""      
-							left join OPYM on OPYM.""PayMethCod"" = OPCH.""PeyMethod""								
-                            where OPCH.""CANCELED"" = 'N'
-                            --and OPCH.""DocStatus"" = 'O'
-                            --and PCH6.""PaidToDate"" < PCH6.""InsTotal""
+                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry"" 
+                            inner join JDT1 on JDT1.""TransId"" = OPCH.""TransId"" and JDT1.""SourceLine"" = PCH6.""InstlmntID""							                            
+                            where OPCH.""CANCELED"" = 'N'                            
                             and ('{0}' = '' or OPCH.""Serial"" = '{0}')
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) >= cast('{3}' as date))
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = OPCH.""DocEntry"" AND VPM2.""InvType"" = 18 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
+                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
+                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
                             and ({7} = 0 or PCH6.""InsTotal"" >= {7})
                             and ({8} = 0 or PCH6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = OPCH.""BPLId"")
                             and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
                             and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and PCH6.""PaidToDate"" > 0))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and PCH6.""PaidToDate"" = 0))
+                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
                             union
                             select  '{14}' AS ""Check"",
-                                    ODPO.""BPLName"" AS ""Filial"",
+                                    CASE ODPO.""BPLId"" WHEN 1 THEN 'M' ELSE 'F' END AS ""Filial"",
 		                            'ADT' AS ""Tipo Doc"",
                                     ODPO.""BPLId"" AS ""Nº Empresa"",
                                     ODPO.""CardCode"" AS ""Nº Fornecedor"",
@@ -621,38 +609,143 @@ namespace ChessIT.Financeiro.View
                                     ODPO.""DocNum"" AS ""Nº SAP"",
 		                            0 AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
-                                    ODPO.""DocDueDate"" AS ""Data Vcto."",
-                                    CASE WHEN DPO6.""PaidToDate"" > 0 THEN DPO6.""DueDate"" END as ""Data Baixa"",
+                                    DPO6.""DueDate"" AS ""Data Vcto."",
+                                    (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
 		                            cast(DPO6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from DPO6 aux where aux.""DocEntry"" = ODPO.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            DPO6.""InsTotal"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Total a Pagar"",
-		                            OPYM.""Descript"" AS ""Forma Pgto.""
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Desc."",
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Multa"",
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) as ""Valor Juros"",
+		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" -
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Total a Pagar"",                                    
+                                    DPO6.""PaidToDate"" +
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Pago"",
+                                    DPO6.""InsTotal"" - DPO6.""PaidToDate"" -
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Saldo"",
+                                    (SELECT ""AcctName"" FROM OACT WHERE ""AcctCode"" =
+                                    (select max(case 
+		                                    when ""CashSum"" > 0 then ""CashAcct""
+		                                    when ""CreditSum"" > 0 then (SELECT MAX(VPM3.""CreditAcct"") FROM VPM3 WHERE VPM3.""DocNum"" = OVPM.""DocEntry"")
+                                            when ""TrsfrSum"" > 0 then ""TrsfrAcct""
+		                                    when ""BoeSum"" > 0 then ""BoeAcc""
+		                                    end)
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N')) AS ""Conta"",
+                                     (select max(case 
+		                                    when ""CashSum"" > 0 then 'Dinheiro' 
+		                                    when ""CreditSum"" > 0 then 'Cartão' 
+		                                    when ""TrsfrSum"" > 0 then 'Transferência'
+		                                    when ""BoeSum"" > 0 then 'Boleto'
+		                                    end)
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
+                                    and VPM2.""InvType"" = 204
+                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
+                                    and ""Canceled"" = 'N') AS ""Carteira""                                   
                             from ODPO
                             inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""
-							left join OPYM on OPYM.""PayMethCod"" = ODPO.""PeyMethod""
+                            inner join JDT1 on JDT1.""TransId"" = ODPO.""TransId"" and JDT1.""SourceLine"" = DPO6.""InstlmntID""                            
                             where ODPO.""CANCELED"" = 'N'
-                            --and ""DocStatus"" = 'O'
-                            --and DPO6.""PaidToDate"" < DPO6.""InsTotal""
                             and ('{0}' = '')
                             and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) >= cast('{1}' as date))
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) >= cast('{3}' as date))
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = ODPO.""DocEntry"" AND VPM2.""InvType"" = 204 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))
+                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
+                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
                             and ({7} = 0 or DPO6.""InsTotal"" >= {7})
                             and ({8} = 0 or DPO6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = ODPO.""BPLId"")
                             and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
                             and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and DPO6.""PaidToDate"" > 0))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and DPO6.""PaidToDate"" = 0))
+                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
                             union
                             select  '{14}' AS ""Check"",
-                                    JDT1.""BPLName"" AS ""Filial"",
+                                    CASE JDT1.""BPLId"" WHEN 1 THEN 'M' ELSE 'F' END AS ""Filial"",
 		                            'LC' AS ""Tipo Doc"",
 		                            JDT1.""BPLId"" AS ""Nº Empresa"",
                                     OCRD.""CardCode"" AS ""Nº Fornecedor"",
@@ -660,22 +753,130 @@ namespace ChessIT.Financeiro.View
                                     OJDT.""TransId"" AS ""Nº SAP"",
 		                            OJDT.""U_NDocFin"" AS ""Nº NF"",
 		                            OCRD.""CardName"" AS ""Fornecedor"",
-                                    OJDT.""DueDate"" AS ""Data Vcto."",
-                                    CASE WHEN ""BalDueCred"" = 0 THEN OJDT.""DueDate"" END as ""Data Baixa"",
+                                    JDT1.""DueDate"" AS ""Data Vcto."",
+                                    (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
 		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) || '/' || cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and TX.""ShortName"" LIKE 'FOR%') as varchar(10)) as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            JDT1.""BalDueCred"" AS ""Total A Pagar"",
-		                            OPYM.""Descript"" AS ""Forma Pgto.""
+		                            COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Desc."",
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Multa"",
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Juros"",
+		                             JDT1.""BalDueCred"" - 
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Total A Pagar"",
+                                    (JDT1.""Credit"" - JDT1.""BalDueCred"") +
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Pago"",
+                                    JDT1.""BalDueCred"" - 
+                                    COALESCE((select sum(""U_ValorDoDesconto"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorMulta"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) +
+		                            COALESCE((select sum(""U_ValorDoJurosMora"")
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N'), 0) AS ""Valor Saldo"",
+                                    (SELECT ""AcctName"" FROM OACT WHERE ""AcctCode"" =
+                                    (select max(case 
+		                                    when ""CashSum"" > 0 then ""CashAcct""
+		                                    when ""CreditSum"" > 0 then (SELECT MAX(VPM3.""CreditAcct"") FROM VPM3 WHERE VPM3.""DocNum"" = OVPM.""DocEntry"")
+                                            when ""TrsfrSum"" > 0 then ""TrsfrAcct""
+		                                    when ""BoeSum"" > 0 then ""BoeAcc""
+		                                    end)
+                                    from VPM2 
+                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                    where VPM2.""DocEntry"" = JDT1.""TransId""
+                                    and VPM2.""InvType"" = 30
+                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                    and ""Canceled"" = 'N')) AS ""Conta"",
+                                    (select max(case 
+		                                when ""CashSum"" > 0 then 'Dinheiro' 
+		                                when ""CreditSum"" > 0 then 'Cartão' 
+		                                when ""TrsfrSum"" > 0 then 'Transferência'
+		                                when ""BoeSum"" > 0 then 'Boleto'
+		                                end) 
+                                   from VPM2 
+                                   left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
+                                   where VPM2.""DocEntry"" = JDT1.""TransId""
+                                   and VPM2.""InvType"" = 30
+                                   and VPM2.""DocLine"" = JDT1.""Line_ID""
+                                   and ""Canceled"" = 'N') AS ""Carteira""
                             from JDT1
                             inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
                             inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
-							left join OPYM on OPYM.""PayMethCod"" = OJDT.""U_FPagFin""
-                            where ""MthDate"" is null
-                            --and ""BalDueCred"" > 0                             
-                            and OJDT.""TransType"" <> 18
+							--left join OPYM on OPYM.""PayMethCod"" = OJDT.""U_FPagFin""
+                            where OJDT.""TransType"" <> 18
+                            and OJDT.""TransType"" <> 204
+                            and JDT1.""Credit"" > 0
+                            --and ""MthDate"" is null
                             and JDT1.""ShortName"" LIKE 'FOR%'
                             and OJDT.""StornoToTr"" IS NULL
                             and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
@@ -684,16 +885,16 @@ namespace ChessIT.Financeiro.View
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) >= cast('{3}' as date))
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) >= cast('{5}' as date)))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or exists (select * from VPM2 left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" where VPM2.""DocEntry"" = JDT1.""TransId"" AND VPM2.""InvType"" = 30 and cast(OVPM.""DocDate"" as date) <= cast('{6}' as date)))                            
+                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
+                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
                             and ({7} = 0 or JDT1.""Credit"" >= {7})
                             and ({8} = 0 or JDT1.""Credit"" <= {8})
                             and ({9} = 0 or {9} = JDT1.""BPLId"")
                             and ('{10}' = '' or '{10}' = JDT1.""ShortName"")
                             and ('{11}' = '' or '{11}' = OJDT.""U_FPagFin"")
-                            and ('{12}' = 'N' or ('{12}' = 'Y' and ""BalDueCred"" = 0))
-                            and ('{13}' = 'N' or ('{13}' = 'Y' and ""BalDueCred"" > 0))";
-#endif
+                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))";
+
 
             string numNF = ((EditText)Form.Items.Item("etNumNF").Specific).String;
             string dataEmissaoDe = ((EditText)Form.Items.Item("etDtEmiIni").Specific).String;
@@ -754,7 +955,25 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Parcela").Editable = false;
                 gridTitulos.Columns.Item("Valor Parcela").Editable = false;
                 gridTitulos.Columns.Item("Total a Pagar").Editable = false;
-                gridTitulos.Columns.Item("Forma Pgto.").Editable = false;
+                gridTitulos.Columns.Item("Valor Pago").Editable = false;
+                gridTitulos.Columns.Item("Valor Saldo").Editable = false;
+                gridTitulos.Columns.Item("Conta").Editable = false;
+                gridTitulos.Columns.Item("Carteira").Editable = false;
+
+                gridTitulos.Columns.Item("Filial").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Tipo Doc").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Nº SAP").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Nº NF").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Fornecedor").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Data Vcto.").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Data Baixa").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Parcela").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Valor Parcela").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Total a Pagar").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Valor Pago").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Valor Saldo").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Conta").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Carteira").TitleObject.Sortable = true;
 
                 PosicionarTotais();
 
@@ -955,6 +1174,8 @@ namespace ChessIT.Financeiro.View
 
             foreach (var baixaCPGroup in baixaCPGroupList)
             {
+                string codigoBarraBoleto = "";
+
                 double proporcionalGrupo = baixaCPGroup.Sum(r => r.TotalPagar) / baixaCPList.Sum(r => r.TotalPagar);
 
                 SAPbobsCOM.Payments payments = (SAPbobsCOM.Payments) Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
@@ -982,7 +1203,7 @@ namespace ChessIT.Financeiro.View
 
                     if (m_BoletoModel.valor > 0)
                     {
-                        payments.BoeAccount = m_BoletoModel.contaC;
+                        //payments.BoeAccount = m_BoletoModel.contaC;
                         payments.BillOfExchangeAmount = m_BoletoModel.valor * proporcionalGrupo;
                         payments.BillofExchangeStatus = SAPbobsCOM.BoBoeStatus.boes_Created;
                         payments.BillOfExchange.BillOfExchangeNo = m_BoletoModel.numero.ToString();
@@ -993,29 +1214,36 @@ namespace ChessIT.Financeiro.View
                         payments.BillOfExchange.BPBankAct = m_BoletoModel.conta;
                         payments.BillOfExchange.Remarks = m_BoletoModel.obs;
                         payments.BillOfExchange.PaymentMethodCode = m_BoletoModel.formaPagto;
+
+                        codigoBarraBoleto = m_BoletoModel.codBarras;
                     }
 
                     int indice = 0;
 
                     foreach (Model.ChequeModel chequeModel in m_ChequeList)
                     {
-                        if (indice > 0)
-                            payments.Checks.Add();
+                        if (chequeModel.valor > 0 && chequeModel.banco != string.Empty && chequeModel.filial != string.Empty &&
+                            chequeModel.pais != string.Empty && chequeModel.conta != string.Empty &&
+                            chequeModel.vcto != DateTime.MinValue)
+                        {
+                            if (indice > 0)
+                                payments.Checks.Add();
 
-                        payments.Checks.SetCurrentLine(payments.Checks.Count - 1);
+                            payments.Checks.SetCurrentLine(payments.Checks.Count - 1);
 
-                        payments.Checks.DueDate = chequeModel.vcto;
-                        payments.Checks.CheckSum = chequeModel.valor * proporcionalGrupo;
-                        payments.Checks.CountryCode = chequeModel.pais;
-                        payments.Checks.BankCode = chequeModel.banco;
-                        payments.Checks.Branch = chequeModel.filial;
-                        payments.Checks.AccounttNum = chequeModel.conta;
-                        payments.Checks.CheckNumber = chequeModel.numero;
-                        payments.Checks.Trnsfrable = chequeModel.endosso ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
-                        payments.Checks.CheckAccount = chequeModel.contaC;
-                        payments.Checks.ManualCheck = chequeModel.manual ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                            payments.Checks.DueDate = chequeModel.vcto;
+                            payments.Checks.CheckSum = chequeModel.valor * proporcionalGrupo;
+                            payments.Checks.CountryCode = chequeModel.pais;
+                            payments.Checks.BankCode = chequeModel.banco;
+                            payments.Checks.Branch = chequeModel.filial;
+                            payments.Checks.AccounttNum = chequeModel.conta;
+                            payments.Checks.CheckNumber = chequeModel.numero;
+                            payments.Checks.Trnsfrable = chequeModel.endosso ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
+                            payments.Checks.CheckAccount = chequeModel.contaC;
+                            payments.Checks.ManualCheck = chequeModel.manual ? SAPbobsCOM.BoYesNoEnum.tYES : SAPbobsCOM.BoYesNoEnum.tNO;
 
-                        indice++;
+                            indice++;
+                        }
                     }
 
                     indice = 0;
@@ -1044,6 +1272,11 @@ namespace ChessIT.Financeiro.View
 
                     foreach (Model.BaixaCPModel baixaCPModel in baixaCPGroup)
                     {
+                        if (payments.Invoices.DocEntry > 0)
+                            payments.Invoices.Add();
+
+                        payments.Invoices.SetCurrentLine(payments.Invoices.Count - 1);
+
                         payments.Invoices.DocEntry = baixaCPModel.DocEntry;
 
                         switch (baixaCPModel.TipoDoc)
@@ -1061,13 +1294,13 @@ namespace ChessIT.Financeiro.View
 
                         payments.Invoices.DocLine = baixaCPModel.Parcela - 1;
                         payments.Invoices.SumApplied = baixaCPModel.TotalPagar;
-                        payments.Invoices.TotalDiscount = baixaCPModel.ValorDesconto;
+                        //payments.Invoices.TotalDiscount = baixaCPModel.ValorDesconto;
 
-                        
-                        //payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto;
+                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto;
                         payments.Invoices.UserFields.Fields.Item("U_ValorDoJurosMora").Value = baixaCPModel.ValorJuros;
                         payments.Invoices.UserFields.Fields.Item("U_ValorMulta").Value = baixaCPModel.ValorMulta;
-                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
+                        payments.Invoices.UserFields.Fields.Item("U_TotalDoPagamento").Value = baixaCPModel.TotalPagar - baixaCPModel.ValorDesconto + baixaCPModel.ValorJuros + baixaCPModel.ValorMulta;
 
                     }
 
@@ -1082,6 +1315,23 @@ namespace ChessIT.Financeiro.View
                         Controller.MainController.Company.GetLastError(out erro, out msg);
 
                         throw new Exception(erro + " - " + msg);
+                    }
+                    else
+                    {
+                        if (codigoBarraBoleto != "")
+                        {
+                            string query = @"select MAX(""BoeKey"") from OBOE";
+
+                            SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            recordSet.DoQuery(query);
+
+                            string boeKey = recordSet.Fields.Item(0).Value.ToString();
+
+                            string command = string.Format(@"update OBOE set ""BarcodeRep"" = '{0}' where ""BoeKey"" = {1}", codigoBarraBoleto, boeKey);
+
+                            recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            recordSet.DoQuery(command);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1102,7 +1352,8 @@ namespace ChessIT.Financeiro.View
             else
                 Controller.MainController.Application.StatusBar.SetText("Operação completada com erros. Consulte o log de mensagens.", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Error);
 
-            Limpar();
+            //Limpar();
+            Pesquisar();
         }
 
         private void Totalizar()

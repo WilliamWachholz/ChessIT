@@ -605,6 +605,17 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Total a Pagar").Editable = false;
                 gridTitulos.Columns.Item("Forma Pgto.").Editable = false;
 
+                gridTitulos.Columns.Item("Filial").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Tipo Doc").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Nº SAP").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Nº NF").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Fornecedor").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Data Vcto.").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Parcela").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Valor Parcela").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Total a Pagar").TitleObject.Sortable = true;
+                gridTitulos.Columns.Item("Forma Pgto.").TitleObject.Sortable = true;
+
                 PosicionarTotais();
 
                 m_TotaisParcela = new Dictionary<int, double>();

@@ -11,3 +11,6 @@ C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Fin
 C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.csproj.CopyComplete
 C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.exe
 C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Debug\ChessIT.Financeiro.pdb
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\SrfFiles\FrmRenegCP.srf
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\SrfFiles\FrmBaixaCP.srf
+C:\AddOn\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Debug\SrfFiles\FrmMeioPagto.srf
