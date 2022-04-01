@@ -468,7 +468,7 @@ namespace ChessIT.Financeiro.View
 		                            OPCH.""Serial"" AS ""Nº NF"",
 		                            OPCH.""CardName"" AS ""Fornecedor"",
                                     PCH6.""DueDate"" AS ""Data Vcto."",
-                                    (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
+                                    (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
 		                            cast(PCH6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from PCH6 aux where aux.""DocEntry"" = OPCH.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            PCH6.""InsTotal"" AS ""Valor Parcela"",
 		                            COALESCE((select sum(""U_ValorDoDesconto"")
@@ -592,15 +592,15 @@ namespace ChessIT.Financeiro.View
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) >= cast('{3}' as date))
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
+                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
+                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
                             and ({7} = 0 or PCH6.""InsTotal"" >= {7})
                             and ({8} = 0 or PCH6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = OPCH.""BPLId"")
                             and ('{10}' = '' or '{10}' = OPCH.""CardCode"")
                             and ('{11}' = '' or '{11}' = OPCH.""PeyMethod"")
-                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
-                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""ReconDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""ReconDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
                             union
                             select  '{14}' AS ""Check"",
                                     CASE ODPO.""BPLId"" WHEN 1 THEN 'M' ELSE 'F' END AS ""Filial"",
@@ -612,7 +612,7 @@ namespace ChessIT.Financeiro.View
 		                            0 AS ""Nº NF"",
 		                            ODPO.""CardName"" AS ""Fornecedor"",
                                     DPO6.""DueDate"" AS ""Data Vcto."",
-                                    (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
+                                    (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
 		                            cast(DPO6.""InstlmntID"" as nvarchar) || '/' || cast((select count(*) from DPO6 aux where aux.""DocEntry"" = ODPO.""DocEntry"") as nvarchar) AS ""Parcela"",
 		                            DPO6.""InsTotal"" AS ""Valor Parcela"",
                                     COALESCE((select sum(""U_ValorDoDesconto"")
@@ -736,15 +736,15 @@ namespace ChessIT.Financeiro.View
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) >= cast('{3}' as date))
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
+                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
+                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
                             and ({7} = 0 or DPO6.""InsTotal"" >= {7})
                             and ({8} = 0 or DPO6.""InsTotal"" <= {8})
                             and ({9} = 0 or {9} = ODPO.""BPLId"")
                             and ('{10}' = '' or '{10}' = ODPO.""CardCode"")
                             and ('{11}' = '' or '{11}' = ODPO.""PeyMethod"")
-                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
-                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""ReconDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""ReconDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
                             union
                             select  '{14}' AS ""Check"",
                                     CASE JDT1.""BPLId"" WHEN 1 THEN 'M' ELSE 'F' END AS ""Filial"",
@@ -756,7 +756,7 @@ namespace ChessIT.Financeiro.View
 		                            OJDT.""U_NDocFin"" AS ""Nº NF"",
 		                            OCRD.""CardName"" AS ""Fornecedor"",
                                     JDT1.""DueDate"" AS ""Data Vcto."",
-                                    (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
+                                    (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
 		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) || '/' || cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and TX.""ShortName"" LIKE 'FOR%') as varchar(10)) as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
 		                            COALESCE((select sum(""U_ValorDoDesconto"")
@@ -887,15 +887,15 @@ namespace ChessIT.Financeiro.View
                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) <= cast('{2}' as date))
                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) >= cast('{3}' as date))
                             and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))
-                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
-                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""CreateDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
+                            and (cast('{5}' as date) = cast('1990-01-01' as date) or (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") >= cast('{5}' as date))
+                            and (cast('{6}' as date) = cast('1990-01-01' as date) or (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") <= cast('{6}' as date))
                             and ({7} = 0 or JDT1.""Credit"" >= {7})
                             and ({8} = 0 or JDT1.""Credit"" <= {8})
                             and ({9} = 0 or {9} = JDT1.""BPLId"")
                             and ('{10}' = '' or '{10}' = JDT1.""ShortName"")
                             and ('{11}' = '' or '{11}' = OJDT.""U_FPagFin"")
-                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
-                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""CreateDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))";
+                            and ('{12}' = 'N' or '{14}' = 'Y' or ('{12}' = 'Y' and exists (select OITR.""ReconDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))
+                            and ('{13}' = 'N' or '{14}' = 'Y' or ('{13}' = 'Y' and not exists (select OITR.""ReconDate"" from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"")))";
 
 
             string numNF = ((EditText)Form.Items.Item("etNumNF").Specific).String;
