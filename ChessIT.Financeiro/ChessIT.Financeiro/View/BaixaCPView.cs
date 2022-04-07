@@ -435,6 +435,8 @@ namespace ChessIT.Financeiro.View
 
                                         gridTitulos.Columns.Item("Check").Type = BoGridColumnType.gct_CheckBox;
                                         gridTitulos.Columns.Item("Check").TitleObject.Caption = "#";
+
+                                        ((EditText)Form.Items.Item("etDtPagto").Specific).String = DateTime.Now.ToString("dd/MM/yyyy");
                                     }
                                     catch { }
                                     finally
@@ -1036,6 +1038,8 @@ namespace ChessIT.Financeiro.View
             Form.DataSources.UserDataSources.Item("percMulta").Value = "";
             Form.DataSources.UserDataSources.Item("percJuros").Value = "";
 
+            ((EditText)Form.Items.Item("etDtPagto").Specific).String = DateTime.Now.ToString("dd/MM/yyyy");
+
             m_BoletoModel = new Model.BoletoModel();
             m_DinheiroModel = new Model.DinheiroModel();
             m_TransferenciaModel = new Model.TransferenciaModel();
@@ -1186,6 +1190,10 @@ namespace ChessIT.Financeiro.View
                     payments.BPLID = baixaCPGroup.Key.empresa;
 
                     payments.BankChargeAmount = m_Encargo;
+
+                    payments.DocDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
+
+                    payments.TaxDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
 
                     if (m_DinheiroModel.valor > 0)
                     {

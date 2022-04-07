@@ -170,24 +170,15 @@ namespace ChessIT.KuricaUtils.View
                                                                                         QUT1.""Price"",
                                                                                         ""@ROTAS"".""U_RotaTransp"",
                                                                                         ""@ROTAS"".""U_Motorista"",
-                                                                                        QUT1.""U_NumColetasMes""
+                                                                                        QUT1.""U_NumColetasMes"",
+                                                                                        QUT1.""UoMEntry"",
+                                                                                        QUT1.""U_NumPedidoMes""
                                                                                  from OQUT
                                                                                  inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
                                                                                  left join ""@ROTAS"" on ""@ROTAS"".""Code"" = '{0}'
                                                                                  where OQUT.""DocEntry"" = {1}",
                                                                                     Form.DataSources.UserDataSources.Item("rota").Value, 
                                                                                     m_Proposta.Proposta.ToString());
-
-#if DEBUG
-                                                query = @"select OQUT.""CardCode"",                                                                        
-                                                                        QUT1.""ItemCode"",
-                                                                        QUT1.""Quantity"",
-                                                                        QUT1.""UomCode"",
-                                                                        QUT1.""Price""
-                                                                 from OQUT
-                                                                 inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
-                                                        where OQUT.""DocEntry"" = " + m_Proposta.Proposta.ToString();
-#endif
 
                                                 recordSet.DoQuery(query);
 
@@ -196,7 +187,6 @@ namespace ChessIT.KuricaUtils.View
                                                     blanketAgreement.BPCode = recordSet.Fields.Item(0).Value.ToString();
                                                     blanketAgreement.Description = recordSet.Fields.Item(1).Value.ToString();
 
-#if !DEBUG
                                                     if (recordSet.Fields.Item(2).Value.ToString() == "Sim")
                                                     {
                                                         blanketAgreement.UserFields.Item("U_Modelo").Value = "RGG";
@@ -214,17 +204,18 @@ namespace ChessIT.KuricaUtils.View
                                                         blanketAgreement.UserFields.Item("U_Modelo").Value = "RT";
                                                     }
 
-#endif
-
                                                     while (!recordSet.EoF)
                                                     {
                                                         SAPbobsCOM.BlanketAgreements_ItemsLine linha = blanketAgreement.BlanketAgreements_ItemsLines.Add();
 
-#if !DEBUG
+
                                                         linha.ItemNo = recordSet.Fields.Item(6).Value.ToString();
                                                         linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(7).Value);
                                                         linha.UnitPrice = Convert.ToDouble(recordSet.Fields.Item(9).Value);
+                                                        linha.UoMEntry = Convert.ToInt32(recordSet.Fields.Item(13).Value);
 
+                                                        if (!recordSet.Fields.Item(13).Value.Equals(""))
+                                                            linha.UserFields.Item("U_NumPedidoMes").Value = Convert.ToInt32(recordSet.Fields.Item(14).Value);
 
                                                         if (!Form.DataSources.UserDataSources.Item("tpModal").Value.Equals(""))
                                                             linha.UserFields.Item("U_TipoModal").Value = Form.DataSources.UserDataSources.Item("tpModal").Value;
@@ -242,12 +233,7 @@ namespace ChessIT.KuricaUtils.View
                                                             blanketAgreement.UserFields.Item("U_Transportadora").Value = recordSet.Fields.Item(10).Value;
                                                         if (recordSet.Fields.Item(10).Value.ToString() != "")
                                                             blanketAgreement.UserFields.Item("U_Motorista").Value = recordSet.Fields.Item(11).Value;
-                                                        
-#else
-                                                        linha.ItemNo = recordSet.Fields.Item(1).Value.ToString();
-                                                        linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(2).Value);
-                                                        linha.UnitPrice = Convert.ToDouble(recordSet.Fields.Item(4).Value);
-#endif
+       
                                                         recordSet.MoveNext();
                                                     }
 
@@ -263,7 +249,6 @@ namespace ChessIT.KuricaUtils.View
                                                     if (!Form.DataSources.UserDataSources.Item("forPgto").Value.Equals(""))
                                                         blanketAgreement.PaymentMethod = Form.DataSources.UserDataSources.Item("forPgto").Value;
 
-#if !DEBUG
                                                     blanketAgreement.UserFields.Item("U_CentroCusto").Value = Form.DataSources.UserDataSources.Item("tpCtr").Value;
                                                     blanketAgreement.UserFields.Item("U_CCContrato").Value = Form.DataSources.UserDataSources.Item("contrato").Value;
                                                     if (!Form.DataSources.UserDataSources.Item("mesesCtr").Value.Equals(""))
@@ -286,9 +271,6 @@ namespace ChessIT.KuricaUtils.View
                                                         blanketAgreement.UserFields.Item("U_DiaColetSab").Value = Form.DataSources.UserDataSources.Item("clSab").Value;
                                                     if (!Form.DataSources.UserDataSources.Item("clDom").Value.Equals(""))
                                                         blanketAgreement.UserFields.Item("U_DiaColetDom").Value = Form.DataSources.UserDataSources.Item("clDom").Value;
-
-
-#endif
 
                                                     int contrato = blanketAgreementService.AddBlanketAgreement(blanketAgreement).AgreementNo;
                                                     
