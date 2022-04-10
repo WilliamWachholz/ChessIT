@@ -1221,7 +1221,7 @@ namespace ChessIT.Financeiro.View
                         payments.BillOfExchange.BPBankCode = m_BoletoModel.banco;
                         payments.BillOfExchange.BPBankAct = m_BoletoModel.conta;
                         payments.BillOfExchange.Remarks = m_BoletoModel.obs;
-                        payments.BillOfExchange.PaymentMethodCode = m_BoletoModel.formaPagto;
+                        payments.BillOfExchange.PaymentMethodCode = m_BoletoModel.formaPagto;                        
 
                         codigoBarraBoleto = m_BoletoModel.codBarras;
                     }
@@ -1291,6 +1291,7 @@ namespace ChessIT.Financeiro.View
                         {
                             case "NE":
                                 payments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_PurchaseInvoice;
+                                payments.Invoices.InstallmentId = baixaCPModel.Parcela;
                                 break;
                             case "ADT":
                                 payments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_PurchaseDownPayment;

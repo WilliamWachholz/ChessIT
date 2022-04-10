@@ -906,6 +906,9 @@ namespace ChessIT.Financeiro.View
                                         ((ComboBox)Form.Items.Item("cbBolSta").Specific).ValidValues.Add("", "");
                                         ((ComboBox)Form.Items.Item("cbBolSta").Specific).ValidValues.Add("G", "Gerado");
 
+                                        Form.DataSources.DataTables.Item("dtBoleto").SetValue("contaC", 0, "2.1.1.01.001");
+                                        ((StaticText)Form.Items.Item("stContaBol").Specific).Caption = "Fornecedores Nacionais";
+
                                         Form.Items.Item("flTransf").Click();
 
                                         Form.DataSources.UserDataSources.Item("moeda").Value = "R$";
