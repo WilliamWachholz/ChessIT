@@ -78,7 +78,7 @@ namespace ChessIT.Financeiro.View
                                     if (cnpj != "")
                                     {
                                         SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                        recordSet.DoQuery(string.Format(@"select OCRD.""CardCode"", OCRD.""CardName"" from CRD7 INNER JOIN OCRD ON OCRD.""CardCode"" = CRD7.""CardCode"" where ""TaxId0"" = '{0}' or ""TaxId4"" = '{0}'", cnpj));
+                                        recordSet.DoQuery(string.Format(@"select OCRD.""CardCode"", OCRD.""CardName"" from CRD7 INNER JOIN OCRD ON OCRD.""CardCode"" = CRD7.""CardCode"" where OCRD.""CardType"" = 'S' and (""TaxId0"" = '{0}' or ""TaxId4"" = '{0}')", cnpj));
 
                                         if (!recordSet.EoF)
                                         {
