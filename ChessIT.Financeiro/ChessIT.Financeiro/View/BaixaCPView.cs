@@ -492,28 +492,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 18
                                     and VPM2.""InstId"" = PCH6.""InstlmntID""
                                     and ""Canceled"" = 'N'), 0) as ""Valor Juros"",
-		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" -
-                                    COALESCE((select sum(""U_ValorDoDesconto"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
-                                    and VPM2.""InvType"" = 18
-                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorMulta"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
-                                    and VPM2.""InvType"" = 18
-                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorDoJurosMora"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
-                                    and VPM2.""InvType"" = 18
-                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) AS ""Total a Pagar"",                                    
+		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Total a Pagar"",                                    
                                     PCH6.""PaidToDate"" +
                                     COALESCE((select sum(""U_ValorDoDesconto"")
                                     from VPM2 
@@ -536,28 +515,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 18
                                     and VPM2.""InstId"" = PCH6.""InstlmntID""
                                     and ""Canceled"" = 'N'), 0) AS ""Valor Pago"",
-                                    PCH6.""InsTotal"" - PCH6.""PaidToDate"" -
-                                    COALESCE((select sum(""U_ValorDoDesconto"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
-                                    and VPM2.""InvType"" = 18
-                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorMulta"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
-                                    and VPM2.""InvType"" = 18
-                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorDoJurosMora"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = OPCH.""DocEntry""
-                                    and VPM2.""InvType"" = 18
-                                    and VPM2.""InstId"" = PCH6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) AS ""Valor Saldo"",
+                                    PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Valor Saldo"",
                                     (SELECT ""AcctName"" FROM OACT WHERE ""AcctCode"" =
                                     (select max(case 
 		                                    when ""CashSum"" > 0 then ""CashAcct""
@@ -636,28 +594,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 204
                                     and VPM2.""InstId"" = DPO6.""InstlmntID""
                                     and ""Canceled"" = 'N'), 0) as ""Valor Juros"",
-		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" -
-                                    COALESCE((select sum(""U_ValorDoDesconto"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
-                                    and VPM2.""InvType"" = 204
-                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorMulta"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
-                                    and VPM2.""InvType"" = 204
-                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorDoJurosMora"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
-                                    and VPM2.""InvType"" = 204
-                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) AS ""Total a Pagar"",                                    
+		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Total a Pagar"",                                    
                                     DPO6.""PaidToDate"" +
                                     COALESCE((select sum(""U_ValorDoDesconto"")
                                     from VPM2 
@@ -680,28 +617,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 204
                                     and VPM2.""InstId"" = DPO6.""InstlmntID""
                                     and ""Canceled"" = 'N'), 0) AS ""Valor Pago"",
-                                    DPO6.""InsTotal"" - DPO6.""PaidToDate"" -
-                                    COALESCE((select sum(""U_ValorDoDesconto"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
-                                    and VPM2.""InvType"" = 204
-                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorMulta"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
-                                    and VPM2.""InvType"" = 204
-                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorDoJurosMora"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = ODPO.""DocEntry""
-                                    and VPM2.""InvType"" = 204
-                                    and VPM2.""InstId"" = DPO6.""InstlmntID""
-                                    and ""Canceled"" = 'N'), 0) AS ""Valor Saldo"",
+                                    DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Valor Saldo"",
                                     (SELECT ""AcctName"" FROM OACT WHERE ""AcctCode"" =
                                     (select max(case 
 		                                    when ""CashSum"" > 0 then ""CashAcct""
@@ -780,28 +696,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 30
                                     and VPM2.""DocLine"" = JDT1.""Line_ID""
                                     and ""Canceled"" = 'N'), 0) AS ""Valor Juros"",
-		                             JDT1.""BalDueCred"" - 
-                                    COALESCE((select sum(""U_ValorDoDesconto"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = JDT1.""TransId""
-                                    and VPM2.""InvType"" = 30
-                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorMulta"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = JDT1.""TransId""
-                                    and VPM2.""InvType"" = 30
-                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorDoJurosMora"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = JDT1.""TransId""
-                                    and VPM2.""InvType"" = 30
-                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
-                                    and ""Canceled"" = 'N'), 0) AS ""Total A Pagar"",
+		                             JDT1.""BalDueCred"" AS ""Total A Pagar"",
                                     (JDT1.""Credit"" - JDT1.""BalDueCred"") +
                                     COALESCE((select sum(""U_ValorDoDesconto"")
                                     from VPM2 
@@ -824,28 +719,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 30
                                     and VPM2.""DocLine"" = JDT1.""Line_ID""
                                     and ""Canceled"" = 'N'), 0) AS ""Valor Pago"",
-                                    JDT1.""BalDueCred"" - 
-                                    COALESCE((select sum(""U_ValorDoDesconto"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = JDT1.""TransId""
-                                    and VPM2.""InvType"" = 30
-                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorMulta"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = JDT1.""TransId""
-                                    and VPM2.""InvType"" = 30
-                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
-                                    and ""Canceled"" = 'N'), 0) +
-		                            COALESCE((select sum(""U_ValorDoJurosMora"")
-                                    from VPM2 
-                                    left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
-                                    where VPM2.""DocEntry"" = JDT1.""TransId""
-                                    and VPM2.""InvType"" = 30
-                                    and VPM2.""DocLine"" = JDT1.""Line_ID""
-                                    and ""Canceled"" = 'N'), 0) AS ""Valor Saldo"",
+                                    JDT1.""BalDueCred"" AS ""Valor Saldo"",
                                     (SELECT ""AcctName"" FROM OACT WHERE ""AcctCode"" =
                                     (select max(case 
 		                                    when ""CashSum"" > 0 then ""CashAcct""
