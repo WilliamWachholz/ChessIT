@@ -193,7 +193,7 @@ namespace ChessIT.KuricaUtils.View
                                                     }
                                                     else if (recordSet.Fields.Item(3).Value.ToString() == "Sim")
                                                     {
-                                                        blanketAgreement.UserFields.Item("U_Modelo").Value = "RSU";
+                                                        blanketAgreement.UserFields.Item("U_Modelo").Value = "RCC";
                                                     }
                                                     else if (recordSet.Fields.Item(4).Value.ToString() == "Sim")
                                                     {

@@ -422,7 +422,7 @@ namespace ChessIT.Financeiro.View
 
                 ((ComboBox)lcForm.Items.Item("1320002034").Specific).Select(((ComboBox)Form.Items.Item("cbEmpresa").Specific).Selected.Value);
 
-                ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0)).AddMonths(numeroParcelas).ToString("dd/MM/yyyy");
+                ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0)).ToString("dd/MM/yyyy");
 
                 ((EditText)lcForm.Items.Item("10").Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
 
