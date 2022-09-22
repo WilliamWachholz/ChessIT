@@ -172,9 +172,13 @@ namespace ChessIT.KuricaUtils.View
                                                                                         ""@ROTAS"".""U_Motorista"",
                                                                                         QUT1.""U_NumColetasMes"",
                                                                                         QUT1.""UomEntry"",
+<<<<<<< HEAD
                                                                                         QUT1.""U_NumPedidosMes"",
                                                                                         QUT1.""DocEntry"",
                                                                                         QUT1.""LineNum""
+=======
+                                                                                        QUT1.""U_NumPedidosMes""
+>>>>>>> 3ccdd5cbce2adb196d68193f27e53b6098b57862
                                                                                  from OQUT
                                                                                  inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
                                                                                  left join ""@ROTAS"" on ""@ROTAS"".""Code"" = '{0}'
