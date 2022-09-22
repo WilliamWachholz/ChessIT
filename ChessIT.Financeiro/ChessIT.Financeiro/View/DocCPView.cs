@@ -78,7 +78,7 @@ namespace ChessIT.Financeiro.View
                                     if (cnpj != "")
                                     {
                                         SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                        recordSet.DoQuery(string.Format(@"select OCRD.""CardCode"", OCRD.""CardName"" from CRD7 INNER JOIN OCRD ON OCRD.""CardCode"" = CRD7.""CardCode"" where ""TaxId0"" = '{0}' or ""TaxId4"" = '{0}'", cnpj));
+                                        recordSet.DoQuery(string.Format(@"select OCRD.""CardCode"", OCRD.""CardName"" from CRD7 INNER JOIN OCRD ON OCRD.""CardCode"" = CRD7.""CardCode"" where OCRD.""CardType"" = 'S' and (""TaxId0"" = '{0}' or ""TaxId4"" = '{0}')", cnpj));
 
                                         if (!recordSet.EoF)
                                         {
@@ -422,7 +422,7 @@ namespace ChessIT.Financeiro.View
 
                 ((ComboBox)lcForm.Items.Item("1320002034").Specific).Select(((ComboBox)Form.Items.Item("cbEmpresa").Specific).Selected.Value);
 
-                ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0)).AddMonths(numeroParcelas).ToString("dd/MM/yyyy");
+                ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(Form.DataSources.DataTables.Item("dtFiltro").GetValue("DataVcto1", 0)).ToString("dd/MM/yyyy");
 
                 ((EditText)lcForm.Items.Item("10").Specific).String = ((EditText)Form.Items.Item("etObs").Specific).String;
 

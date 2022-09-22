@@ -8,7 +8,7 @@ namespace ChessIT.Financeiro.Model
 {
     class BoletoModel
     {
-        public string contaC { get; set; } = "";
+        public string contaC { get; set; } = "2.1.1.01.001";
 
         public int numero { get; set; }
 

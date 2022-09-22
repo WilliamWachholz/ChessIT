@@ -171,8 +171,10 @@ namespace ChessIT.KuricaUtils.View
                                                                                         ""@ROTAS"".""U_RotaTransp"",
                                                                                         ""@ROTAS"".""U_Motorista"",
                                                                                         QUT1.""U_NumColetasMes"",
-                                                                                        QUT1.""UoMEntry"",
-                                                                                        QUT1.""U_NumPedidoMes""
+                                                                                        QUT1.""UomEntry"",
+                                                                                        QUT1.""U_NumPedidosMes"",
+                                                                                        QUT1.""DocEntry"",
+                                                                                        QUT1.""LineNum""
                                                                                  from OQUT
                                                                                  inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
                                                                                  left join ""@ROTAS"" on ""@ROTAS"".""Code"" = '{0}'
@@ -193,7 +195,7 @@ namespace ChessIT.KuricaUtils.View
                                                     }
                                                     else if (recordSet.Fields.Item(3).Value.ToString() == "Sim")
                                                     {
-                                                        blanketAgreement.UserFields.Item("U_Modelo").Value = "RSU";
+                                                        blanketAgreement.UserFields.Item("U_Modelo").Value = "RCC";
                                                     }
                                                     else if (recordSet.Fields.Item(4).Value.ToString() == "Sim")
                                                     {
@@ -208,14 +210,13 @@ namespace ChessIT.KuricaUtils.View
                                                     {
                                                         SAPbobsCOM.BlanketAgreements_ItemsLine linha = blanketAgreement.BlanketAgreements_ItemsLines.Add();
 
-
                                                         linha.ItemNo = recordSet.Fields.Item(6).Value.ToString();
                                                         linha.PlannedQuantity = Convert.ToDouble(recordSet.Fields.Item(7).Value);
                                                         linha.UnitPrice = Convert.ToDouble(recordSet.Fields.Item(9).Value);
                                                         linha.UoMEntry = Convert.ToInt32(recordSet.Fields.Item(13).Value);
 
                                                         if (!recordSet.Fields.Item(13).Value.Equals(""))
-                                                            linha.UserFields.Item("U_NumPedidoMes").Value = Convert.ToInt32(recordSet.Fields.Item(14).Value);
+                                                            linha.UserFields.Item("U_NumPedidosMes").Value = Convert.ToInt32(recordSet.Fields.Item(14).Value);
 
                                                         if (!Form.DataSources.UserDataSources.Item("tpModal").Value.Equals(""))
                                                             linha.UserFields.Item("U_TipoModal").Value = Form.DataSources.UserDataSources.Item("tpModal").Value;
@@ -229,11 +230,14 @@ namespace ChessIT.KuricaUtils.View
                                                             linha.UserFields.Item("U_QtdColTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value) * Convert.ToDouble(linha.UserFields.Item("U_QtdColMes").Value);
                                                         }
 
+                                                        linha.UserFields.Item("U_PropostaEntry").Value = Convert.ToInt32(recordSet.Fields.Item(15).Value.ToString());
+                                                        linha.UserFields.Item("U_PropostaLine").Value = Convert.ToInt32(recordSet.Fields.Item(16).Value.ToString());
+
                                                         if (recordSet.Fields.Item(10).Value.ToString() != "")
                                                             blanketAgreement.UserFields.Item("U_Transportadora").Value = recordSet.Fields.Item(10).Value;
                                                         if (recordSet.Fields.Item(10).Value.ToString() != "")
-                                                            blanketAgreement.UserFields.Item("U_Motorista").Value = recordSet.Fields.Item(11).Value;
-       
+                                                            blanketAgreement.UserFields.Item("U_Motorista").Value = recordSet.Fields.Item(11).Value;                                                        
+
                                                         recordSet.MoveNext();
                                                     }
 
@@ -270,7 +274,7 @@ namespace ChessIT.KuricaUtils.View
                                                     if (!Form.DataSources.UserDataSources.Item("clSab").Value.Equals(""))
                                                         blanketAgreement.UserFields.Item("U_DiaColetSab").Value = Form.DataSources.UserDataSources.Item("clSab").Value;
                                                     if (!Form.DataSources.UserDataSources.Item("clDom").Value.Equals(""))
-                                                        blanketAgreement.UserFields.Item("U_DiaColetDom").Value = Form.DataSources.UserDataSources.Item("clDom").Value;
+                                                        blanketAgreement.UserFields.Item("U_DiaColetDom").Value = Form.DataSources.UserDataSources.Item("clDom").Value;                                                    
 
                                                     int contrato = blanketAgreementService.AddBlanketAgreement(blanketAgreement).AgreementNo;
                                                     
