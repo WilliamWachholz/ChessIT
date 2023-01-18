@@ -1,0 +1,12 @@
+2021-08-25 13:22:52,354 FATAL JBC.Framework.Factory.SAPServiceFactory - Connection error on AddOn: Connection - Could not find SBO that match the connection string
+System.Runtime.InteropServices.COMException (0xFFFFE3DE): Connection - Could not find SBO that match the connection string
+   at SAPbouiCOM.SboGuiApiClass.Connect(String ConnectionStr)
+   at JBC.Framework.Factory.SAPServiceFactory.SetApplication() in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 81
+   at JBC.Framework.Factory.SAPServiceFactory.B1Connect(String version) in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 64
+2021-08-25 13:22:52,387 FATAL JBC.Framework.Factory.SAPServiceFactory - Connection error on AddOn: Connection - Could not find SBO that match the connection string
+System.Runtime.InteropServices.COMException (0xFFFFE3DE): Connection - Could not find SBO that match the connection string
+   at SAPbouiCOM.SboGuiApiClass.Connect(String ConnectionStr)
+   at JBC.Framework.Factory.SAPServiceFactory.SetApplication() in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 81
+   at JBC.Framework.Factory.SAPServiceFactory.B1Connect(String version) in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 64
+2021-08-25 15:55:58,494 INFO JBC.Framework.Service.AppEventHandler - Shutting down JBC
+2021-08-25 15:59:39,292 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.COLETOR - Version 1.0.0.0

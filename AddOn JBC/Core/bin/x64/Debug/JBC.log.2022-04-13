@@ -1,0 +1,19 @@
+2022-04-13 12:19:25,809 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-13 12:19:25,890 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-13 12:19:32,083 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.3
+2022-04-13 12:26:53,664 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-13 12:26:53,754 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-13 12:26:56,259 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.3
+2022-04-13 12:33:01,475 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-13 12:33:01,554 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-13 12:33:08,046 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.3
+2022-04-13 13:11:23,928 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-13 13:11:24,007 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-13 13:11:26,527 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.3
+2022-04-13 13:21:58,988 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-13 13:21:59,107 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-13 13:22:07,237 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.3
+2022-04-13 13:26:35,948 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-13 13:26:36,039 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-13 13:26:42,095 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.3
+2022-04-13 13:37:04,777 INFO JBC.Framework.Service.AppEventHandler - Shutting down JBC
