@@ -2586,7 +2586,7 @@ namespace Chess.IT.Services.View
             string usage = recordSet.Fields.Item(9).Value.ToString();
             int AgrLineNum = Convert.ToInt32(recordSet.Fields.Item(10).Value.ToString());            
 
-            int bplID = 3;
+            int bplID = 1;
             string tpOper = "C-GG";
             string respFat = "Cliente";
             string codTransp = "FOR00001";
