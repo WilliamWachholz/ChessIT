@@ -306,15 +306,15 @@ namespace ChessIT.KuricaUtils.View
 		                            ODRF.""DocNum"" AS ""Nº Doc"",
 		                            ODRF.""DocDate"" AS ""Data"",
 		                            ODRF.""CardName"" AS ""Fornecedor"",
-		                            ODRF.""Comments"" AS ""Observação"",
+		                            CASE COALESCE(OWDD.""Remarks"", '') WHEN '' THEN ODRF.""Comments"" ELSE OWDD.""Remarks"" END AS ""Observação"",
 		                            ODRF.""DocTotal"" AS ""Valor Total"",
                                     case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
 			                                when (OWDD.""Status"" = 'N') then 'Recusado'
 			                                else 'Pendente'
 		                            end as ""Decisão/Situação"",
-                                    (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Aprovador"",
-                                    (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Aprovação"",
-                                    (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Aprovação"",
+                                    (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Resp. Decisão"",
+                                    (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Decisão"",
+                                    (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Decisão"",
 		                            '' AS ""Descrição Item"",
 		                            NULL AS ""Quantidade"",
 		                            NULL AS ""Preço Unitário"",
@@ -352,15 +352,15 @@ namespace ChessIT.KuricaUtils.View
 		                                    ODRF.""DocNum"" AS ""Nº Doc"",
 		                                    ODRF.""DocDate"" AS ""Data"",
 		                                    ODRF.""CardName"" AS ""Fornecedor"",
-		                                    ODRF.""Comments"" AS ""Observação"",
+		                                    CASE COALESCE(OWDD.""Remarks"", '') WHEN '' THEN ODRF.""Comments"" ELSE OWDD.""Remarks"" END AS ""Observação"",
 		                                    ODRF.""DocTotal"" AS ""Valor Total"",
                                             case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
 			                                     when (OWDD.""Status"" = 'N') then 'Recusado'
 			                                     else 'Pendente'
 		                                    end as ""Decisão/Situação"",
-                                            (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Aprovador"",
-                                            (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Aprovação"",
-                                            (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Aprovação"",
+                                            (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Resp. Decisão"",
+                                            (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Decisão"",
+                                            (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Decisão"",
 		                                    '' AS ""Descrição Item"",
 		                                    NULL AS ""Quantidade"",
 		                                    NULL AS ""Preço Unitário"",
@@ -438,9 +438,9 @@ namespace ChessIT.KuricaUtils.View
                 gridDetalhes.Columns.Item("Observação").Editable = false;
                 gridDetalhes.Columns.Item("Valor Total").Editable = false;
                 gridDetalhes.Columns.Item("Decisão/Situação").Editable = false;
-                gridDetalhes.Columns.Item("Aprovador").Editable = false;
-                gridDetalhes.Columns.Item("Data Aprovação").Editable = false;
-                gridDetalhes.Columns.Item("Horário Aprovação").Editable = false;
+                gridDetalhes.Columns.Item("Resp. Decisão").Editable = false;
+                gridDetalhes.Columns.Item("Data Decisão").Editable = false;
+                gridDetalhes.Columns.Item("Horário Decisão").Editable = false;
                 gridDetalhes.Columns.Item("Descrição Item").Editable = false;
                 gridDetalhes.Columns.Item("Quantidade").Editable = false;
                 gridDetalhes.Columns.Item("Preço Unitário").Editable = false;

@@ -172,13 +172,9 @@ namespace ChessIT.KuricaUtils.View
                                                                                         ""@ROTAS"".""U_Motorista"",
                                                                                         QUT1.""U_NumColetasMes"",
                                                                                         QUT1.""UomEntry"",
-<<<<<<< HEAD
                                                                                         QUT1.""U_NumPedidosMes"",
                                                                                         QUT1.""DocEntry"",
                                                                                         QUT1.""LineNum""
-=======
-                                                                                        QUT1.""U_NumPedidosMes""
->>>>>>> 3ccdd5cbce2adb196d68193f27e53b6098b57862
                                                                                  from OQUT
                                                                                  inner join QUT1 on QUT1.""DocEntry"" = OQUT.""DocEntry""
                                                                                  left join ""@ROTAS"" on ""@ROTAS"".""Code"" = '{0}'
@@ -219,18 +215,25 @@ namespace ChessIT.KuricaUtils.View
                                                         linha.UnitPrice = Convert.ToDouble(recordSet.Fields.Item(9).Value);
                                                         linha.UoMEntry = Convert.ToInt32(recordSet.Fields.Item(13).Value);
 
-                                                        if (!recordSet.Fields.Item(13).Value.Equals(""))
+                                                        if (!recordSet.Fields.Item(14).Value.Equals(""))
                                                             linha.UserFields.Item("U_NumPedidosMes").Value = Convert.ToInt32(recordSet.Fields.Item(14).Value);
 
                                                         if (!Form.DataSources.UserDataSources.Item("tpModal").Value.Equals(""))
                                                             linha.UserFields.Item("U_TipoModal").Value = Form.DataSources.UserDataSources.Item("tpModal").Value;
 
-                                                        if (!recordSet.Fields.Item(12).Value.Equals(""))
+                                                        if (!recordSet.Fields.Item(12).Value.Equals("") && Convert.ToInt32(recordSet.Fields.Item(12).Value) > 0)
                                                         {
                                                             linha.UserFields.Item("U_NumColetasMes").Value = Convert.ToInt32(recordSet.Fields.Item(12).Value);
                                                             linha.UserFields.Item("U_QtdColMes").Value = linha.PlannedQuantity * Convert.ToInt32(recordSet.Fields.Item(12).Value);
                                                             linha.UserFields.Item("U_NumColetasTotal").Value = Convert.ToInt32(recordSet.Fields.Item(12).Value) * Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
 
+                                                            linha.UserFields.Item("U_QtdColTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value) * Convert.ToDouble(linha.UserFields.Item("U_QtdColMes").Value);
+                                                        }
+                                                        else if (!recordSet.Fields.Item(14).Value.Equals("") && Convert.ToInt32(recordSet.Fields.Item(14).Value) > 0)
+                                                        {
+                                                            linha.UserFields.Item("U_NumColetasMes").Value = Convert.ToInt32(recordSet.Fields.Item(14).Value);
+                                                            linha.UserFields.Item("U_QtdColMes").Value = linha.PlannedQuantity * Convert.ToInt32(recordSet.Fields.Item(14).Value);
+                                                            linha.UserFields.Item("U_NumColetasTotal").Value = Convert.ToInt32(recordSet.Fields.Item(14).Value) * Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value);
                                                             linha.UserFields.Item("U_QtdColTotal").Value = Convert.ToInt32(Form.DataSources.UserDataSources.Item("mesesCtr").Value) * Convert.ToDouble(linha.UserFields.Item("U_QtdColMes").Value);
                                                         }
 

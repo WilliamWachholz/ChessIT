@@ -67,9 +67,7 @@ namespace ChessIT.KuricaUtils.View
                                    "'" + resultado.Fornecedor.Trim() + "' as \"Fornecedor\", " +
                                    "'" + resultado.ValorTotal.ToString("C") + "' as \"Valor Total\", " +
                                    "'" + resultado.Resultado + "' as \"Resultado\" " +
-#if !DEBUG
                         " from dummy " +
-#endif
                         " union all ";
                 }
 
@@ -108,12 +106,6 @@ namespace ChessIT.KuricaUtils.View
                                "" + m_ResultadoProposta.Contrato.ToString() + " as \"Nº Contrato\", " +
                                "'" + m_ResultadoProposta.Resultado + "' as \"Resultado\" " +
                         " from dummy ";
-
-#if DEBUG
-                query = "select " + m_ResultadoProposta.Proposta + " as \"Nº Proposta\", " +
-                               "" + m_ResultadoProposta.Contrato.ToString() + " as \"Nº Contrato\", " +
-                               "'" + m_ResultadoProposta.Resultado + "' as \"Resultado\" ";
-#endif
 
                 if (query != string.Empty)
                 {                    

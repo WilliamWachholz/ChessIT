@@ -1,0 +1,16 @@
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Debug\ChessIT.KuricaUtils.Properties.Resources.resources
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Debug\ChessIT.KuricaUtils.csproj.GenerateResource.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Debug\ChessIT.KuricaUtils.csproj.CoreCompileInputs.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\Menu.xml
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\SrfFiles\FrmAprovacao.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\SrfFiles\FrmPropostaContrato.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\SrfFiles\FrmRecusa.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\SrfFiles\FrmResultado.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\ChessIT.KuricaUtils.exe.config
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\ChessIT.KuricaUtils.exe
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\ChessIT.KuricaUtils.pdb
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Debug\SAPBusinessOneSDK.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Debug\ChessIT.KuricaUtils.csproj.AssemblyReference.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Debug\ChessIT.KuricaUtils.csproj.CopyComplete
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Debug\ChessIT.KuricaUtils.exe
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Debug\ChessIT.KuricaUtils.pdb
