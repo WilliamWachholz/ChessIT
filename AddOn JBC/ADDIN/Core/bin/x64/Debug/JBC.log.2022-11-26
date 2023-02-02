@@ -1,0 +1,86 @@
+2022-11-26 19:00:45,943 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+2022-11-26 19:00:46,027 FATAL JBC.Framework.MicroCore - Error preparing Framework - 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForObject[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 390
+   at JBC.Framework.DAO.AssemblyDAOImpl.GetCoreAssemblyInformation() in C:\Users\WUP84\source\repos\JBC_B1\DAO\AssemblyDAOImpl.cs:line 189
+   at JBC.Framework.Service.AssemblyManager.UpdateFrameworkAssemblies(String appFolder) in C:\Users\WUP84\source\repos\JBC_B1\Service\AssemblyManager.cs:line 415
+   at JBC.Framework.MicroCore.PrepareFramework() in C:\Users\WUP84\source\repos\JBC_B1\MicroCore.cs:line 85
+2022-11-26 19:00:46,154 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+   at SAPbobsCOM.IRecordset.DoQuery(String QueryStr)
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForList[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 414
+2022-11-26 19:01:21,972 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+2022-11-26 19:01:22,057 FATAL JBC.Framework.MicroCore - Error preparing Framework - 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForObject[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 390
+   at JBC.Framework.DAO.AssemblyDAOImpl.GetCoreAssemblyInformation() in C:\Users\WUP84\source\repos\JBC_B1\DAO\AssemblyDAOImpl.cs:line 189
+   at JBC.Framework.Service.AssemblyManager.UpdateFrameworkAssemblies(String appFolder) in C:\Users\WUP84\source\repos\JBC_B1\Service\AssemblyManager.cs:line 415
+   at JBC.Framework.MicroCore.PrepareFramework() in C:\Users\WUP84\source\repos\JBC_B1\MicroCore.cs:line 85
+2022-11-26 19:01:22,172 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+   at SAPbobsCOM.IRecordset.DoQuery(String QueryStr)
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForList[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 414
+2022-11-26 19:02:02,542 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+2022-11-26 19:02:02,627 FATAL JBC.Framework.MicroCore - Error preparing Framework - 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForObject[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 390
+   at JBC.Framework.DAO.AssemblyDAOImpl.GetCoreAssemblyInformation() in C:\Users\WUP84\source\repos\JBC_B1\DAO\AssemblyDAOImpl.cs:line 189
+   at JBC.Framework.Service.AssemblyManager.UpdateFrameworkAssemblies(String appFolder) in C:\Users\WUP84\source\repos\JBC_B1\Service\AssemblyManager.cs:line 415
+   at JBC.Framework.MicroCore.PrepareFramework() in C:\Users\WUP84\source\repos\JBC_B1\MicroCore.cs:line 85
+2022-11-26 19:02:02,742 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+   at SAPbobsCOM.IRecordset.DoQuery(String QueryStr)
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForList[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 414
+2022-11-26 19:10:10,610 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
+2022-11-26 19:10:10,685 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-11-26 19:10:10,719 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-11-26 19:18:24,851 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+2022-11-26 19:18:24,944 FATAL JBC.Framework.MicroCore - Error preparing Framework - 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForObject[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 390
+   at JBC.Framework.DAO.AssemblyDAOImpl.GetCoreAssemblyInformation() in C:\Users\WUP84\source\repos\JBC_B1\DAO\AssemblyDAOImpl.cs:line 189
+   at JBC.Framework.Service.AssemblyManager.UpdateFrameworkAssemblies(String appFolder) in C:\Users\WUP84\source\repos\JBC_B1\Service\AssemblyManager.cs:line 415
+   at JBC.Framework.MicroCore.PrepareFramework() in C:\Users\WUP84\source\repos\JBC_B1\MicroCore.cs:line 85
+2022-11-26 19:18:25,060 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+   at SAPbobsCOM.IRecordset.DoQuery(String QueryStr)
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForList[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 414
+2022-11-26 19:19:12,469 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+2022-11-26 19:19:12,603 FATAL JBC.Framework.MicroCore - Error preparing Framework - 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 2 col 6 (at pos 21)
+
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForObject[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 390
+   at JBC.Framework.DAO.AssemblyDAOImpl.GetCoreAssemblyInformation() in C:\Users\WUP84\source\repos\JBC_B1\DAO\AssemblyDAOImpl.cs:line 189
+   at JBC.Framework.Service.AssemblyManager.UpdateFrameworkAssemblies(String appFolder) in C:\Users\WUP84\source\repos\JBC_B1\Service\AssemblyManager.cs:line 415
+   at JBC.Framework.MicroCore.PrepareFramework() in C:\Users\WUP84\source\repos\JBC_B1\MicroCore.cs:line 85
+2022-11-26 19:19:12,771 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema KURICA_PROD: line 6 col 2 (at pos 104)
+
+   at SAPbobsCOM.IRecordset.DoQuery(String QueryStr)
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForList[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 414
+2022-11-26 19:53:25,189 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
+2022-11-26 19:53:25,316 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-11-26 19:53:25,397 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found

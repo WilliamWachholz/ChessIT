@@ -1,0 +1,8 @@
+﻿<Application>
+	<Menus>
+		<action type="add">
+			<Menu Checked="0" Enabled="1" FatherUID="2048" Position="21" String="Gestão - Ordem de Serviço" Type="1" UniqueID="FrmGeraOS" />
+			<Menu Checked="0" Enabled="1" FatherUID="43525" Position="5" String="Integração de Balança" Type="1" UniqueID="FrmCnfIntegraBalanca" />
+		</action>
+	</Menus>
+</Application>
