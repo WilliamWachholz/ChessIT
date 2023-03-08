@@ -86,12 +86,6 @@ namespace Chess.IT.Services.View
                     }
                 }                
             }
-            else
-            {
-
-                Program.oApplicationS.StatusBar.SetText("Z" + m_Notas.Count);
-
-            }
         }
 
         Timer m_Timer = new Timer(1000);

@@ -68,3 +68,4 @@ C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Core\obj\x64\Debug\Core.
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Core\obj\x64\Debug\Core.csproj.CoreCompileInputs.cache
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Core\obj\x64\Debug\Core.csproj.CopyComplete
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Core\obj\x64\Debug\JBC.exe
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Core\bin\x64\Debug\resources\Chess - Certificado de Destinação.rpt

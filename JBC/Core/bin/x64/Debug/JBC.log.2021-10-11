@@ -1,0 +1,45 @@
+2021-10-11 11:08:06,266 FATAL JBC.Framework.Factory.SAPServiceFactory - Connection error on AddOn: Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+System.Runtime.InteropServices.COMException (0xFFFFE3DF): Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+   at SAPbouiCOM.SboGuiApiClass.Connect(String ConnectionStr)
+   at JBC.Framework.Factory.SAPServiceFactory.SetApplication() in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 81
+   at JBC.Framework.Factory.SAPServiceFactory.B1Connect(String version) in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 64
+2021-10-11 11:08:06,963 FATAL JBC.Framework.Factory.SAPServiceFactory - Connection error on AddOn: Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+System.Runtime.InteropServices.COMException (0xFFFFE3DF): Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+   at SAPbouiCOM.SboGuiApiClass.Connect(String ConnectionStr)
+   at JBC.Framework.Factory.SAPServiceFactory.SetApplication() in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 81
+   at JBC.Framework.Factory.SAPServiceFactory.B1Connect(String version) in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 64
+2021-10-11 11:10:23,867 FATAL JBC.Framework.Factory.SAPServiceFactory - Connection error on AddOn: Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+System.Runtime.InteropServices.COMException (0xFFFFE3DF): Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+   at SAPbouiCOM.SboGuiApiClass.Connect(String ConnectionStr)
+   at JBC.Framework.Factory.SAPServiceFactory.SetApplication() in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 81
+   at JBC.Framework.Factory.SAPServiceFactory.B1Connect(String version) in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 64
+2021-10-11 11:10:24,610 FATAL JBC.Framework.Factory.SAPServiceFactory - Connection error on AddOn: Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+System.Runtime.InteropServices.COMException (0xFFFFE3DF): Connection - Connection string is not valid.  [66000-84]. Nenhuma licença SAP
+   at SAPbouiCOM.SboGuiApiClass.Connect(String ConnectionStr)
+   at JBC.Framework.Factory.SAPServiceFactory.SetApplication() in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 81
+   at JBC.Framework.Factory.SAPServiceFactory.B1Connect(String version) in C:\Users\WUP84\source\repos\JBC_B1\Factory\SAPServiceFactory.cs:line 64
+2021-10-11 12:54:07,617 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:07:18,667 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:08:00,327 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:08:54,007 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:09:12,615 INFO JBC.Framework.Service.AppEventHandler - Shutting down JBC
+2021-10-11 13:09:23,525 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:11:25,579 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:25:59,389 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:28:37,929 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 13:31:12,548 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 14:24:09,809 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 14:27:02,984 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 14:29:43,668 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 14:36:06,364 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 15:05:00,998 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 15:06:37,392 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 15:22:24,863 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 15:35:18,065 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 15:40:32,915 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 15:53:11,068 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 15:58:38,074 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 16:00:28,063 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 16:02:39,691 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 16:04:40,654 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0
+2021-10-11 16:07:25,482 INFO JBC.Framework.Service.AssemblyManager - Updated file JBC.Coletor - Version 1.0.0.0

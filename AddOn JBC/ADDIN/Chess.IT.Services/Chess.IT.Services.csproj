@@ -137,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SrfFiles\frmCertificados.srf" />
     <None Include="packages.config" />
+    <None Include="resources\Chess - Certificado de Destinação.rpt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resources\frmPicking.srf" />

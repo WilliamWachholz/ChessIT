@@ -1,0 +1,36 @@
+2022-04-19 13:34:54,504 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
+2022-04-19 13:34:54,574 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-19 13:34:54,586 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-19 13:39:20,672 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-19 13:39:20,804 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-19 13:39:27,585 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
+2022-04-19 15:41:45,181 INFO JBC.Framework.Service.AppEventHandler - Shutting down JBC
+2022-04-19 20:10:00,402 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema PREGOLIVE: line 2 col 6 (at pos 21)
+
+2022-04-19 20:10:00,486 FATAL JBC.Framework.MicroCore - Error preparing Framework - 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema PREGOLIVE: line 2 col 6 (at pos 21)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema PREGOLIVE: line 2 col 6 (at pos 21)
+
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForObject[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 390
+   at JBC.Framework.DAO.AssemblyDAOImpl.GetCoreAssemblyInformation() in C:\Users\WUP84\source\repos\JBC_B1\DAO\AssemblyDAOImpl.cs:line 189
+   at JBC.Framework.Service.AssemblyManager.UpdateFrameworkAssemblies(String appFolder) in C:\Users\WUP84\source\repos\JBC_B1\Service\AssemblyManager.cs:line 415
+   at JBC.Framework.MicroCore.PrepareFramework() in C:\Users\WUP84\source\repos\JBC_B1\MicroCore.cs:line 85
+2022-04-19 20:10:00,627 ERROR JBC.Framework.DAO.BusinessOneDAOSQLImpl - SQL Select for Object error: 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema PREGOLIVE: line 6 col 2 (at pos 104)
+
+System.Runtime.InteropServices.COMException (0xFFFFF830): 1). [SAP AG][LIBODBCHDB DLL][HDBODBC] Base table or view not found;259 invalid table name:  Could not find table/view JBC_MODULES in schema PREGOLIVE: line 6 col 2 (at pos 104)
+
+   at SAPbobsCOM.IRecordset.DoQuery(String QueryStr)
+   at JBC.Framework.DAO.BusinessOneDAOSQLImpl.ExecuteSqlForList[T](String sql) in C:\Users\WUP84\source\repos\JBC_B1\DAO\BusinessOneDAOSQLImpl.cs:line 414
+2022-04-19 20:15:28,733 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-19 20:15:28,798 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-19 20:16:10,250 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-19 20:16:10,307 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-19 20:16:16,128 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
+2022-04-19 20:23:31,061 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-19 20:23:31,139 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-19 20:25:13,188 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-19 20:25:13,280 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-19 20:25:18,305 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
+2022-04-19 20:27:49,133 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2022-04-19 20:27:49,220 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2022-04-19 20:27:54,245 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5

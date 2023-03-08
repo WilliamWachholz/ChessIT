@@ -39,6 +39,7 @@ namespace Chess.IT.Services.FormClass.userform
         private SAPbouiCOM.Button _ButtonConsultar;
         private SAPbouiCOM.Button _ButtonMarcarTudo;
         private SAPbouiCOM.Button _ButtonDesmarcarTudo;
+        private SAPbouiCOM.Button _ButtonImprimirCertificado;
         private SAPbouiCOM.Matrix _oMatrix1;
         private DataTable dtMatrix1 { get; set; }
         private bool bConfiguraTela = true;
@@ -740,19 +741,33 @@ namespace Chess.IT.Services.FormClass.userform
             {
                 if (oApplication.MessageBox(string.Format("{0}, você confirma a Geração de uma nova numeração de Certificado?", oJBCKURICAService.UserName()), 1, "Sim", "Não") == 1)
                 {
+                    string cardCode = "";
+
                     this._oMatrix1.FlushToDataSource();
                     bool bSelecionouAlgo = false;
+                    bool bSelecionouVariosClientes = false;
                     for (int i = 0; i < this.dtMatrix1.Rows.Count; i++)
                     {
                         if (this.dtMatrix1.GetValue("SEL", i).ToString().Equals("Y"))
                         {
                             bSelecionouAlgo = true;
-                            break;
+
+                            if (cardCode != string.Empty && cardCode != this.dtMatrix1.GetValue("CardCode", i).ToString())
+                            {
+                                bSelecionouVariosClientes = true;
+                                break;
+                            }
+
+                            cardCode = this.dtMatrix1.GetValue("CardCode", i).ToString();
                         }
                     }
                     if (!bSelecionouAlgo)
                     {
-                        Log.ErrorFormat("{0}, por favor selecione registros para gerar o certificado!!");
+                        Log.ErrorFormat("Por favor selecione registros para gerar o certificado!!");
+                    }
+                    else if (bSelecionouVariosClientes)
+                    {
+                        Log.ErrorFormat("Não é permitida a geração de certificado para clientes diferentes na mesma requisição.");
                     }
                     else
                     {

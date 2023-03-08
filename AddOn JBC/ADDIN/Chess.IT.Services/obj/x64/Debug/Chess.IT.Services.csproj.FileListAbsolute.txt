@@ -44,3 +44,4 @@ C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x6
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Debug\Chess.IT.Services.dll
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Debug\Chess.IT.Services.pdb
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Debug\Chess.IT.Services.csproj.AssemblyReference.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Debug\resources\Chess - Certificado de Destinação.rpt
