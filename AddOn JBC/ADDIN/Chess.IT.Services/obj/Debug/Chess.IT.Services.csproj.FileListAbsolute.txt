@@ -1,2 +1,0 @@
-C:\Users\kuricaambiental_02\source\repos\ChessIT\ADDIN\RENAME\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.AssemblyReference.cache
-C:\Users\kuricaambiental_02\source\repos\ChessIT\ADDIN\RENAME\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.CoreCompileInputs.cache

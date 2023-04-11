@@ -1,1 +1,0 @@
-SELECT 1 FROM OUSR WHERE USER_CODE = '{0}' and coalesce("U_JBC_CERT_C",'N')='Y';

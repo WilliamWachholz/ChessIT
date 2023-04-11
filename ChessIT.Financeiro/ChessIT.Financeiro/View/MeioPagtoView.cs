@@ -991,10 +991,10 @@ namespace ChessIT.Financeiro.View
                                     "'" + chequeModel.contaC + @"' as ""contaC"", " +
                                     (chequeModel.endosso ? "'Y'" : "'N'") + @" as ""endosso"" ";
 
-#if !DEBUG
+
 
                 query += " from dummy ";
-#endif
+
                 query += "union all";
 
                 linha++;
@@ -1013,10 +1013,10 @@ namespace ChessIT.Financeiro.View
                                         @"cast('' as varchar(15)) as ""contaC"", " +
                                         @"'N' as ""endosso"" ";
 
-#if !DEBUG
+
 
                 query += " from dummy ";
-#endif
+
             }
             else
             {
@@ -1049,10 +1049,10 @@ namespace ChessIT.Financeiro.View
                 query += @" select " + linha.ToString() + @" as ""linha"", '" +
                     recordSet.Fields.Item(0).Value.ToString() + @"' as ""cartao"" ";
 
-#if !DEBUG
+
 
                                             query += " from dummy ";
-#endif
+
                 query += "union all";
 
                 linha++;
@@ -1060,10 +1060,10 @@ namespace ChessIT.Financeiro.View
 
             query += @" select " + linha.ToString() + @" as ""linha"", 'Definir novo' as ""cartao"" ";
 
-#if !DEBUG
+
 
                                             query += " from dummy ";
-#endif
+
             Form.DataSources.DataTables.Item("dtComprov").ExecuteQuery(query);
 
             Matrix matrixComprovante = (Matrix)Form.Items.Item("mtComprov").Specific;

@@ -121,10 +121,6 @@ namespace ChessIT.Financeiro.Controller
 
                     xml = xml.Replace("uid=\"FrmDocCP\"", string.Format("uid=\"{0}\"", formUID));
 
-#if DEBUG
-                    xml = xml.Replace("from dummy", "");
-#endif
-
                     Application.LoadBatchActions(ref xml);
                 }
                 catch (Exception exception)
@@ -149,10 +145,6 @@ namespace ChessIT.Financeiro.Controller
                     string formUID = GerarFormUID("FrmBaixaCP");
 
                     xml = xml.Replace("uid=\"FrmBaixaCP\"", string.Format("uid=\"{0}\"", formUID));
-
-#if DEBUG
-                    xml = xml.Replace("from dummy", "");
-#endif
 
                     Application.LoadBatchActions(ref xml);
                 }
@@ -179,9 +171,6 @@ namespace ChessIT.Financeiro.Controller
 
                     xml = xml.Replace("uid=\"FrmRenegCP\"", string.Format("uid=\"{0}\"", formUID));
 
-#if DEBUG
-                    xml = xml.Replace("from dummy", "");
-#endif
 
                     Application.LoadBatchActions(ref xml);
                 }
@@ -620,12 +609,10 @@ namespace ChessIT.Financeiro.Controller
                 {
                     if (Convert.ToDateTime(prop.GetValue(model)) == DateTime.MinValue || Convert.ToDateTime(prop.GetValue(model)) == new DateTime(1899, 12, 30))
                     {
-#if DEBUG
-                        values.Add("cast(null as date)" + " as " + @"""" + prop.Name + @"""");
-#else
+
                         values.Add("to_date(null)" + " as " + @"""" + prop.Name + @"""");
 
-#endif
+
                     }
                     else
                     {
@@ -653,11 +640,9 @@ namespace ChessIT.Financeiro.Controller
                 }
             }
 
-#if DEBUG
-            select = " select " + string.Join(",", values.ToArray());
-#else
+
             select = " select " + string.Join(",", values.ToArray()) + " from dummy";
-#endif
+
             try
             {
                 dataTable.ExecuteQuery(select);
@@ -722,12 +707,10 @@ namespace ChessIT.Financeiro.Controller
                 {
                     if (Convert.ToDateTime(prop.GetValue(model)) == DateTime.MinValue || Convert.ToDateTime(prop.GetValue(model)) == new DateTime(1899, 12, 30))
                     {
-#if DEBUG
-                        values.Add("cast(null as date)");
-#else
+
                             values.Add("to_date(null)");
 
-#endif
+
                     }
                     else
                     {
@@ -755,12 +738,10 @@ namespace ChessIT.Financeiro.Controller
                 }
             }
 
-#if DEBUG
-            return " select " + string.Join(",", values.ToArray()) + " ";
-#else
+
             return " select " + string.Join(",", values.ToArray()) +  " from dummy ";
 
-#endif
+
         }
 
         public static void OpenMeioPagtoView(string parentUID)
@@ -780,9 +761,6 @@ namespace ChessIT.Financeiro.Controller
 
                 xml = xml.Replace("uid=\"FrmMeioPagto\"", string.Format("uid=\"{0}\"", formUID));
 
-#if DEBUG
-                    xml = xml.Replace("from dummy", "");
-#endif
 
                 Application.LoadBatchActions(ref xml);
             }

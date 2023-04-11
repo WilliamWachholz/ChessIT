@@ -1,1 +1,0 @@
-select CAST('{0}' as DATETIME) as "DATA" FROM DUMMY

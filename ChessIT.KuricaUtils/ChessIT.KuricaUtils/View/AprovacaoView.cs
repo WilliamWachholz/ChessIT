@@ -306,15 +306,15 @@ namespace ChessIT.KuricaUtils.View
 		                            ODRF.""DocNum"" AS ""Nº Doc"",
 		                            ODRF.""DocDate"" AS ""Data"",
 		                            ODRF.""CardName"" AS ""Fornecedor"",
-		                            CASE COALESCE(OWDD.""Remarks"", '') WHEN '' THEN ODRF.""Comments"" ELSE OWDD.""Remarks"" END AS ""Observação"",
+		                            CASE COALESCE((select max(""Remarks"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status""  IN ('N', 'Y')), '') WHEN '' THEN ODRF.""Comments"" ELSE COALESCE((select max(""Remarks"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status""  IN ('N', 'Y')), '') END AS ""Observação"",
 		                            ODRF.""DocTotal"" AS ""Valor Total"",
                                     case when (OWDD.""Status"" = 'Y') then 'Aprovado' 
 			                                when (OWDD.""Status"" = 'N') then 'Recusado'
 			                                else 'Pendente'
 		                            end as ""Decisão/Situação"",
-                                    (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Resp. Decisão"",
-                                    (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Decisão"",
-                                    (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Decisão"",
+                                    (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status""  IN ('N', 'Y')) as ""Resp. Decisão"",
+                                    (select max(""UpdateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status""  IN ('N', 'Y')) as ""Data Decisão"",
+                                    (select max(substring(""UpdateTime"", 0, length(""UpdateTime"") - 2) || ':' ||  substring(""UpdateTime"", length(""UpdateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status""  IN ('N', 'Y')) as ""Horário Decisão"",
 		                            '' AS ""Descrição Item"",
 		                            NULL AS ""Quantidade"",
 		                            NULL AS ""Preço Unitário"",
@@ -358,9 +358,9 @@ namespace ChessIT.KuricaUtils.View
 			                                     when (OWDD.""Status"" = 'N') then 'Recusado'
 			                                     else 'Pendente'
 		                                    end as ""Decisão/Situação"",
-                                            (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Resp. Decisão"",
-                                            (select max(""CreateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Data Decisão"",
-                                            (select max(substring(""CreateTime"", 0, length(""CreateTime"") - 2) || ':' ||  substring(""CreateTime"", length(""CreateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" = 'Y') as ""Horário Decisão"",
+                                            (select max(""U_NAME"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" IN ('N', 'Y')) as ""Resp. Decisão"",
+                                            (select max(""UpdateDate"") from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" IN ('N', 'Y')) as ""Data Decisão"",
+                                            (select max(substring(""UpdateTime"", 0, length(""UpdateTime"") - 2) || ':' ||  substring(""UpdateTime"", length(""UpdateTime"") - 1, 2)) from WDD1 inner join OUSR on OUSR.""USERID"" = WDD1.""UserID"" where WDD1.""WddCode"" = OWDD.""WddCode"" and WDD1.""Status"" IN ('N', 'Y')) as ""Horário Decisão"",
 		                                    '' AS ""Descrição Item"",
 		                                    NULL AS ""Quantidade"",
 		                                    NULL AS ""Preço Unitário"",
@@ -376,8 +376,7 @@ namespace ChessIT.KuricaUtils.View
                                     and ((cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODRF.""DocDate"" as date) <= cast('{2}' as date)))
                                     and ('{3}' = '' or '{3}' = OBPL.""BPLName"")
                                     and ('{4}' = '' or '{4}' = ODRF.""CardCode"")
-                                    --and ('{5}' = 'Y' or ('{6}' = 'Y' and (ODRF.""DocStatus"" = 'C' AND OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and (ODRF.""DocStatus"" = 'O' AND OWDD.""Status"" = 'W')))
-                                    and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or('{7}' = 'Y' and(OWDD.""Status"" = 'W')))
+                                    and('{5}' = 'Y' or('{6}' = 'Y' and (OWDD.""Status"" = 'Y')) or ('{7}' = 'Y' and(OWDD.""Status"" = 'W')) or('{8}' = 'Y' and (OWDD.""Status"" = 'N')))
                                     union
                                     select  'N' AS ""#"",
                                         OWDD.""WddCode"",

@@ -499,11 +499,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 18
                                     and VPM2.""InstId"" = PCH6.""InstlmntID""
                                     and ""Canceled"" = 'N'), 0) + PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Total a Pagar"",                                    
-<<<<<<< HEAD
                                     PCH6.""PaidToDate"" -
-=======
-                                    PCH6.""PaidToDate"" +
->>>>>>> 3ccdd5cbce2adb196d68193f27e53b6098b57862
                                     COALESCE((select sum(""U_ValorDoDesconto"")
                                     from VPM2 
                                     left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
@@ -617,11 +613,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""InvType"" = 204
                                     and VPM2.""InstId"" = DPO6.""InstlmntID""
                                     and ""Canceled"" = 'N'), 0) + DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Total a Pagar"",                                    
-<<<<<<< HEAD
                                     DPO6.""PaidToDate"" -
-=======
-                                    DPO6.""PaidToDate"" +
->>>>>>> 3ccdd5cbce2adb196d68193f27e53b6098b57862
                                     COALESCE((select sum(""U_ValorDoDesconto"")
                                     from VPM2 
                                     left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 
@@ -729,11 +721,7 @@ namespace ChessIT.Financeiro.View
                                     and VPM2.""DocLine"" = JDT1.""Line_ID""
                                     and ""Canceled"" = 'N'), 0) AS ""Valor Juros"",
 		                            JDT1.""BalDueCred"" AS ""Total A Pagar"",
-<<<<<<< HEAD
                                     (JDT1.""Credit"" - JDT1.""BalDueCred"") -
-=======
-                                    (JDT1.""Credit"" - JDT1.""BalDueCred"") +
->>>>>>> 3ccdd5cbce2adb196d68193f27e53b6098b57862
                                     COALESCE((select sum(""U_ValorDoDesconto"")
                                     from VPM2 
                                     left join OVPM on OVPM.""DocEntry"" = VPM2.""DocNum"" 

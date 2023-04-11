@@ -1,4 +1,0 @@
-2022-06-02 11:09:43,919 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
-2022-06-02 11:09:44,007 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
-2022-06-02 11:09:50,745 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
-2022-06-02 11:23:16,904 INFO JBC.Framework.Service.AppEventHandler - Shutting down JBC
