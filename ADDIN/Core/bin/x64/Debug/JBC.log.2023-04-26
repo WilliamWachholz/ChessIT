@@ -1,0 +1,6 @@
+2023-04-26 16:15:38,637 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2023-04-26 16:15:38,721 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2023-04-26 16:15:40,615 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
+2023-04-26 16:18:07,448 WARN JBC.Framework.Service.AssemblyManager - File JBC.CEP - Version ? - not found
+2023-04-26 16:18:07,550 WARN JBC.Framework.Service.AssemblyManager - File JBC.ConsultaCNPJ - Version ? - not found
+2023-04-26 16:18:13,642 INFO JBC.Framework.Service.AssemblyManager - Updated file Chess.IT.Services - Version 1.0.0.5
