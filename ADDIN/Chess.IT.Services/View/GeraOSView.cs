@@ -119,8 +119,6 @@ namespace Chess.IT.Services.View
 
                                             Form.Items.Item("6658").Visible = false;
                                             Form.Items.Item("cbUtlRes").Visible = false;
-                                            Form.Items.Item("6659").Visible = false;
-                                            Form.Items.Item("cbUtlLoc").Visible = false;
 
                                             string query = @"
                                                     select 
@@ -213,16 +211,14 @@ namespace Chess.IT.Services.View
 
                                             //motorista
                                             Form.Items.Item("22").Top = 100;
-                                            Form.Items.Item("22").Left = Form.Items.Item("6659").Left;
+                                            Form.Items.Item("22").Left = Form.Items.Item("6658").Left;
                                             Form.Items.Item("etMotora").Top = 100;
-                                            Form.Items.Item("etMotora").Left = Form.Items.Item("6659").Left + 60;
+                                            Form.Items.Item("etMotora").Left = Form.Items.Item("6658").Left + 60;
                                             Form.Items.Item("etMotoraN").Top = 120;
-                                            Form.Items.Item("etMotoraN").Left = Form.Items.Item("6659").Left;
+                                            Form.Items.Item("etMotoraN").Left = Form.Items.Item("6658").Left;
 
                                             Form.Items.Item("6658").Visible = true;
                                             Form.Items.Item("cbUtlRes").Visible = true;
-                                            Form.Items.Item("6659").Visible = true;
-                                            Form.Items.Item("cbUtlLoc").Visible = true;
 
                                             Form.Items.Item("20").Top = 30;
                                             Form.Items.Item("20").Left = 490;
@@ -262,8 +258,6 @@ namespace Chess.IT.Services.View
 
                                             Form.Items.Item("6658").Visible = false;
                                             Form.Items.Item("cbUtlRes").Visible = false;
-                                            Form.Items.Item("6659").Visible = false;
-                                            Form.Items.Item("cbUtlLoc").Visible = false;
 
                                             Form.Items.Item("20").Top = 10;
                                             Form.Items.Item("20").Left = 670;
@@ -1217,16 +1211,16 @@ namespace Chess.IT.Services.View
 
                                         Form.Items.Item("fldCtr").Click();
 
-                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("", "[Selecionar]");
-                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RCC", "Construção Civil");
-                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RGG", "Grande Gerador");
-                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RPV", "Poda e Varrição");
-                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSS", "Serviços de Saúde");
-                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSI", "Sólidos Industriais");
-                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSU", "Sólido Urbano");
+                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("", "[Selecionar]");
+                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RCC", "Construção Civil");
+                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RGG", "Grande Gerador");
+                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RPV", "Poda e Varrição");
+                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSS", "Serviços de Saúde");
+                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSI", "Sólidos Industriais");
+                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSU", "Sólido Urbano");
 
-                                        Form.Items.Item("11").Visible = false;
-                                        Form.Items.Item("cbModCtr").Visible = false;
+                                        //Form.Items.Item("11").Visible = false;
+                                        //Form.Items.Item("cbModCtr").Visible = false;
 
                                         ((ComboBox)Form.Items.Item("cbDiaCol").Specific).ValidValues.Add("0", "[Selecionar]");
                                         ((ComboBox)Form.Items.Item("cbDiaCol").Specific).ValidValues.Add("1", "Segunda-feira");
@@ -1284,7 +1278,6 @@ namespace Chess.IT.Services.View
                                         ((ComboBox)Form.Items.Item("cbRespFat").Specific).ValidValues.Add("3", "Terceiros");
 
                                         ComboBox cbUtlRes = (ComboBox)Form.Items.Item("cbUtlRes").Specific;
-                                        ComboBox cbUtlLoc = (ComboBox)Form.Items.Item("cbUtlLoc").Specific;
 
                                         SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                                         recordSet.DoQuery(@"select ""ID"", ""Usage"" from OUSG where ""Usage"" LIKE 'V%'");
@@ -1292,7 +1285,6 @@ namespace Chess.IT.Services.View
                                         while (!recordSet.EoF)
                                         {
                                             cbUtlRes.ValidValues.Add(recordSet.Fields.Item(0).Value.ToString(), recordSet.Fields.Item(1).Value.ToString());
-                                            cbUtlLoc.ValidValues.Add(recordSet.Fields.Item(0).Value.ToString(), recordSet.Fields.Item(1).Value.ToString());
 
                                             recordSet.MoveNext();
                                         }
@@ -1740,7 +1732,7 @@ namespace Chess.IT.Services.View
 
             string nrContrato = ((EditText)Form.Items.Item("etNrCtr").Specific).String;
 
-            string modeloContrato = ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;
+            string modeloContrato = ""; // ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;
 
             string centroCusto = ((EditText)Form.Items.Item("etCentroC").Specific).String;
 
@@ -1791,13 +1783,13 @@ namespace Chess.IT.Services.View
                                             where OOAT.""BpType"" = 'C'
                                             and OOAT.""Status"" = 'A'
                                             and OOAT.""Cancelled"" <> 'Y'
+                                            and OOAT.""U_Modelo"" = 'RGG'
+                                            and OOAT.""U_CCContrato"" = 'Contratos Rotas GG'
                                             and exists (select * from OAT1 TX inner join OITM TY on TY.""ItemCode"" = TX.""ItemCode"" where TX.""AgrNo"" = OOAT.""AbsID"" and TY.""ItmsGrpCod"" = 118)
                                             and ('{1}' = '' or '{1}' = OOAT.""BpCode"")
                                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OOAT.""StartDate"" as date) >= '{2}')
                                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OOAT.""StartDate"" as date) <= '{3}') 
                                             and ('{4}' = '' or '{4}' = cast(OOAT.""Number"" as varchar))
-                                            --and ('{5}' = '' or '{5}' = OOAT.""U_Modelo"")
-                                            and ('{5}' = '' and 'RGG' = OOAT.""U_Modelo"")
                                             and ('{6}' = '' or '{6}' = OOAT.""U_CentroCusto"")
                                             and ('{7}' = '' or '{7}' = OOAT.""U_Rota"")
                                             and ('{8}' = '0' or ('{8}' = '1' AND OOAT.""U_DiaColetSeg"" = 'Sim')
@@ -2085,7 +2077,7 @@ namespace Chess.IT.Services.View
 
             string nrContrato = ((EditText)Form.Items.Item("etNrCtr").Specific).String;
 
-            string modeloContrato = ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;   
+            string modeloContrato = ""; // ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;   
                                     
             string diaColeta = ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected.Description;
 
@@ -2278,7 +2270,7 @@ namespace Chess.IT.Services.View
             string motoristaNome = Form.DataSources.DataTables.Item("dtFiltro").GetValue("NomeMotorista", 0).ToString();
             string diaColeta = ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected == null ? "[Selecionar]" : ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected.Description;
             string utilizacaoResiduo = Form.DataSources.DataTables.Item("dtFiltro").GetValue("UtlRes", 0).ToString();
-            string utilizacaoLocacao = Form.DataSources.DataTables.Item("dtFiltro").GetValue("UtlLoc", 0).ToString();            
+            //string utilizacaoLocacao = Form.DataSources.DataTables.Item("dtFiltro").GetValue("UtlLoc", 0).ToString();            
 
             if (dataSaidaOS == DateTime.MinValue)
             {
@@ -2315,12 +2307,12 @@ namespace Chess.IT.Services.View
                 return;
             }
 
-            if (utilizacaoLocacao == "")
-            {
-                Program.oApplicationS.StatusBar.SetText("Informe a utilização locação", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Error);
+            //if (utilizacaoLocacao == "")
+            //{
+            //    Program.oApplicationS.StatusBar.SetText("Informe a utilização locação", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Error);
 
-                return;
-            }
+            //    return;
+            //}
 
             //valida o centro de custo 
             if (!ValidaCentroDeCusto())
@@ -2408,7 +2400,7 @@ namespace Chess.IT.Services.View
                             {
                                 SAPbobsCOM.Documents documents = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
                                 
-                                SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placaOS, gridContratos, absID1, utilizacaoResiduo, utilizacaoLocacao, row);
+                                SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placaOS, gridContratos, absID1, utilizacaoResiduo, row);
                                 iNumber = Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
                                 while (!recordSet.EoF)
                                 {
@@ -2489,7 +2481,7 @@ namespace Chess.IT.Services.View
                                     {
 
                                         SAPbobsCOM.Documents documents = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
-                                        SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placaOS, gridContratos, absID1, utilizacaoResiduo, utilizacaoLocacao, row);
+                                        SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placaOS, gridContratos, absID1, utilizacaoResiduo, row);
                                         iNumber = Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
                                         while (!recordSet.EoF)
                                         {
@@ -2808,6 +2800,7 @@ namespace Chess.IT.Services.View
             documents.TaxDate = taxDate;
             documents.BPL_IDAssignedToInvoice = bplID;
             documents.TaxExtension.Carrier = codTransp;
+            documents.UserFields.Fields.Item("U_TipoFat").Value = "1";
 
             documents.UserFields.Fields.Item("U_EstPlaca").Value = estPlaca;
             documents.UserFields.Fields.Item("U_TipoOper").Value = tpOper;
@@ -2843,7 +2836,7 @@ namespace Chess.IT.Services.View
             documents.Lines.Add();
         }
 
-        private static SAPbobsCOM.Recordset ConsultaContratoGeracao(string placaOS, Grid gridContratos, int absID, string utilizacaoResiduo, string utilizacaoLocacao, int row)
+        private static SAPbobsCOM.Recordset ConsultaContratoGeracao(string placaOS, Grid gridContratos, int absID, string utilizacaoResiduo, int row)
         {
             string agrLineNums = (((EditTextColumn)gridContratos.Columns.Item("AgrLineNum")).GetText(row));
             string query = string.Format(@"select distinct OOAT.""BpCode"",                                                                  
@@ -2857,7 +2850,6 @@ namespace Chess.IT.Services.View
                                                                       COALESCE(""@VEICULOS"".""U_UFPlaca"", ''),
                                                                       (	
                                                                             select case when t33.""ItmsGrpCod"" = 118 then {3}
-                                                                                        when t33.""ItmsGrpCod"" = 102 then {4}
 		                                                                                else coalesce(OUSG.ID,0)
                                                                                     end
 	                                                                        from 
@@ -2879,14 +2871,14 @@ namespace Chess.IT.Services.View
                                                                 inner join OAT1 on OAT1.""AgrNo"" = OOAT.""AbsID""        
 
                                                                 inner join OITM T22 on T22.""ItemCode""=OAT1.""ItemCode""   
-                                                                inner join OITB t33 on t33.""ItmsGrpCod"" = T22.""ItmsGrpCod"" and t33.""ItmsGrpCod"" IN (102, 118)
+                                                                inner join OITB t33 on t33.""ItmsGrpCod"" = T22.""ItmsGrpCod"" and t33.""ItmsGrpCod"" IN (118)
 
 
                                                                 left join ""@VEICULOS"" ON ""@VEICULOS"".""DocEntry"" = (select MAX(TX.""DocEntry"") from ""@VEICULOS"" TX WHERE TX.""U_Placa"" = '{2}')
                                                                 left join ""@VEICULOS_DADOS"" ON ""@VEICULOS_DADOS"".""Code"" = ""@VEICULOS"".""Code""
                                                                 where OOAT.""AbsID"" = {0}
                                                                 and OAT1.""AgrLineNum"" in ({1})
-                                                                ", absID, agrLineNums, placaOS, utilizacaoResiduo, utilizacaoLocacao);
+                                                                ", absID, agrLineNums, placaOS, utilizacaoResiduo);
 
             SAPbobsCOM.Recordset recordSet = null;
 
@@ -3159,21 +3151,22 @@ namespace Chess.IT.Services.View
                                                               OITM.""ItmsGrpCod"",
                                                               OITM.""ManBtchNum"",
                                                               RDR1.""LineNum"",
-                                                                coalesce(ORDR.""U_IR_ISS"",'') ISS
-                                                                , coalesce(ORDR.""U_IR_PIS"",'') PIS
-                                                                , coalesce(ORDR.""U_IR_COFINS"", '') COFINS
-                                                                , coalesce(ORDR.""U_IR_CSLL"", '') CSLL
-                                                                , coalesce(ORDR.""U_IR_IRPJ"", '') IRPJ
-                                                                , coalesce(ORDR.""U_IR_INSS"", '') INSS
-                                                                ,RDR1.""Usage""
-                                                                ,RDR1.""TaxCode""
-                                                                ,ORDR.""GroupNum""
-                                                            from ORDR
-                                                            inner join RDR1 on RDR1.""DocEntry"" = ORDR.""DocEntry""
-                                                            inner join OITM on OITM.""ItemCode"" = RDR1.""ItemCode""    
-                                                            left JOIN OOAT T2 ON RDR1.""AgrNo"" = T2.""AbsID""
-                                                            where ORDR.""DocEntry"" = {0}                                                            
-                                                            and OITM.""ItmsGrpCod""in (102, 118)
+                                                              coalesce(ORDR.""U_IR_ISS"",'') ISS,
+                                                              coalesce(ORDR.""U_IR_PIS"",'') PIS,
+                                                              coalesce(ORDR.""U_IR_COFINS"", '') COFINS,
+                                                              coalesce(ORDR.""U_IR_CSLL"", '') CSLL,
+                                                              coalesce(ORDR.""U_IR_IRPJ"", '') IRPJ,
+                                                              coalesce(ORDR.""U_IR_INSS"", '') INSS,
+                                                              RDR1.""Usage"",
+                                                              RDR1.""TaxCode"",
+                                                              ORDR.""GroupNum"",
+                                                              case OITM.""ItmsGrpCod"" when 120 then 29 when 118 then 33 end as ""SeqCode""
+                                                         from ORDR
+                                                         inner join RDR1 on RDR1.""DocEntry"" = ORDR.""DocEntry""
+                                                         inner join OITM on OITM.""ItemCode"" = RDR1.""ItemCode""    
+                                                          left JOIN OOAT T2 ON RDR1.""AgrNo"" = T2.""AbsID""
+                                                         where ORDR.""DocEntry"" = {0}                                                            
+                                                           and OITM.""ItmsGrpCod""in (102, 118)
                                                             
                                                             ", docEntry, respFaturamento);
 
@@ -3200,7 +3193,6 @@ namespace Chess.IT.Services.View
                                 faturaModel.ManBtchNum = recordSet.Fields.Item(6).Value.ToString() == "Y";
                                 faturaModel.LineNum = Convert.ToInt32(recordSet.Fields.Item(7).Value);
                                 faturaModel.ISS = recordSet.Fields.Item(8).Value.ToString();
-
                                 faturaModel.PIS = recordSet.Fields.Item(9).Value.ToString();
                                 faturaModel.COFINS = recordSet.Fields.Item(10).Value.ToString();
                                 faturaModel.CSLL = recordSet.Fields.Item(11).Value.ToString();
@@ -3210,6 +3202,7 @@ namespace Chess.IT.Services.View
                                 faturaModel.TaxCode = recordSet.Fields.Item(15).Value.ToString();
                                 faturaModel.Draft = ((CheckBoxColumn)gridOS.Columns.Item("Esboço")).IsChecked(row);
                                 faturaModel.GroupNum = recordSet.Fields.Item(16).Value.ToString();
+                                faturaModel.SeqCode = Convert.ToInt32(recordSet.Fields.Item("SeqCode").Value);
 
                                 if (faturaModel.Quantity <= 0)
                                 {
@@ -3231,11 +3224,11 @@ namespace Chess.IT.Services.View
                     }
                 }
 
-                var faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.BaseEntry.ToString(), Valor2 = r.TpOper }).ToList();
+                var faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.BaseEntry.ToString(), Valor2 = r.TpOper, Valor3 = r.SeqCode }).ToList();
 
                 if (faturamentoAgrupado)
                 {
-                    faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.CardCode.ToString(), Valor2 = r.TpOper }).ToList();
+                    faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.CardCode.ToString(), Valor2 = r.TpOper, Valor3 = r.SeqCode }).ToList();
                 }
 
                 List<int> notasTransporteCliente = new List<int>();
@@ -3318,7 +3311,7 @@ namespace Chess.IT.Services.View
 
                             }
 
-                           documentNFSE.SequenceCode = 35;
+                           documentNFSE.SequenceCode = faturaGroup.First().SeqCode;
 
                             erro = documentNFSE.Add();
 

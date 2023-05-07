@@ -42,7 +42,7 @@ namespace Chess.IT.Services.Model
         
         public int PropostaComercial { get; set; }
 
-
+        public int SeqCode { get; set; }
 
     }
 }

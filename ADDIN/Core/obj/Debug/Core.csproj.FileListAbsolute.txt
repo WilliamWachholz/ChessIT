@@ -39,3 +39,5 @@ C:\Users\kuricaambiental_02\source\repos\ChessIT\ADDIN\Core\bin\Debug\JBC.ChessI
 C:\Users\kuricaambiental_02\source\repos\ChessIT\ADDIN\Core\bin\Debug\ChessIT.GeracaoOS.dll
 C:\Users\kuricaambiental_02\source\repos\ChessIT\ADDIN\Core\bin\Debug\JBC.ChessITServices.dll.config
 C:\Users\kuricaambiental_02\source\repos\ChessIT\ADDIN\Core\bin\Debug\ChessIT.GeracaoOS.dll.config
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\Debug\JBC.exe.config
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\obj\Debug\JBC.exe
