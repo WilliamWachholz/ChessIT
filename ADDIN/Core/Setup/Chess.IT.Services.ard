@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ChessIT" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="Chess.IT.Services" ExtVersion="9.9.15" Contdata="" Partner="ChessIT" DBType="HANA" ClientType="A">
+  <Validity>
+    <SBOCompatibility>
+      <Version From="" To="" />
+    </SBOCompatibility>
+  </Validity>
+  <Configuration>
+    <Repository>
+      <Properties />
+    </Repository>
+    <Deployment>
+      <Properties />
+    </Deployment>
+    <Assignment>
+      <Properties />
+    </Assignment>
+  </Configuration>
+  <Addons>
+    <Addon Name="Chess.IT.Services" Group="" ForceFlag="" Visible="" AutoAssign="" SelfUpgrd="">
+      <x86 AddonExe="" AddonSig="">
+        <Installation>
+          <Files />
+        </Installation>
+        <Uninstallation>
+          <Files />
+        </Uninstallation>
+      </x86>
+      <x64 AddonExe="JBC.exe" AddonSig="6EAB9EF6694025D2CAFA628F26C34749" ExeDir="X64Client">
+        <Installation>
+          <Files>
+            <File FileName="X64Client\Castle.Core.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Castle.Facilities.Logging.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Castle.Services.Logging.Log4netIntegration.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Castle.Windsor.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Chess.IT.Services.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Chess.IT.Services.pdb">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Framework.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\FrameworkInterface.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\ICSharpCode.SharpZipLib.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Interop.SAPbobsCOM.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\JBC.exe">
+              <Actions />
+            </File>
+            <File FileName="X64Client\JBC.exe.config">
+              <Actions />
+            </File>
+            <File FileName="X64Client\log4net.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Newtonsoft.Json.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Newtonsoft.Json.xml">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SAP.ico">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SAPbouiCOM.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\pt-BR\Framework.resources.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\resources\Chess - Certificado de Destinação.rpt">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SrfFiles\FrmCnfIntegraBalanca.srf">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SrfFiles\FrmGeraOS.srf">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SrfFiles\FrmNotasGeradas.srf">
+              <Actions />
+            </File>
+            <File FileName="X64Client\xml\Menu.xml">
+              <Actions />
+            </File>
+          </Files>
+        </Installation>
+        <Uninstallation>
+          <Files>
+            <File FileName="X64Client\Castle.Core.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Castle.Facilities.Logging.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Castle.Services.Logging.Log4netIntegration.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Castle.Windsor.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Chess.IT.Services.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Chess.IT.Services.pdb">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Framework.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\FrameworkInterface.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\ICSharpCode.SharpZipLib.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Interop.SAPbobsCOM.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\JBC.exe">
+              <Actions />
+            </File>
+            <File FileName="X64Client\JBC.exe.config">
+              <Actions />
+            </File>
+            <File FileName="X64Client\log4net.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Newtonsoft.Json.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\Newtonsoft.Json.xml">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SAP.ico">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SAPbouiCOM.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\pt-BR\Framework.resources.dll">
+              <Actions />
+            </File>
+            <File FileName="X64Client\resources\Chess - Certificado de Destinação.rpt">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SrfFiles\FrmCnfIntegraBalanca.srf">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SrfFiles\FrmGeraOS.srf">
+              <Actions />
+            </File>
+            <File FileName="X64Client\SrfFiles\FrmNotasGeradas.srf">
+              <Actions />
+            </File>
+            <File FileName="X64Client\xml\Menu.xml">
+              <Actions />
+            </File>
+          </Files>
+        </Uninstallation>
+      </x64>
+    </Addon>
+  </Addons>
+  <XApps>
+    <XApp Name="" Path="" FileName="" />
+  </XApps>
+  <UDQs>
+    <UDQ udqname="">
+      <Hana FileName="" />
+    </UDQ>
+  </UDQs>
+</AddOnRegData>

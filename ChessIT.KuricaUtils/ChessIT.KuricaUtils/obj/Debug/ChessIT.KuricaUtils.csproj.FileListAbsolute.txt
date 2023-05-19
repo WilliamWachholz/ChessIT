@@ -30,3 +30,6 @@ C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtil
 C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.KuricaUtils.exe
 C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.KuricaUtils.pdb
 C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.KuricaUtils.csproj.AssemblyReference.cache
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\Debug\ChessIT.KuricaUtils.exe.config
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.KuricaUtils.exe
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\Debug\ChessIT.KuricaUtils.pdb

@@ -29,3 +29,6 @@ C:\Users\kuricaambiental_adm\source\repos\ChessIT.Financeiro\ChessIT.Financeiro\
 C:\Users\kuricaambiental_adm\source\repos\ChessIT.Financeiro\ChessIT.Financeiro\obj\Debug\ChessIT.Financeiro.csproj.CopyComplete
 C:\Users\kuricaambiental_adm\source\repos\ChessIT.Financeiro\ChessIT.Financeiro\obj\Debug\ChessIT.Financeiro.exe
 C:\Users\kuricaambiental_adm\source\repos\ChessIT.Financeiro\ChessIT.Financeiro\obj\Debug\ChessIT.Financeiro.pdb
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Debug\ChessIT.Financeiro.exe.config
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Debug\ChessIT.Financeiro.exe
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Debug\ChessIT.Financeiro.pdb

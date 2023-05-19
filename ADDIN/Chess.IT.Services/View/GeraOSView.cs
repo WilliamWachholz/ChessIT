@@ -2779,12 +2779,6 @@ namespace Chess.IT.Services.View
             int AgrLineNum = Convert.ToInt32(recordSet.Fields.Item(10).Value.ToString());
 
             string IR_ISS = recordSet.Fields.Item(12).Value.ToString();
-            string IR_PIS = recordSet.Fields.Item(13).Value.ToString();
-            string IR_COFINS = recordSet.Fields.Item(14).Value.ToString();
-            string IR_CSLL = recordSet.Fields.Item(15).Value.ToString();
-            string IR_IRPJ = recordSet.Fields.Item(16).Value.ToString();
-            string IR_INSS = recordSet.Fields.Item(17).Value.ToString();
-            string IR_INSS_RED_BC = recordSet.Fields.Item(18).Value.ToString();
 
             int bplID = 1;
             string tpOper = "C-GG";
@@ -2817,12 +2811,6 @@ namespace Chess.IT.Services.View
             documents.UserFields.Fields.Item("U_DiaSemRot").Value = diaColeta;
 
             documents.UserFields.Fields.Item("U_IR_ISS").Value = IR_ISS;
-            documents.UserFields.Fields.Item("U_IR_PIS").Value = IR_PIS;
-            documents.UserFields.Fields.Item("U_IR_COFINS").Value = IR_COFINS;
-            documents.UserFields.Fields.Item("U_IR_CSLL").Value = IR_CSLL;
-            documents.UserFields.Fields.Item("U_IR_IRPJ").Value = IR_IRPJ;
-            documents.UserFields.Fields.Item("U_IR_INSS").Value = IR_INSS;
-            documents.UserFields.Fields.Item("U_IR_INSS_RED_BC").Value = IR_INSS_RED_BC;
 
             documents.Lines.ItemCode = itemCode;
             documents.Lines.Usage = usage;
@@ -2861,12 +2849,6 @@ namespace Chess.IT.Services.View
                                                                         ,OAT1.""AgrLineNum""
                                                                         ,OOAT.""Number""
                                                                         ,OOAT.""U_IR_ISS""
-                                                                        ,OOAT.""U_IR_PIS""
-                                                                        ,OOAT.""U_IR_COFINS""
-                                                                        ,OOAT.""U_IR_CSLL""
-                                                                        ,OOAT.""U_IR_IRPJ""
-                                                                        ,OOAT.""U_IR_INSS""
-                                                                        ,OOAT.""U_IR_INSS_RED_BC""
                                                                 from OOAT
                                                                 inner join OAT1 on OAT1.""AgrNo"" = OOAT.""AbsID""        
 
@@ -3152,18 +3134,17 @@ namespace Chess.IT.Services.View
                                                               OITM.""ManBtchNum"",
                                                               RDR1.""LineNum"",
                                                               coalesce(ORDR.""U_IR_ISS"",'') ISS,
-                                                              coalesce(ORDR.""U_IR_PIS"",'') PIS,
-                                                              coalesce(ORDR.""U_IR_COFINS"", '') COFINS,
-                                                              coalesce(ORDR.""U_IR_CSLL"", '') CSLL,
-                                                              coalesce(ORDR.""U_IR_IRPJ"", '') IRPJ,
-                                                              coalesce(ORDR.""U_IR_INSS"", '') INSS,
                                                               RDR1.""Usage"",
                                                               RDR1.""TaxCode"",
                                                               ORDR.""GroupNum"",
-                                                              case OITM.""ItmsGrpCod"" when 120 then 29 when 118 then 33 end as ""SeqCode""
+                                                              case OCRD.""U_TipoFat"" when '1' then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')
+                                                              						  when '2' then case OITM.""ItmsGrpCod"" when 102 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'FAT') 
+                                                              															     when 118 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')  end 
+                                                              end as ""SeqCode""
                                                          from ORDR
                                                          inner join RDR1 on RDR1.""DocEntry"" = ORDR.""DocEntry""
-                                                         inner join OITM on OITM.""ItemCode"" = RDR1.""ItemCode""    
+                                                         inner join OITM on OITM.""ItemCode"" = RDR1.""ItemCode""   
+                                                         inner join OCRD on OCRD.""CardCode"" = ORDR.""CardCode""
                                                           left JOIN OOAT T2 ON RDR1.""AgrNo"" = T2.""AbsID""
                                                          where ORDR.""DocEntry"" = {0}                                                            
                                                            and OITM.""ItmsGrpCod""in (102, 118)
@@ -3269,350 +3250,409 @@ namespace Chess.IT.Services.View
                     {
                         int erro = 0;
 
-                        //switch (faturaGroup.Key.Valor2)
-                        //{
-                        if (faturaGroup.Key.Valor2.Equals("C-GG") 
-                            | faturaGroup.Key.Valor2.Equals("C-PJG")
-                            | faturaGroup.Key.Valor2.Equals("C-PF")
-                            ) {
-                            documentNFSE.CardCode = faturaGroup.First().CardCode;
-                            documentNFSE.DocDate = DateTime.Now;
-                            documentNFSE.TaxDate = DateTime.Now;
-                            //documentNFSE.DocDueDate = DateTime.Now;
-                            documentNFSE.BPL_IDAssignedToInvoice = 1;
-                            documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);
+                        documentNFSE.CardCode = faturaGroup.First().CardCode;
+                        documentNFSE.DocDate = DateTime.Now;
+                        documentNFSE.TaxDate = DateTime.Now;
+                        //documentNFSE.DocDueDate = DateTime.Now;
+                        documentNFSE.BPL_IDAssignedToInvoice = 1;
+                        documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);
 
-                            foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        {
+                            if (documentNFSE.Lines.ItemCode != string.Empty)
                             {
-                                if (documentNFSE.Lines.ItemCode != string.Empty)
-                                {
-                                    documentNFSE.Lines.Add();
-                                    documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
-                                }
-
-                                documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
-                                documentNFSE.Lines.Quantity = faturaModel.Quantity;
-                                documentNFSE.Lines.UnitPrice = faturaModel.Price;
-                                documentNFSE.Lines.Usage = faturaModel.Usage;
-                                documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
-                                documentNFSE.Lines.WarehouseCode = "01";
-
-                                if (respFaturamento == "1")
-                                {
-                                    documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
-                                    documentNFSE.Lines.BaseType = 17;
-                                    documentNFSE.Lines.BaseLine = faturaModel.LineNum;
-                                }
-
-                                documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
-                                documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
-
-                                ImpostoRetido(documentNFSE, faturaModel);
-
+                                documentNFSE.Lines.Add();
+                                documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
                             }
 
-                           documentNFSE.SequenceCode = faturaGroup.First().SeqCode;
+                            documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
+                            documentNFSE.Lines.Quantity = faturaModel.Quantity;
+                            documentNFSE.Lines.UnitPrice = faturaModel.Price;
+                            documentNFSE.Lines.Usage = faturaModel.Usage;
+                            documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
+                            documentNFSE.Lines.WarehouseCode = "01";
 
-                            erro = documentNFSE.Add();
-
-                            if (erro != 0)
+                            if (respFaturamento == "1")
                             {
-                                string msg = "";
-
-                                Program.oCompanyS.GetLastError(out erro, out msg);
-
-                                throw new Exception(erro + " - " + msg);
+                                documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
+                                documentNFSE.Lines.BaseType = 17;
+                                documentNFSE.Lines.BaseLine = faturaModel.LineNum;
                             }
 
-                            if (Program.oCompanyS.GetNewObjectType() == "112")
-                            {
-                                notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
-                            }
-                            else 
-                            {
-                                notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
-                            }
+                            documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
+                            documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
 
+                            ImpostoRetido(documentNFSE, faturaModel);
 
-                            //break;
                         }
-                        else if (faturaGroup.Key.Valor2.Equals("C-TRT")){
 
-                            documentNFSE.CardCode = faturaGroup.First().CardCode;
-                            documentNFSE.DocDate = DateTime.Now;
-                            documentNFSE.TaxDate = DateTime.Now;
-                            //documentNFSE.DocDueDate = DateTime.Now.AddDays(1);
-                            documentNFSE.BPL_IDAssignedToInvoice = 1;
-                            documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);
+                        documentNFSE.SequenceCode = faturaGroup.First().SeqCode;
 
-                            documentNFSE.SequenceCode = 35;
+                        erro = documentNFSE.Add();
 
-                            if (tipoFaturamento == "0")
-                            {
-                                foreach (Model.FaturaModel faturaModel in faturaGroup)
-                                {
-                                    if (documentNFSE.Lines.ItemCode != string.Empty)
-                                    {
-                                        documentNFSE.Lines.Add();
-                                        documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
-                                    }
+                        if (erro != 0)
+                        {
+                            string msg = "";
 
-                                    documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
-                                    documentNFSE.Lines.Quantity = faturaModel.Quantity;
-                                    documentNFSE.Lines.UnitPrice = faturaModel.Price;                                   
-                                    documentNFSE.Lines.Usage = faturaModel.Usage;
-                                    documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
-                                    documentNFSE.Lines.WarehouseCode = "01";
+                            Program.oCompanyS.GetLastError(out erro, out msg);
 
-                                    if (respFaturamento == "1")
-                                    {
-                                        documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
-                                        documentNFSE.Lines.BaseType = 17;
-                                        documentNFSE.Lines.BaseLine = faturaModel.LineNum;
-                                    }
-
-                                    documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
-                                    documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
-
-                                    ImpostoRetido(documentNFSE, faturaModel);
-
-                                    notasTransporteCliente.Add(faturaModel.BaseEntry);
-                                }
-                            }
-                            else
-                            {
-                                foreach (Model.FaturaModel faturaModel in faturaGroup)
-                                {
-                                    if (documentNFSE.Lines.ItemCode != string.Empty)
-                                    {
-                                        documentNFSE.Lines.Add();
-                                        documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
-                                    }
-
-                                    documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
-                                    documentNFSE.Lines.Usage = faturaModel.Usage;
-                                    documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
-                                    documentNFSE.Lines.Quantity = faturaModel.Quantity;
-                                    documentNFSE.Lines.UnitPrice = faturaModel.Price;
-                                    documentNFSE.Lines.WarehouseCode = "01";
-
-                                    if (respFaturamento == "1")
-                                    {
-                                        documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
-                                        documentNFSE.Lines.BaseType = 17;
-                                        documentNFSE.Lines.BaseLine = faturaModel.LineNum;
-                                    }
-
-                                    documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
-                                    documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
-
-                                    ImpostoRetido(documentNFSE, faturaModel);
-                                }
-
-                                documentNFSE.Comments = string.Join(",", faturaGroup.ToList().Select(r => r.BaseEntry).ToArray());
-                            }
-
-                            erro = documentNFSE.Add();
-
-                            if (erro != 0)
-                            {
-                                string msg = "";
-
-                                Program.oCompanyS.GetLastError(out erro, out msg);
-
-                                throw new Exception(erro + " - " + msg);
-                            }
-
-                            if (tipoFaturamento == "1")
-                            {
-                                int nota = Convert.ToInt32(Program.oCompanyS.GetNewObjectKey());
-
-                                foreach (Model.FaturaModel faturaModel in faturaGroup)
-                                {
-                                    notasTransporteTransportadora.Add(faturaModel.BaseEntry, nota);
-                                }
-                            }
-
-                            if (Program.oCompanyS.GetNewObjectType() == "112")
-                            {
-                                notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
-                            }
-                            else
-                            {
-                                notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
-                            }
-
-                            //break;
+                            throw new Exception(erro + " - " + msg);
                         }
-                        else if (faturaGroup.Key.Valor2.Equals("LOC")) {
-                            documentNFSE.CardCode = faturaGroup.First().CardCode;
-                            documentNFSE.DocDate = DateTime.Now;
-                            documentNFSE.TaxDate = DateTime.Now;
-                            //documentNFSE.DocDueDate = DateTime.Now.AddDays(1);
-                            documentNFSE.BPL_IDAssignedToInvoice = 1;
-                            documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);                            
 
-                            bool gerarNFSE = false;
-
-
-                            foreach (Model.FaturaModel faturaModel in faturaGroup)
-                            {
-                                if (faturaModel.ItmsGrpCod == "118")
-                                {
-                                    gerarNFSE = true;
-
-                                    if (documentNFSE.Lines.ItemCode != string.Empty)
-                                    {
-                                        documentNFSE.Lines.Add();
-                                        documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
-                                    }
-
-                                    documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
-                                    documentNFSE.Lines.Quantity = faturaModel.Quantity;
-                                    documentNFSE.Lines.UnitPrice = faturaModel.Price;
-                                    documentNFSE.Lines.Usage = faturaModel.Usage;
-                                    documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
-                                    documentNFSE.Lines.WarehouseCode = "01";
-
-                                    if (respFaturamento == "1")
-                                    {
-                                        documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
-                                        documentNFSE.Lines.BaseType = 17;
-                                        documentNFSE.Lines.BaseLine = faturaModel.LineNum;
-                                    }
-
-                                    documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
-                                    documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
-
-                                    ImpostoRetido(documentNFSE, faturaModel);
-
-                                    if (faturaModel.ManBtchNum)
-                                    {
-                                        SAPbobsCOM.Documents oDocumentsRef = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
-                                        try
-                                        {
-                                            for (int x = 0; x < oDocumentsRef.Lines.BatchNumbers.Count; x++)
-                                            {
-                                                if (x > 0)
-                                                    documentNFSE.Lines.BatchNumbers.Add();
-
-                                                oDocumentsRef.Lines.BatchNumbers.SetCurrentLine(x);
-
-                                                documentNFSE.Lines.BatchNumbers.BatchNumber = oDocumentsRef.Lines.BatchNumbers.BatchNumber;
-                                                documentNFSE.Lines.BatchNumbers.Quantity = oDocumentsRef.Lines.BatchNumbers.Quantity;
-                                            }
-                                        }
-                                        finally
-                                        {
-                                            System.Runtime.InteropServices.Marshal.ReleaseComObject(oDocumentsRef);
-                                            GC.Collect();
-                                        }
-                                    }
-                                }
-                            }
-
-                            documentNFSE.SequenceCode = 35;
-
-                            if (gerarNFSE)
-                            {
-                                erro = documentNFSE.Add();
-
-                                if (erro != 0)
-                                {
-                                    string msg = "";
-
-                                    Program.oCompanyS.GetLastError(out erro, out msg);
-
-                                    throw new Exception(erro + " - " + msg);
-                                }
-
-                                if (Program.oCompanyS.GetNewObjectType() == "112")
-                                {
-                                    notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
-                                }
-                                else
-                                {
-                                    notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
-                                }
-                            }
-
-                            bool gerarFAT = false;
-
-                            documentFAT.CardCode = faturaGroup.First().CardCode;
-                            documentFAT.DocDate = DateTime.Now;
-                            documentFAT.TaxDate = DateTime.Now;
-                            //documentFAT.DocDueDate = DateTime.Now.AddDays(1);
-                            documentFAT.BPL_IDAssignedToInvoice = 1;
-                            documentFAT.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);                            
-
-                            foreach (Model.FaturaModel faturaModel in faturaGroup)
-                            {
-                                if (faturaModel.ItmsGrpCod == "102")
-                                {
-                                    gerarFAT = true;
-
-                                    if (documentFAT.Lines.ItemCode != string.Empty)
-                                    {
-                                        documentFAT.Lines.Add();
-                                        documentFAT.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
-                                    }
-
-                                    documentFAT.Lines.ItemCode = faturaModel.ItemCode;
-                                    documentFAT.Lines.Quantity = faturaModel.Quantity;
-                                    documentFAT.Lines.UnitPrice = faturaModel.Price;
-                                    documentFAT.Lines.Usage = faturaModel.Usage;
-                                    documentFAT.Lines.TaxCode = faturaModel.TaxCode;
-                                    documentFAT.Lines.WarehouseCode = "01";
-
-                                    if (respFaturamento == "1")
-                                    {
-                                        documentFAT.Lines.BaseEntry = faturaModel.BaseEntry;
-                                        documentFAT.Lines.BaseType = 17;
-                                        documentFAT.Lines.BaseLine = faturaModel.LineNum;
-                                    }
-
-                                    documentFAT.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
-                                    documentFAT.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
-
-                                    ImpostoRetido(documentFAT, faturaModel);
-                                }
-                            }
-
-                            documentFAT.SequenceCode = 29;
-
-                            if (gerarFAT)
-                            {
-                                erro = documentFAT.Add();
-
-                                if (erro != 0)
-                                {
-                                    string msg = "";
-
-                                    Program.oCompanyS.GetLastError(out erro, out msg);
-
-                                    throw new Exception(erro + " - " + msg);
-                                }
-
-                                if (Program.oCompanyS.GetNewObjectType() == "112")
-                                {
-                                    notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
-                                }
-                                else
-                                {
-                                    notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
-                                }
-                            }
-
-
-                            if (!gerarNFSE && !gerarFAT)
-                                throw new Exception("Nenhum item na OS para gerar fatura de locação.");
-                            //break;
-
+                        if (Program.oCompanyS.GetNewObjectType() == "112")
+                        {
+                            notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
                         }
                         else
                         {
-                            Program.oApplicationS.StatusBar.SetText("Tipo de Operação inválida: " + faturaGroup.Key.Valor2, BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Error);
+                            notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
                         }
+
+
+                        ////switch (faturaGroup.Key.Valor2)
+                        ////{
+                        //if (faturaGroup.Key.Valor2.Equals("C-GG") 
+                        //    | faturaGroup.Key.Valor2.Equals("C-PJG")
+                        //    | faturaGroup.Key.Valor2.Equals("C-PF")
+                        //    ) {
+                        //    documentNFSE.CardCode = faturaGroup.First().CardCode;
+                        //    documentNFSE.DocDate = DateTime.Now;
+                        //    documentNFSE.TaxDate = DateTime.Now;
+                        //    //documentNFSE.DocDueDate = DateTime.Now;
+                        //    documentNFSE.BPL_IDAssignedToInvoice = 1;
+                        //    documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);
+
+                        //    foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        //    {
+                        //        if (documentNFSE.Lines.ItemCode != string.Empty)
+                        //        {
+                        //            documentNFSE.Lines.Add();
+                        //            documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
+                        //        }
+
+                        //        documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
+                        //        documentNFSE.Lines.Quantity = faturaModel.Quantity;
+                        //        documentNFSE.Lines.UnitPrice = faturaModel.Price;
+                        //        documentNFSE.Lines.Usage = faturaModel.Usage;
+                        //        documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
+                        //        documentNFSE.Lines.WarehouseCode = "01";
+
+                        //        if (respFaturamento == "1")
+                        //        {
+                        //            documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
+                        //            documentNFSE.Lines.BaseType = 17;
+                        //            documentNFSE.Lines.BaseLine = faturaModel.LineNum;
+                        //        }
+
+                        //        documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
+                        //        documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
+
+                        //        ImpostoRetido(documentNFSE, faturaModel);
+
+                        //    }
+
+                        //   documentNFSE.SequenceCode = faturaGroup.First().SeqCode;
+
+                        //    erro = documentNFSE.Add();
+
+                        //    if (erro != 0)
+                        //    {
+                        //        string msg = "";
+
+                        //        Program.oCompanyS.GetLastError(out erro, out msg);
+
+                        //        throw new Exception(erro + " - " + msg);
+                        //    }
+
+                        //    if (Program.oCompanyS.GetNewObjectType() == "112")
+                        //    {
+                        //        notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
+                        //    }
+                        //    else 
+                        //    {
+                        //        notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
+                        //    }
+
+
+                        //    //break;
+                        //}
+                        //else if (faturaGroup.Key.Valor2.Equals("C-TRT")){
+
+                        //    documentNFSE.CardCode = faturaGroup.First().CardCode;
+                        //    documentNFSE.DocDate = DateTime.Now;
+                        //    documentNFSE.TaxDate = DateTime.Now;
+                        //    //documentNFSE.DocDueDate = DateTime.Now.AddDays(1);
+                        //    documentNFSE.BPL_IDAssignedToInvoice = 1;
+                        //    documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);
+
+                        //    documentNFSE.SequenceCode = 35;
+
+                        //    if (tipoFaturamento == "0")
+                        //    {
+                        //        foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        //        {
+                        //            if (documentNFSE.Lines.ItemCode != string.Empty)
+                        //            {
+                        //                documentNFSE.Lines.Add();
+                        //                documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
+                        //            }
+
+                        //            documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
+                        //            documentNFSE.Lines.Quantity = faturaModel.Quantity;
+                        //            documentNFSE.Lines.UnitPrice = faturaModel.Price;                                   
+                        //            documentNFSE.Lines.Usage = faturaModel.Usage;
+                        //            documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
+                        //            documentNFSE.Lines.WarehouseCode = "01";
+
+                        //            if (respFaturamento == "1")
+                        //            {
+                        //                documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
+                        //                documentNFSE.Lines.BaseType = 17;
+                        //                documentNFSE.Lines.BaseLine = faturaModel.LineNum;
+                        //            }
+
+                        //            documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
+                        //            documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
+
+                        //            ImpostoRetido(documentNFSE, faturaModel);
+
+                        //            notasTransporteCliente.Add(faturaModel.BaseEntry);
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        //        {
+                        //            if (documentNFSE.Lines.ItemCode != string.Empty)
+                        //            {
+                        //                documentNFSE.Lines.Add();
+                        //                documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
+                        //            }
+
+                        //            documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
+                        //            documentNFSE.Lines.Usage = faturaModel.Usage;
+                        //            documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
+                        //            documentNFSE.Lines.Quantity = faturaModel.Quantity;
+                        //            documentNFSE.Lines.UnitPrice = faturaModel.Price;
+                        //            documentNFSE.Lines.WarehouseCode = "01";
+
+                        //            if (respFaturamento == "1")
+                        //            {
+                        //                documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
+                        //                documentNFSE.Lines.BaseType = 17;
+                        //                documentNFSE.Lines.BaseLine = faturaModel.LineNum;
+                        //            }
+
+                        //            documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
+                        //            documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
+
+                        //            ImpostoRetido(documentNFSE, faturaModel);
+                        //        }
+
+                        //        documentNFSE.Comments = string.Join(",", faturaGroup.ToList().Select(r => r.BaseEntry).ToArray());
+                        //    }
+
+                        //    erro = documentNFSE.Add();
+
+                        //    if (erro != 0)
+                        //    {
+                        //        string msg = "";
+
+                        //        Program.oCompanyS.GetLastError(out erro, out msg);
+
+                        //        throw new Exception(erro + " - " + msg);
+                        //    }
+
+                        //    if (tipoFaturamento == "1")
+                        //    {
+                        //        int nota = Convert.ToInt32(Program.oCompanyS.GetNewObjectKey());
+
+                        //        foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        //        {
+                        //            notasTransporteTransportadora.Add(faturaModel.BaseEntry, nota);
+                        //        }
+                        //    }
+
+                        //    if (Program.oCompanyS.GetNewObjectType() == "112")
+                        //    {
+                        //        notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
+                        //    }
+                        //    else
+                        //    {
+                        //        notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
+                        //    }
+
+                        //    //break;
+                        //}
+                        //else if (faturaGroup.Key.Valor2.Equals("LOC")) {
+                        //    documentNFSE.CardCode = faturaGroup.First().CardCode;
+                        //    documentNFSE.DocDate = DateTime.Now;
+                        //    documentNFSE.TaxDate = DateTime.Now;
+                        //    //documentNFSE.DocDueDate = DateTime.Now.AddDays(1);
+                        //    documentNFSE.BPL_IDAssignedToInvoice = 1;
+                        //    documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);                            
+
+                        //    bool gerarNFSE = false;
+
+
+                        //    foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        //    {
+                        //        if (faturaModel.ItmsGrpCod == "118")
+                        //        {
+                        //            gerarNFSE = true;
+
+                        //            if (documentNFSE.Lines.ItemCode != string.Empty)
+                        //            {
+                        //                documentNFSE.Lines.Add();
+                        //                documentNFSE.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
+                        //            }
+
+                        //            documentNFSE.Lines.ItemCode = faturaModel.ItemCode;
+                        //            documentNFSE.Lines.Quantity = faturaModel.Quantity;
+                        //            documentNFSE.Lines.UnitPrice = faturaModel.Price;
+                        //            documentNFSE.Lines.Usage = faturaModel.Usage;
+                        //            documentNFSE.Lines.TaxCode = faturaModel.TaxCode;
+                        //            documentNFSE.Lines.WarehouseCode = "01";
+
+                        //            if (respFaturamento == "1")
+                        //            {
+                        //                documentNFSE.Lines.BaseEntry = faturaModel.BaseEntry;
+                        //                documentNFSE.Lines.BaseType = 17;
+                        //                documentNFSE.Lines.BaseLine = faturaModel.LineNum;
+                        //            }
+
+                        //            documentNFSE.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
+                        //            documentNFSE.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
+
+                        //            ImpostoRetido(documentNFSE, faturaModel);
+
+                        //            if (faturaModel.ManBtchNum)
+                        //            {
+                        //                SAPbobsCOM.Documents oDocumentsRef = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
+                        //                try
+                        //                {
+                        //                    for (int x = 0; x < oDocumentsRef.Lines.BatchNumbers.Count; x++)
+                        //                    {
+                        //                        if (x > 0)
+                        //                            documentNFSE.Lines.BatchNumbers.Add();
+
+                        //                        oDocumentsRef.Lines.BatchNumbers.SetCurrentLine(x);
+
+                        //                        documentNFSE.Lines.BatchNumbers.BatchNumber = oDocumentsRef.Lines.BatchNumbers.BatchNumber;
+                        //                        documentNFSE.Lines.BatchNumbers.Quantity = oDocumentsRef.Lines.BatchNumbers.Quantity;
+                        //                    }
+                        //                }
+                        //                finally
+                        //                {
+                        //                    System.Runtime.InteropServices.Marshal.ReleaseComObject(oDocumentsRef);
+                        //                    GC.Collect();
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+
+                        //    documentNFSE.SequenceCode = 35;
+
+                        //    if (gerarNFSE)
+                        //    {
+                        //        erro = documentNFSE.Add();
+
+                        //        if (erro != 0)
+                        //        {
+                        //            string msg = "";
+
+                        //            Program.oCompanyS.GetLastError(out erro, out msg);
+
+                        //            throw new Exception(erro + " - " + msg);
+                        //        }
+
+                        //        if (Program.oCompanyS.GetNewObjectType() == "112")
+                        //        {
+                        //            notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
+                        //        }
+                        //        else
+                        //        {
+                        //            notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
+                        //        }
+                        //    }
+
+                        //    bool gerarFAT = false;
+
+                        //    documentFAT.CardCode = faturaGroup.First().CardCode;
+                        //    documentFAT.DocDate = DateTime.Now;
+                        //    documentFAT.TaxDate = DateTime.Now;
+                        //    //documentFAT.DocDueDate = DateTime.Now.AddDays(1);
+                        //    documentFAT.BPL_IDAssignedToInvoice = 1;
+                        //    documentFAT.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);                            
+
+                        //    foreach (Model.FaturaModel faturaModel in faturaGroup)
+                        //    {
+                        //        if (faturaModel.ItmsGrpCod == "102")
+                        //        {
+                        //            gerarFAT = true;
+
+                        //            if (documentFAT.Lines.ItemCode != string.Empty)
+                        //            {
+                        //                documentFAT.Lines.Add();
+                        //                documentFAT.Lines.SetCurrentLine(documentNFSE.Lines.Count - 1);
+                        //            }
+
+                        //            documentFAT.Lines.ItemCode = faturaModel.ItemCode;
+                        //            documentFAT.Lines.Quantity = faturaModel.Quantity;
+                        //            documentFAT.Lines.UnitPrice = faturaModel.Price;
+                        //            documentFAT.Lines.Usage = faturaModel.Usage;
+                        //            documentFAT.Lines.TaxCode = faturaModel.TaxCode;
+                        //            documentFAT.Lines.WarehouseCode = "01";
+
+                        //            if (respFaturamento == "1")
+                        //            {
+                        //                documentFAT.Lines.BaseEntry = faturaModel.BaseEntry;
+                        //                documentFAT.Lines.BaseType = 17;
+                        //                documentFAT.Lines.BaseLine = faturaModel.LineNum;
+                        //            }
+
+                        //            documentFAT.Lines.UserFields.Fields.Item("U_OSEntry").Value = faturaModel.BaseEntry;
+                        //            documentFAT.Lines.UserFields.Fields.Item("U_OSLine").Value = faturaModel.LineNum;
+
+                        //            ImpostoRetido(documentFAT, faturaModel);
+                        //        }
+                        //    }
+
+                        //    documentFAT.SequenceCode = 29;
+
+                        //    if (gerarFAT)
+                        //    {
+                        //        erro = documentFAT.Add();
+
+                        //        if (erro != 0)
+                        //        {
+                        //            string msg = "";
+
+                        //            Program.oCompanyS.GetLastError(out erro, out msg);
+
+                        //            throw new Exception(erro + " - " + msg);
+                        //        }
+
+                        //        if (Program.oCompanyS.GetNewObjectType() == "112")
+                        //        {
+                        //            notasGeradas.Add(new NotaGerada() { NF = "0", Esboco = Program.oCompanyS.GetNewObjectKey() });
+                        //        }
+                        //        else
+                        //        {
+                        //            notasGeradas.Add(new NotaGerada() { NF = Program.oCompanyS.GetNewObjectKey(), Esboco = "0" });
+                        //        }
+                        //    }
+
+
+                        //    if (!gerarNFSE && !gerarFAT)
+                        //        throw new Exception("Nenhum item na OS para gerar fatura de locação.");
+                        //    //break;
+
+                        //}
+                        //else
+                        //{
+                        //    Program.oApplicationS.StatusBar.SetText("Tipo de Operação inválida: " + faturaGroup.Key.Valor2, BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Error);
+                        //}
                        // }
                     }
                     finally

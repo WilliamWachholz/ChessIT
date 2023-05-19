@@ -13,3 +13,6 @@ C:\AddOn\ChessIT\ChessIT.GeracaoOS\ChessIT.GeracaoOS\bin\Debug\Menu.xml
 C:\AddOn\ChessIT\ChessIT.GeracaoOS\ChessIT.GeracaoOS\bin\Debug\SrfFiles\FrmGeraOS.srf
 C:\AddOn\ChessIT\ChessIT.GeracaoOS\ChessIT.GeracaoOS\bin\Debug\SrfFiles\FrmCnfIntegraBalanca.srf
 C:\AddOn\ChessIT\ChessIT.GeracaoOS\ChessIT.GeracaoOS\bin\Debug\SrfFiles\FrmNotasGeradas.srf
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.GeracaoOS\ChessIT.GeracaoOS\bin\Debug\ChessIT.GeracaoOS.exe.config
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.GeracaoOS\ChessIT.GeracaoOS\obj\Debug\ChessIT.GeracaoOS.exe
+D:\Arquivos\Clientes\GitHub\ChessIT\ChessIT.GeracaoOS\ChessIT.GeracaoOS\obj\Debug\ChessIT.GeracaoOS.pdb

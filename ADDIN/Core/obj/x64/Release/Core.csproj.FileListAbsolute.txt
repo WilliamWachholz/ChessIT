@@ -1,0 +1,27 @@
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\SrfFiles\FrmCnfIntegraBalanca.srf
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\SrfFiles\FrmGeraOS.srf
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\SrfFiles\FrmNotasGeradas.srf
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\xml\Menu.xml
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\resources\Chess - Certificado de Destinação.rpt
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\SAP.ico
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\JBC.exe.config
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\JBC.exe
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Castle.Core.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Castle.Facilities.Logging.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Castle.Services.Logging.Log4netIntegration.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Chess.IT.Services.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Framework.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\FrameworkInterface.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\ICSharpCode.SharpZipLib.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Interop.SAPbobsCOM.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\log4net.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\SAPbouiCOM.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Newtonsoft.Json.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Castle.Windsor.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Chess.IT.Services.pdb
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\Newtonsoft.Json.xml
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\bin\x64\Release\pt-BR\Framework.resources.dll
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\obj\x64\Release\Core.csproj.AssemblyReference.cache
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\obj\x64\Release\Core.csproj.CoreCompileInputs.cache
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\obj\x64\Release\Core.csproj.CopyComplete
+D:\Arquivos\Clientes\GitHub\ChessIT\ADDIN\Core\obj\x64\Release\JBC.exe

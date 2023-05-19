@@ -1,0 +1,25 @@
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\SrfFiles\FrmCnfIntegraBalanca.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\SrfFiles\FrmGeraOS.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\SrfFiles\FrmNotasGeradas.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\xml\Menu.xml
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\resources\Chess - Certificado de Destinação.rpt
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Chess.IT.Services.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Chess.IT.Services.pdb
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Castle.Core.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Castle.Facilities.Logging.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Castle.Services.Logging.Log4netIntegration.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Castle.Windsor.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Framework.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\FrameworkInterface.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\ICSharpCode.SharpZipLib.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Interop.SAPbobsCOM.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\log4net.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Newtonsoft.Json.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\SAPbouiCOM.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Newtonsoft.Json.xml
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\pt-BR\Framework.resources.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.csproj.AssemblyReference.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.csproj.CoreCompileInputs.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.csproj.CopyComplete
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.pdb
