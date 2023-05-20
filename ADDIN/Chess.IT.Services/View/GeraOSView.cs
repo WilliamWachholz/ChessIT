@@ -3174,15 +3174,10 @@ namespace Chess.IT.Services.View
                                 faturaModel.ManBtchNum = recordSet.Fields.Item(6).Value.ToString() == "Y";
                                 faturaModel.LineNum = Convert.ToInt32(recordSet.Fields.Item(7).Value);
                                 faturaModel.ISS = recordSet.Fields.Item(8).Value.ToString();
-                                faturaModel.PIS = recordSet.Fields.Item(9).Value.ToString();
-                                faturaModel.COFINS = recordSet.Fields.Item(10).Value.ToString();
-                                faturaModel.CSLL = recordSet.Fields.Item(11).Value.ToString();
-                                faturaModel.IRPJ = recordSet.Fields.Item(12).Value.ToString();
-                                faturaModel.INSS = recordSet.Fields.Item(13).Value.ToString();
-                                faturaModel.Usage = recordSet.Fields.Item(14).Value.ToString();
-                                faturaModel.TaxCode = recordSet.Fields.Item(15).Value.ToString();
+                                faturaModel.Usage = recordSet.Fields.Item(9).Value.ToString();
+                                faturaModel.TaxCode = recordSet.Fields.Item(10).Value.ToString();
                                 faturaModel.Draft = ((CheckBoxColumn)gridOS.Columns.Item("Esboço")).IsChecked(row);
-                                faturaModel.GroupNum = recordSet.Fields.Item(16).Value.ToString();
+                                faturaModel.GroupNum = recordSet.Fields.Item(11).Value.ToString();
                                 faturaModel.SeqCode = Convert.ToInt32(recordSet.Fields.Item("SeqCode").Value);
 
                                 if (faturaModel.Quantity <= 0)
