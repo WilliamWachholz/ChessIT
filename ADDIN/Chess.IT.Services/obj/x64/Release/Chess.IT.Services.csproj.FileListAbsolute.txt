@@ -18,7 +18,6 @@ C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x6
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\SAPbouiCOM.dll
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\Newtonsoft.Json.xml
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\x64\Release\pt-BR\Framework.resources.dll
-C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.csproj.AssemblyReference.cache
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.csproj.CoreCompileInputs.cache
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.csproj.CopyComplete
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\x64\Release\Chess.IT.Services.dll

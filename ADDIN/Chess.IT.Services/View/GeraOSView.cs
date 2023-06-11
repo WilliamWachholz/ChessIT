@@ -1116,10 +1116,10 @@ namespace Chess.IT.Services.View
                                         {
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("NrContrato", 0, chooseFromListEvent.SelectedObjects.GetValue("Number", 0).ToString());
                                         }
-                                        else if (pVal.ItemUID.Equals("etCentroC"))
-                                        {
-                                            Form.DataSources.DataTables.Item("dtFiltro").SetValue("CentroCusto", 0, chooseFromListEvent.SelectedObjects.GetValue("PrcCode", 0).ToString());
-                                        }
+                                        //else if (pVal.ItemUID.Equals("etCentroC"))
+                                        //{
+                                        //    Form.DataSources.DataTables.Item("dtFiltro").SetValue("CentroCusto", 0, chooseFromListEvent.SelectedObjects.GetValue("PrcCode", 0).ToString());
+                                        //}
                                         else if (pVal.ItemUID.Equals("etNrRota"))
                                         {
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("NrRota", 0, chooseFromListEvent.SelectedObjects.GetValue("Code", 0).ToString());
@@ -1211,13 +1211,13 @@ namespace Chess.IT.Services.View
 
                                         Form.Items.Item("fldCtr").Click();
 
-                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("", "[Selecionar]");
-                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RCC", "Construção Civil");
-                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RGG", "Grande Gerador");
-                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RPV", "Poda e Varrição");
-                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSS", "Serviços de Saúde");
-                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSI", "Sólidos Industriais");
-                                        //((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSU", "Sólido Urbano");
+                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("", "[Selecionar]");
+                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RCC", "Construção Civil");
+                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RGG", "Grande Gerador");
+                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RPV", "Poda e Varrição");
+                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSS", "Serviços de Saúde");
+                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSI", "Sólidos Industriais");
+                                        ((ComboBox)Form.Items.Item("cbModCtr").Specific).ValidValues.Add("RSU", "Sólido Urbano");
 
                                         //Form.Items.Item("11").Visible = false;
                                         //Form.Items.Item("cbModCtr").Visible = false;
@@ -1732,15 +1732,15 @@ namespace Chess.IT.Services.View
 
             string nrContrato = ((EditText)Form.Items.Item("etNrCtr").Specific).String;
 
-            string modeloContrato = ""; // ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;
+            string modeloContrato = ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;
 
-            string centroCusto = ((EditText)Form.Items.Item("etCentroC").Specific).String;
+            string centroCusto = ""; // ((EditText)Form.Items.Item("etCentroC").Specific).String;
 
             string nrRota = ((EditText)Form.Items.Item("etNrRota").Specific).String;
 
             string diaColeta = ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected.Value;
 
-            string motorista = ((EditText)Form.Items.Item("etMotora").Specific).String;                       
+            string motorista = ((EditText)Form.Items.Item("etMotoraN").Specific).String;                       
 
             //string placa = ((EditText)Form.Items.Item("etNrPlaca").Specific).String;
 
@@ -2077,11 +2077,11 @@ namespace Chess.IT.Services.View
 
             string nrContrato = ((EditText)Form.Items.Item("etNrCtr").Specific).String;
 
-            string modeloContrato = ""; // ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;   
+            string modeloContrato = ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;   
                                     
             string diaColeta = ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected.Description;
 
-            string motorista = ((EditText)Form.Items.Item("etMotora").Specific).String;            
+            string motorista = ((EditText)Form.Items.Item("etMotoraN").Specific).String;            
 
             string tipoOperacao = ((ComboBox)Form.Items.Item("cbTpOper").Specific).Selected.Value;
                         
@@ -2129,8 +2129,7 @@ namespace Chess.IT.Services.View
                                             left join OCRD TRANSP ON TRANSP.""CardCode"" = ORDR.""U_CodTransp""
                                             left join OUSR ON ORDR.""UserSign"" = OUSR.""USERID""
                                             where ORDR.""CANCELED"" = 'N'
-                                            and ORDR.""DocStatus"" = 'O'
-                                            and ORDR.""U_Status"" = 'P'                                            
+                                            and ORDR.""DocStatus"" = 'O'                                         
                                             and ('{1}' = '' or '{1}' = ORDR.""CardCode"")
                                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ORDR.""DocDate"" as date) >= '{2}')
                                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ORDR.""DocDate"" as date) <= '{3}') 
