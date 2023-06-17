@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -287,7 +288,7 @@ namespace Chess.IT.Services.View
                                             Form.Items.Item("etMotoraN").Top = 27;
                                             Form.Items.Item("etMotoraN").Left = 670;
 
-                                            string query = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"", 0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"", cast('' as varchar(254)) as ""CodTransp"" from dummy";
+                                            string query = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"", 0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"", cast('' as varchar(254)) as ""CodTransp"", cast('' as varchar(254)) as ""CodFAT"" from dummy";
 
                                             Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(query);
 
@@ -990,7 +991,6 @@ namespace Chess.IT.Services.View
                                     {
                                         case "1":
                                             ((EditText)Form.Items.Item("etDtOSI").Specific).String = DateTime.Now.AddDays(-7).ToString("dd/MM/yyyy");
-
                                             ((EditText)Form.Items.Item("etDtOSF").Specific).String = DateTime.Now.ToString("dd/MM/yyyy");
                                             break;
                                         case "2":
@@ -1194,17 +1194,17 @@ namespace Chess.IT.Services.View
                             {
                                 if (!Loaded)
                                 {
-                                    try
-                                    {
-                                        Form.DataSources.UserDataSources.Add("DtOSI", SAPbouiCOM.BoDataType.dt_DATE, 0);
-                                        Form.DataSources.UserDataSources.Add("DtOSF", SAPbouiCOM.BoDataType.dt_DATE, 0);
+                                    //try
+                                    //{
+                                    //    Form.DataSources.UserDataSources.Add("DtOSI", SAPbouiCOM.BoDataType.dt_DATE, 0);
+                                    //    Form.DataSources.UserDataSources.Add("DtOSF", SAPbouiCOM.BoDataType.dt_DATE, 0);
 
-                                        ((EditText)Form.Items.Item("etDtOSI").Specific).DataBind.SetBound(true, "", "DtOSI");
-                                        ((EditText)Form.Items.Item("etDtOSF").Specific).DataBind.SetBound(true, "", "DtOSF");
-                                    }
-                                    catch 
-                                    {
-                                    }
+                                    //    ((EditText)Form.Items.Item("etDtOSI").Specific).DataBind.SetBound(true, "", "DtOSI");
+                                    //    ((EditText)Form.Items.Item("etDtOSF").Specific).DataBind.SetBound(true, "", "DtOSF");
+                                    //}
+                                    //catch 
+                                    //{
+                                    //}
                                     try
                                     {
     
@@ -1722,6 +1722,8 @@ namespace Chess.IT.Services.View
         {
             m_absIDs = new List<int>();
 
+            var dtFiltro = Form.DataSources.DataTables.Item("dtFiltro");
+
             string selecionar = ((CheckBox)Form.Items.Item("ckSelCtr").Specific).Checked ? "Y" : "N";
 
             string cliente = ((EditText)Form.Items.Item("etCliente").Specific).String;
@@ -1783,13 +1785,13 @@ namespace Chess.IT.Services.View
                                             where OOAT.""BpType"" = 'C'
                                             and OOAT.""Status"" = 'A'
                                             and OOAT.""Cancelled"" <> 'Y'
-                                            and OOAT.""U_Modelo"" = 'RGG'
                                             and OOAT.""U_CCContrato"" = 'Contratos Rotas GG'
                                             and exists (select * from OAT1 TX inner join OITM TY on TY.""ItemCode"" = TX.""ItemCode"" where TX.""AgrNo"" = OOAT.""AbsID"" and TY.""ItmsGrpCod"" = 118)
                                             and ('{1}' = '' or '{1}' = OOAT.""BpCode"")
                                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OOAT.""StartDate"" as date) >= '{2}')
                                             and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OOAT.""StartDate"" as date) <= '{3}') 
                                             and ('{4}' = '' or '{4}' = cast(OOAT.""Number"" as varchar))
+                                            and ('{5}' = '' or '{5}' = OOAT.""U_Modelo"")                 
                                             and ('{6}' = '' or '{6}' = OOAT.""U_CentroCusto"")
                                             and ('{7}' = '' or '{7}' = OOAT.""U_Rota"")
                                             and ('{8}' = '0' or ('{8}' = '1' AND OOAT.""U_DiaColetSeg"" = 'Sim')
@@ -1822,8 +1824,10 @@ namespace Chess.IT.Services.View
                                                                                               --, OAT1.""PlanQty""
 
                                             
-                                            ", selecionar, cliente, dataDe == "" ? "1990-01-01" : Convert.ToDateTime(dataDe).ToString("yyyy-MM-dd")
-                                            , dataAte == "" ? "1990-01-01" : Convert.ToDateTime(dataAte).ToString("yyyy-MM-dd"), nrContrato, modeloContrato
+                                            ", selecionar, cliente
+                                            , dataDe == "" ? "1990-01-01" : DateTime.Parse(dtFiltro.GetValue("DataCtrIni", 0).ToString()).ToString("yyyy-MM-dd")
+                                            , dataAte == "" ? "1990-01-01" : DateTime.Parse(dtFiltro.GetValue("DataCtrFim", 0).ToString()).ToString("yyyy-MM-dd")
+                                            , nrContrato, modeloContrato
                                             , centroCusto, nrRota, diaColeta, motorista, placa, endereco);
 
             Form.Freeze(true);
@@ -2091,6 +2095,7 @@ namespace Chess.IT.Services.View
 
             string transportadora = ((EditText)Form.Items.Item("edTransp").Specific).String;
 
+
             ComboBox cbEndereco = ((ComboBox)Form.Items.Item("Item_8").Specific);
             string endereco = cbEndereco.Selected == null ? "0" : cbEndereco.Selected.Value;
 
@@ -2150,8 +2155,8 @@ namespace Chess.IT.Services.View
 ",                                            
                                             selecionar, 
                                             cliente,
-                                            dataDe == "" ? "1990-01-01" : Convert.ToDateTime(dataDe).ToString("yyyy-MM-dd"), 
-                                            dataAte == "" ? "1990-01-01" : Convert.ToDateTime(dataAte).ToString("yyyy-MM-dd"),
+                                            dataDe == "" ? "1990-01-01" : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("DtOSI").ValueEx, "yyyyMMdd", null).ToString("yyyy-MM-dd"), 
+                                            dataAte == "" ? "1990-01-01" : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("DtOSF").ValueEx, "yyyyMMdd", null).ToString("yyyy-MM-dd"),
                                             nrOS,
                                             situacaoOS,
                                             placa,
@@ -2263,7 +2268,7 @@ namespace Chess.IT.Services.View
         private void GerarOS()
         {
             string placaOS = Form.DataSources.UserDataSources.Item("nrPlacaOS").Value;
-            DateTime dataSaidaOS = Form.DataSources.UserDataSources.Item("dtSaidaOS").Value == "" ? DateTime.MinValue : Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtSaidaOS").Value);
+            DateTime dataSaidaOS = Form.DataSources.UserDataSources.Item("dtSaidaOS").Value == "" ? DateTime.MinValue : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("dtSaidaOS").ValueEx, "yyyyMMdd", null); // Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtSaidaOS").Value);
             string horaSaidaOS = Form.DataSources.UserDataSources.Item("hrSaidaOS").Value;
             //string motora = ((EditText)Form.Items.Item("etMotora").Specific).String;
             string motoristaNome = Form.DataSources.DataTables.Item("dtFiltro").GetValue("NomeMotorista", 0).ToString();
