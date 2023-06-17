@@ -311,7 +311,7 @@ namespace Chess.IT.Services.View
                                     }
                                     else if (pVal.ItemUID == "btGerarOS")
                                     {
-                                       // MostrarOSGeradas("50,1,2", new List<ErroGerOS>() { new ErroGerOS() { absID=1,Erro="asdasd"}, new ErroGerOS() { absID = 22, Erro = "asdasd" } });
+                                        // MostrarOSGeradas("50,1,2", new List<ErroGerOS>() { new ErroGerOS() { absID=1,Erro="asdasd"}, new ErroGerOS() { absID = 22, Erro = "asdasd" } });
                                         GerarOS();
                                     }
                                     else if (pVal.ItemUID == "btPesqOS")
@@ -350,7 +350,7 @@ namespace Chess.IT.Services.View
 
                                         return;
                                     }
-                                    
+
                                     if (((ComboBox)Form.Items.Item("cbTpRateio").Specific).Selected.Value.Equals("0"))
                                     {
                                         LogHelper.InfoError("Selecione o Tipo de Rateio");
@@ -358,7 +358,7 @@ namespace Chess.IT.Services.View
                                         return;
                                     }
 
-                                    string tiporateio = ((ComboBox)Form.Items.Item("cbTpRateio").Specific).Selected.Value;                                                                      
+                                    string tiporateio = ((ComboBox)Form.Items.Item("cbTpRateio").Specific).Selected.Value;
 
                                     if (tiporateio.Equals("R"))//ROTA
                                     {
@@ -493,7 +493,7 @@ namespace Chess.IT.Services.View
                                         double dPesoEstimadoTotal = PesoEstimadoTotalSelecionados();
 
                                         double dPeso;
-                                        
+
                                         //dPeso = Convert.ToDouble(((EditText)Form.Items.Item("edtPeso").Specific).Value);
 
                                         //dPeso = PesoLiquidoTotalSelecionados();
@@ -514,7 +514,7 @@ namespace Chess.IT.Services.View
                                             {
                                                 //double dM3Order = Convert.ToDouble(oOrder.UserFields.Fields.Item("U_VolumeM3").Value);
                                                 LogHelper.InfoWarning(string.Format("Processando OS {0}", gridPes.DataTable.GetValue(1, i).ToString()));
-                                                
+
                                                 //if (((CheckBox)Form.Items.Item("chkBal").Specific).Checked)
                                                 //{
                                                 //    BalancaController oBalancaController = new BalancaController(Form);
@@ -619,7 +619,7 @@ namespace Chess.IT.Services.View
                                 if (pVal.ItemUID == "btCapPes")
                                 {
                                     //ComboBox cbDCol= (ComboBox)Form.Items.Item("cbDCol").Specific);
-                                    if (((ComboBox)Form.Items.Item("cbDCol").Specific).Selected==null)
+                                    if (((ComboBox)Form.Items.Item("cbDCol").Specific).Selected == null)
                                     {
                                         LogHelper.InfoError("Selecione o Tipo de Pessagem");
                                     }
@@ -627,7 +627,7 @@ namespace Chess.IT.Services.View
                                     {
                                         LogHelper.InfoError("Selecione o Tipo de Pessagem");
                                     }
-                                    else if 
+                                    else if
                                         (
                                         (!((CheckBox)Form.Items.Item("chkBal").Specific).Checked)
                                         && string.IsNullOrEmpty(((EditText)Form.Items.Item("edtPeso").Specific).Value)
@@ -655,7 +655,7 @@ namespace Chess.IT.Services.View
                                         {
 
                                             StaticText lblBalanca = (StaticText)Form.Items.Item("lblBalanca").Specific;
-                                            
+
 
                                             foreach (int linhaRateio in m_LinhasRateioPeso)
                                             {
@@ -669,7 +669,7 @@ namespace Chess.IT.Services.View
                                                 {
                                                     LogHelper.InfoWarning(string.Format("Processando Contrato {0}", gridPes.DataTable.GetValue(1, i).ToString()));
 
-                                                    
+
                                                     if (((CheckBox)Form.Items.Item("chkBal").Specific).Checked)
                                                     {
                                                         BalancaController oBalancaController = new BalancaController(Form);
@@ -681,7 +681,7 @@ namespace Chess.IT.Services.View
                                                         ((EditText)Form.Items.Item("edtPeso").Specific).Item.Enabled = true;
                                                         ((EditText)Form.Items.Item("edtPeso").Specific).Value = OBalanca.peso;
                                                         ((EditText)Form.Items.Item("etPlacaPes").Specific).Value = ((EditText)Form.Items.Item("etPlacaPes").Specific).Value;
-                                                       ((EditText)Form.Items.Item("edtPeso").Specific).Item.Enabled = false;
+                                                        ((EditText)Form.Items.Item("edtPeso").Specific).Item.Enabled = false;
 
                                                         peso = OBalanca.peso;
                                                     }
@@ -701,19 +701,19 @@ namespace Chess.IT.Services.View
                                                         {
                                                             //if (Convert.ToDouble(oOrder.UserFields.Fields.Item("U_PesoBruto").Value) > 0)
                                                             //{
-                                                                oOrder.UserFields.Fields.Item("U_Tara").Value = peso;
-                                                                //já tiverem o[Peso Bruto] preenchido > 0,0000, execute cálculo do peso líquido dessas ordens:
-                                                                //ORDR.U_PesoBruto - ORDR.U_Tara => ORDR.U_PesoLiquido.
-                                                                oOrder.UserFields.Fields.Item("U_PesoLiq").Value =
-                                                                (Convert.ToDouble(oOrder.UserFields.Fields.Item("U_PesoBruto").Value) -
-                                                                    Convert.ToDouble(oOrder.UserFields.Fields.Item("U_Tara").Value)).ToString();
+                                                            oOrder.UserFields.Fields.Item("U_Tara").Value = peso;
+                                                            //já tiverem o[Peso Bruto] preenchido > 0,0000, execute cálculo do peso líquido dessas ordens:
+                                                            //ORDR.U_PesoBruto - ORDR.U_Tara => ORDR.U_PesoLiquido.
+                                                            oOrder.UserFields.Fields.Item("U_PesoLiq").Value =
+                                                            (Convert.ToDouble(oOrder.UserFields.Fields.Item("U_PesoBruto").Value) -
+                                                                Convert.ToDouble(oOrder.UserFields.Fields.Item("U_Tara").Value)).ToString();
 
                                                             //}
-                                                            
+
                                                         }
                                                         else if (tipoPesagem.Equals("PB"))//Peso Bruto
                                                         {
-                                                            oOrder.UserFields.Fields.Item("U_PesoLiq").Value = 
+                                                            oOrder.UserFields.Fields.Item("U_PesoLiq").Value =
                                                                     Convert.ToDouble(peso) -
                                                                     Convert.ToDouble(oOrder.UserFields.Fields.Item("U_Tara").Value);
 
@@ -746,7 +746,7 @@ namespace Chess.IT.Services.View
                                                     Program.LimparObjeto(oOrder);
 
 
-                                                    
+
 
 
                                                     //bSelecionado = true;
@@ -771,7 +771,8 @@ namespace Chess.IT.Services.View
                                         }
                                     }
                                 }
-                                if (pVal.ItemUID == "btUptPlaca") {
+                                if (pVal.ItemUID == "btUptPlaca")
+                                {
                                     if (Program.oApplicationS.MessageBox("Confirma Atualização das Placas da OS?", 1, "Sim", "Não") == 1)
                                     {
                                         LogHelper.InfoWarning(string.Format("Atualização das Placas Iniciada...!!"));
@@ -903,7 +904,7 @@ namespace Chess.IT.Services.View
                                         ((EditText)Form.Items.Item("edtPeso").Specific).Item.Enabled = true;
                                     }
                                 }
-                                
+
                                 if (pVal.ItemUID == "ckSelOS")
                                 {
                                     if (Form.DataSources.DataTables.Item("dtOS").Rows.Count > 0)
@@ -925,11 +926,11 @@ namespace Chess.IT.Services.View
                                     {
                                         Grid gridContr = (Grid)Form.Items.Item("gridContr").Specific;
                                         StaticText lblContratoTot = (StaticText)Form.Items.Item("Item_1").Specific;
-                                        
+
                                         int ContratoTot = Convert.ToInt32(lblContratoTot.Caption);
                                         //int M3Tot = Convert.ToInt32(lblM3Tot.Caption);
                                         //int M3 = 0;
-                                        
+
 
                                         if (gridContr.DataTable.GetValue(0, pVal.Row).ToString().Equals("Y"))
                                         {
@@ -947,7 +948,7 @@ namespace Chess.IT.Services.View
                                 }
                                 if (pVal.ItemUID == "gridPes")
                                 {
-                                    if (pVal.ColUID=="#")
+                                    if (pVal.ColUID == "#")
                                     {
                                         Grid gridPes = (Grid)Form.Items.Item("gridPes").Specific;
                                         StaticText lblOsTot = (StaticText)Form.Items.Item("lblOsTot").Specific;
@@ -1104,7 +1105,7 @@ namespace Chess.IT.Services.View
 
                                     if (chooseFromListEvent.SelectedObjects != null)
                                     {
-                                        
+
 
                                         if (pVal.ItemUID.Equals("etCliente"))
                                         {
@@ -1207,7 +1208,7 @@ namespace Chess.IT.Services.View
                                     //}
                                     try
                                     {
-    
+
 
                                         Form.Items.Item("fldCtr").Click();
 
@@ -1367,7 +1368,7 @@ namespace Chess.IT.Services.View
                             {
                                 //if (Loaded)
                                 //    Form.Items.Item("33").Height = 1;
-                            }                            
+                            }
                             break;
                     }
                 }
@@ -1405,7 +1406,7 @@ namespace Chess.IT.Services.View
 	                            T0.""CardCode""='{0}'
                                             ", sCardCode);
 
-            SAPbobsCOM.Recordset recordSetEndereco= null;
+            SAPbobsCOM.Recordset recordSetEndereco = null;
             recordSetEndereco = (SAPbobsCOM.Recordset)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             recordSetEndereco.DoQuery(SQL);
             while (!recordSetEndereco.EoF)
@@ -1661,24 +1662,24 @@ namespace Chess.IT.Services.View
                 //if (gridPes.DataTable.GetValue(0, i).ToString().Equals("Y"))
                 //{
 
-                    string sDocEntry = gridPes.DataTable.GetValue(1, i).ToString();
-                    if (string.IsNullOrEmpty(sDocEntrys))
-                    {
-                        sDocEntrys = sDocEntry;
-                    }
-                    else
-                    {
-                        sDocEntrys = sDocEntrys + "," + sDocEntry;
-                    }
+                string sDocEntry = gridPes.DataTable.GetValue(1, i).ToString();
+                if (string.IsNullOrEmpty(sDocEntrys))
+                {
+                    sDocEntrys = sDocEntry;
+                }
+                else
+                {
+                    sDocEntrys = sDocEntrys + "," + sDocEntry;
+                }
                 //}
             }
 
             return sDocEntrys;
         }
 
-        private static int CalculaM3OS(int pRow, string DocEntry )
+        private static int CalculaM3OS(int pRow, string DocEntry)
         {
-            int M3=0;
+            int M3 = 0;
             SAPbobsCOM.Recordset recordSetVerificacao = null;
             try
             {
@@ -1742,14 +1743,14 @@ namespace Chess.IT.Services.View
 
             string diaColeta = ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected.Value;
 
-            string motorista = ((EditText)Form.Items.Item("etMotoraN").Specific).String;                       
+            string motorista = ((EditText)Form.Items.Item("etMotoraN").Specific).String;
 
             //string placa = ((EditText)Form.Items.Item("etNrPlaca").Specific).String;
 
             string placa = "";
 
             ComboBox cbEndereco = ((ComboBox)Form.Items.Item("Item_8").Specific);
-            string endereco = cbEndereco.Selected==null ? "0" : cbEndereco.Selected.Value;
+            string endereco = cbEndereco.Selected == null ? "0" : cbEndereco.Selected.Value;
 
             string query = string.Format(@"SELECT '{0}' AS ""#"",
                                                       OOAT.""AbsID"" AS ""Nº Interno"",
@@ -1850,7 +1851,7 @@ namespace Chess.IT.Services.View
                 gridContratos.Columns.Item("Coleta Pendente").Editable = false;
                 gridContratos.Columns.Item("Última OS").Editable = false;
                 gridContratos.Columns.Item("Data OS").Editable = false;
-                
+
                 gridContratos.Columns.Item("#").Type = BoGridColumnType.gct_CheckBox;
 
                 ((EditTextColumn)gridContratos.Columns.Item("Nº Interno")).LinkedObjectType = "1250000025";
@@ -1997,7 +1998,7 @@ namespace Chess.IT.Services.View
                     int M3 = 0;
                     for (int i = 0; i < gridPes.Rows.Count; i++)
                     {
-                        M3 =M3 +  CalculaM3OS(i, gridPes.DataTable.GetValue(1, i).ToString());
+                        M3 = M3 + CalculaM3OS(i, gridPes.DataTable.GetValue(1, i).ToString());
                     }
                     ((StaticText)Form.Items.Item("lblM3Tot").Specific).Caption = M3.ToString();
                 }
@@ -2006,7 +2007,7 @@ namespace Chess.IT.Services.View
                     ((StaticText)Form.Items.Item("lblOsTot").Specific).Caption = "0";
                     ((StaticText)Form.Items.Item("lblM3Tot").Specific).Caption = "0";
                 }
-                
+
 
                 ConfiguraGridPes();
 
@@ -2065,7 +2066,7 @@ namespace Chess.IT.Services.View
 
             string dataDe = ((EditText)Form.Items.Item("etDtOSI").Specific).String;
 
-            string dataAte = ((EditText)Form.Items.Item("etDtOSF").Specific).String;                                   
+            string dataAte = ((EditText)Form.Items.Item("etDtOSF").Specific).String;
 
             string nrOS = ((EditText)Form.Items.Item("etNrOS").Specific).String;
 
@@ -2081,14 +2082,14 @@ namespace Chess.IT.Services.View
 
             string nrContrato = ((EditText)Form.Items.Item("etNrCtr").Specific).String;
 
-            string modeloContrato = ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;   
-                                    
+            string modeloContrato = ((ComboBox)Form.Items.Item("cbModCtr").Specific).Selected.Value;
+
             string diaColeta = ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected.Description;
 
-            string motorista = ((EditText)Form.Items.Item("etMotoraN").Specific).String;            
+            string motorista = ((EditText)Form.Items.Item("etMotoraN").Specific).String;
 
             string tipoOperacao = ((ComboBox)Form.Items.Item("cbTpOper").Specific).Selected.Value;
-                        
+
             string respFat = ((ComboBox)Form.Items.Item("cbRespFat").Specific).Selected.Description;
 
             string agrupamento = ((ComboBox)Form.Items.Item("cbAgrOS").Specific).Selected.Value;
@@ -2152,10 +2153,10 @@ namespace Chess.IT.Services.View
                                             and ('{15}'='0' or ""ShipToCode""='{15}')
                                             and ('{16}'='' or ORDR.""U_Status""='{16}')
                                             and ('{17}' = '' or '{17}' = ORDR.""U_CodTransp"")
-",                                            
-                                            selecionar, 
+",
+                                            selecionar,
                                             cliente,
-                                            dataDe == "" ? "1990-01-01" : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("DtOSI").ValueEx, "yyyyMMdd", null).ToString("yyyy-MM-dd"), 
+                                            dataDe == "" ? "1990-01-01" : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("DtOSI").ValueEx, "yyyyMMdd", null).ToString("yyyy-MM-dd"),
                                             dataAte == "" ? "1990-01-01" : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("DtOSF").ValueEx, "yyyyMMdd", null).ToString("yyyy-MM-dd"),
                                             nrOS,
                                             situacaoOS,
@@ -2186,7 +2187,7 @@ namespace Chess.IT.Services.View
             switch (agrupamento)
             {
                 case "0":
-                    query += @" order by ORDR.""DocNum"" DESC"; 
+                    query += @" order by ORDR.""DocNum"" DESC";
                     break;
                 case "1":
                     query += @" order by ORDR.""CardName"" DESC";
@@ -2353,16 +2354,14 @@ namespace Chess.IT.Services.View
             //PEGA TODOS OS SELECIONADOS
             Grid gridContratos = (Grid)Form.Items.Item("gridContr").Specific;
             List<int> absIDs = new List<int>();
-            //for (int row = 0; row < gridContratos.Rows.Count; row++)
-            //{
-                //if (((CheckBoxColumn)gridContratos.Columns.Item("#")).IsChecked(row))
-                //{
-                    //if (absIDs.Where(a => a == Convert.ToInt32(((EditTextColumn)gridContratos.Columns.Item("Nº Interno")).GetText(row))).Count() == 0)
-                    //{
-                        //absIDs.Add(Convert.ToInt32(((EditTextColumn)gridContratos.Columns.Item("Nº Interno")).GetText(row)));
-                    //}
-                //}
-            //}
+
+            if (((CheckBox)Form.Items.Item("ckSelCtr").Specific).Checked)
+            {
+                for (int row = 0; row < gridContratos.Rows.Count; row++)
+                {
+                    absIDs.Add(Convert.ToInt32(((EditTextColumn)gridContratos.Columns.Item("Nº Interno")).GetText(row)));
+                }
+            }
 
             foreach (int absRow in m_absIDs)
             {
@@ -2383,7 +2382,7 @@ namespace Chess.IT.Services.View
                 {
                     LogHelper.InfoSuccess(string.Format("Processando Contrato {0}", absID1));
                     //NotasVencidas(absID).Count();
-                    
+
                     if (NotasVencidas(absID1).Count() > 0)
                     {
                         LogHelper.InfoError(string.Format("Notas {0} do cliente {1} em aberto. Não é possível gerar OS.",
@@ -2403,7 +2402,7 @@ namespace Chess.IT.Services.View
                             if (Convert.ToInt32(((EditTextColumn)gridContratos.Columns.Item("Nº Interno")).GetText(row)) == absID1)
                             {
                                 SAPbobsCOM.Documents documents = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
-                                
+
                                 SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placaOS, gridContratos, absID1, utilizacaoResiduo, row);
                                 iNumber = Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
                                 while (!recordSet.EoF)
@@ -2430,14 +2429,14 @@ namespace Chess.IT.Services.View
                                     {
                                         LogHelper.InfoError(msgErro);
                                     }
-                                   // Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
-                                    ErroGerOSs.Add( new ErroGerOS() { absID= iNumber, Erro= msgErro } );
+                                    // Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
+                                    ErroGerOSs.Add(new ErroGerOS() { absID = iNumber, Erro = msgErro });
                                     //throw new Exception(msgErro);
                                 }
                                 else
                                 {
                                     osGeradas = true;
-                                    
+
                                     LogHelper.InfoSuccess(string.Format("OS {0} Gerado {1}", iNumber, Program.oCompanyS.GetNewObjectKey()));
 
                                     if (string.IsNullOrEmpty(sOSsGeradas))
@@ -2455,11 +2454,11 @@ namespace Chess.IT.Services.View
                         }
                     }
                 }
-                catch (Exception ex )
+                catch (Exception ex)
                 {
                     string msgErro = string.Format("{0} - {0}", ex.Message, ex.StackTrace);
                     LogHelper.InfoError(string.Format("Erro Processando OS {0}: {1}", absID1, msgErro));
-                    
+
                     ErroGerOSs.Add(new ErroGerOS() { absID = iNumber, Erro = msgErro });
                 }
             }
@@ -2555,7 +2554,7 @@ namespace Chess.IT.Services.View
 
             if (osGeradas)
             {
-               // Program.oApplicationS.MessageBox("Ordens de serviço geradas", 1, "OK");
+                // Program.oApplicationS.MessageBox("Ordens de serviço geradas", 1, "OK");
 
                 Form.DataSources.UserDataSources.Item("nrPlacaOS").Value = string.Empty;
                 Form.DataSources.UserDataSources.Item("dtSaidaOS").Value = string.Empty;
@@ -2763,7 +2762,7 @@ namespace Chess.IT.Services.View
             //}
         }
 
-        private static void MontaOS(string placaOS, DateTime dataSaidaOS, string horaSaidaOS, string motorista, string diaColeta, 
+        private static void MontaOS(string placaOS, DateTime dataSaidaOS, string horaSaidaOS, string motorista, string diaColeta,
             int contrato, SAPbobsCOM.Documents documents, SAPbobsCOM.Recordset recordSet)
         {
             DateTime docDate = DateTime.Now;
@@ -2824,7 +2823,7 @@ namespace Chess.IT.Services.View
             documents.Lines.AgreementNo = contrato;
             documents.Lines.AgreementRowNumber = AgrLineNum;
             documents.Lines.UserFields.Fields.Item("U_UtilTax").Value = usage;
-            
+
             documents.Lines.Add();
         }
 
@@ -2994,7 +2993,7 @@ namespace Chess.IT.Services.View
             oItem = oForm.Items.Add("1", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
             oItem.Left = 0;
             oItem.Width = 65;
-            oItem.Top = oMatrix.Item.Height+10;
+            oItem.Top = oMatrix.Item.Height + 10;
             oItem.Height = 19;
             oButton = ((SAPbouiCOM.Button)(oItem.Specific));
             oButton.Caption = "Ok";
@@ -3018,13 +3017,13 @@ namespace Chess.IT.Services.View
 
             dtMatrix2 = oForm.DataSources.DataTables.Add("DT_02");
             select = string.Empty;
-            if (ErroGerOSs.Count()>0)
+            if (ErroGerOSs.Count() > 0)
             {
                 foreach (ErroGerOS erroGerOS in ErroGerOSs)
                 {
                     if (!string.IsNullOrEmpty(select))
                     {
-                        select= select+" union all ";
+                        select = select + " union all ";
                     }
                     select = select + string.Format(@" 
                                                         select 
@@ -3033,7 +3032,7 @@ namespace Chess.IT.Services.View
                                                         from
                                                             dummy
                                                     
-                                                        ", erroGerOS.absID, erroGerOS.Erro.Replace("'","''"));
+                                                        ", erroGerOS.absID, erroGerOS.Erro.Replace("'", "''"));
                 }
                 select = select + "order by 1;";
                 dtMatrix2.ExecuteQuery(select);
@@ -3126,7 +3125,7 @@ namespace Chess.IT.Services.View
                 for (int row = 0; row < gridOS.Rows.Count; row++)
                 {
                     if (((CheckBoxColumn)gridOS.Columns.Item("#")).IsChecked(row))
-                    {                        
+                    {
                         int docEntry = Convert.ToInt32(((EditTextColumn)gridOS.Columns.Item("Nº Interno")).GetText(row));
 
                         string query = string.Format(@"select case '{1}' when '2' then ORDR.""U_CodTransp"" when '3' then ORDR.""U_CodTransp"" else ORDR.""CardCode"" end as ""CardCode"",
@@ -3169,7 +3168,7 @@ namespace Chess.IT.Services.View
                                 Model.FaturaModel faturaModel = new Model.FaturaModel();
 
                                 faturaModel.BaseEntry = docEntry;
-                                faturaModel.CardCode = recordSet.Fields.Item(0).Value.ToString();                                
+                                faturaModel.CardCode = recordSet.Fields.Item(0).Value.ToString();
                                 faturaModel.TpOper = recordSet.Fields.Item(1).Value.ToString();
                                 faturaModel.ItemCode = recordSet.Fields.Item(2).Value.ToString();
                                 faturaModel.Quantity = Convert.ToDouble(recordSet.Fields.Item(3).Value);
@@ -3652,7 +3651,7 @@ namespace Chess.IT.Services.View
                         //{
                         //    Program.oApplicationS.StatusBar.SetText("Tipo de Operação inválida: " + faturaGroup.Key.Valor2, BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Error);
                         //}
-                       // }
+                        // }
                     }
                     finally
                     {
@@ -3752,7 +3751,7 @@ namespace Chess.IT.Services.View
                 Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(queryFiltro);
             }
             catch (Exception ex)
-            {                
+            {
                 if (Program.oCompanyS.InTransaction)
                     Program.oCompanyS.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
 
