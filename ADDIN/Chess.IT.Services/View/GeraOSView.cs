@@ -80,8 +80,11 @@ namespace Chess.IT.Services.View
 
                                             Form.Items.Item("18").Visible = true;
                                             Form.Items.Item("etNrRota").Visible = true;
-                                            Form.Items.Item("20").Visible = true;
-                                            Form.Items.Item("cbDiaCol").Visible = true;
+
+                                            Form.Items.Item("59").Visible = true;
+                                            Form.Items.Item("58").Visible = true;
+                                            Form.Items.Item("etDtOSI").Visible = true;
+                                            Form.Items.Item("etDtOSF").Visible = true;
 
                                             Form.Items.Item("btPesqPes").Visible = true;
 
@@ -112,11 +115,11 @@ namespace Chess.IT.Services.View
                                             Form.Items.Item("etMotoraN").Top = 27;
                                             Form.Items.Item("etMotoraN").Left = 670;
 
-                                            //dia coleta
-                                            Form.Items.Item("20").Top = 42;
-                                            Form.Items.Item("cbDiaCol").Top = 42;
-                                            Form.Items.Item("20").Left = 17;
-                                            Form.Items.Item("cbDiaCol").Left = 98;
+                                            //data OS
+                                            Form.Items.Item("59").Top = 42;
+                                            Form.Items.Item("58").Top = 42;
+                                            Form.Items.Item("etDtOSI").Top = 42;
+                                            Form.Items.Item("etDtOSF").Top = 42;
 
                                             Form.Items.Item("6658").Visible = false;
                                             Form.Items.Item("cbUtlRes").Visible = false;
@@ -287,6 +290,12 @@ namespace Chess.IT.Services.View
                                             Form.Items.Item("etMotora").Left = 590;
                                             Form.Items.Item("etMotoraN").Top = 27;
                                             Form.Items.Item("etMotoraN").Left = 670;
+
+                                            //data OS
+                                            Form.Items.Item("59").Top = 28;
+                                            Form.Items.Item("58").Top = 28;
+                                            Form.Items.Item("etDtOSI").Top = 28;
+                                            Form.Items.Item("etDtOSF").Top = 28;
 
                                             string query = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"", 0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"", cast('' as varchar(254)) as ""CodTransp"" from dummy";
 
@@ -639,17 +648,9 @@ namespace Chess.IT.Services.View
                                     {
                                         //verifica se tem algo selecionado
                                         Grid gridPes = (Grid)Form.Items.Item("gridPes").Specific;
-                                        //bool bSelecionado = false;
-                                        //for (int i = 0; i < gridPes.Rows.Count; i++)
-                                        //{
-                                        //    if (gridPes.DataTable.GetValue(0, i).ToString().Equals("Y"))
-                                        //    {
-                                        //        bSelecionado = true;
-                                        //        break;
-                                        //    }
-                                        //}
+                                        //bool bSelecionado = false;                                                                              
 
-                                        bool bSelecionado = ((CheckBox)Form.Items.Item("ckSelTPes").Specific).Checked ? true : m_LinhasRateioPeso.Count > 0;
+                                        bool bSelecionado = m_LinhasRateioPeso.Count > 0;
 
                                         if (bSelecionado)
                                         {
@@ -919,6 +920,11 @@ namespace Chess.IT.Services.View
                                         , BoStatusBarMessageType.smt_Warning
                                     );
                                     CarregarPes();
+
+                                    if (!((CheckBox)Form.Items.Item("ckSelTPes").Specific).Checked)
+                                    {
+                                        m_LinhasRateioPeso.Clear();
+                                    }
                                 }
                                 if (pVal.ItemUID == "gridContr")
                                 {
@@ -1786,7 +1792,6 @@ namespace Chess.IT.Services.View
                                             where OOAT.""BpType"" = 'C'
                                             and OOAT.""Status"" = 'A'
                                             and OOAT.""Cancelled"" <> 'Y'
-                                            and OOAT.""U_CCContrato"" = 'Contratos Rotas GG'
                                             and exists (select * from OAT1 TX inner join OITM TY on TY.""ItemCode"" = TX.""ItemCode"" where TX.""AgrNo"" = OOAT.""AbsID"" and TY.""ItmsGrpCod"" = 118)
                                             and ('{1}' = '' or '{1}' = OOAT.""BpCode"")
                                             and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OOAT.""StartDate"" as date) >= '{2}')
@@ -1895,10 +1900,11 @@ namespace Chess.IT.Services.View
             string cliente = ((EditText)Form.Items.Item("etCliente").Specific).String;
             string placa = ((EditText)Form.Items.Item("etNrPlaca").Specific).String;
             string nrRota = ((EditText)Form.Items.Item("etNrRota").Specific).String;
-            string diaColeta = ((ComboBox)Form.Items.Item("cbDiaCol").Specific).Selected.Description;
             string nrSerie = ((EditText)Form.Items.Item("Item_5").Specific).String;
             ComboBox cbEndereco = ((ComboBox)Form.Items.Item("Item_8").Specific);
             string endereco = cbEndereco.Selected == null ? "0" : cbEndereco.Selected.Value;
+            string dataDe = ((EditText)Form.Items.Item("etDtOSI").Specific).String;
+            string dataAte = ((EditText)Form.Items.Item("etDtOSF").Specific).String;
 
             string query = string.Format(@"
                     select 
@@ -1943,15 +1949,16 @@ namespace Chess.IT.Services.View
                         and('{1}' = '' or '{1}' = T0.""CardCode"")
                         and('{2}' = '' or '{2}' = T0.""U_NPlaca"")
                         and('{3}' = '' or '{3}' = (select max(OOAT.""U_Rota"") from RDR1 inner join OOAT on OOAT.""AbsID"" = RDR1.""AgrNo"" where RDR1.""DocEntry"" = T0.""DocEntry""))
-                        and('{4}' = '[Selecionar]' or '{4}' = T0.""U_DiaSemRot"")
-                        and ('{5}' = '' or exists ( SELECT T5.""DistNumber""
+                        and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(T0.""DocDate"" as date) >= '{4}')
+                        and (cast('{5}' as date) = cast('1990-01-01' as date) or cast(T0.""DocDate"" as date) <= '{5}') 
+                        and ('{6}' = '' or exists ( SELECT T5.""DistNumber""
                                                     FROM RDR1 T1
                                                     INNER JOIN OITL T3 ON T1.""DocEntry"" = T3.""ApplyEntry"" AND T1.""LineNum"" = T3.""ApplyLine""
                                                     INNER JOIN ITL1 T4 ON T3.""LogEntry"" = T4.""LogEntry""
                                                     INNER JOIN OSRN T5 ON T4.""ItemCode"" = T5.""ItemCode"" AND T4.""MdAbsEntry"" = T5.""AbsEntry""
                                                     WHERE T1.""DocEntry"" = T0.""DocEntry"" 
-                                                    AND T5.""DistNumber"" = '{5}'))                        
-                        and ('{6}'='0' or ""ShipToCode""='{6}')
+                                                    AND T5.""DistNumber"" = '{6}'))                        
+                        and ('{7}'='0' or ""ShipToCode""='{7}')
                     order by T0.""DocNum"" DESC
 
             ",
@@ -1959,7 +1966,8 @@ namespace Chess.IT.Services.View
                                             cliente,
                                             placa,
                                             nrRota,
-                                            diaColeta,
+                                            dataDe == "" ? "1990-01-01" : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("DtOSI").ValueEx, "yyyyMMdd", null).ToString("yyyy-MM-dd"),
+                                            dataAte == "" ? "1990-01-01" : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("DtOSF").ValueEx, "yyyyMMdd", null).ToString("yyyy-MM-dd"),
                                             nrSerie,
                                             endereco);
 
@@ -1999,6 +2007,7 @@ namespace Chess.IT.Services.View
                     for (int i = 0; i < gridPes.Rows.Count; i++)
                     {
                         M3 = M3 + CalculaM3OS(i, gridPes.DataTable.GetValue(1, i).ToString());
+                        m_LinhasRateioPeso.Add(i + 1);
                     }
                     ((StaticText)Form.Items.Item("lblM3Tot").Specific).Caption = M3.ToString();
                 }
@@ -2349,7 +2358,7 @@ namespace Chess.IT.Services.View
             }
 
 
-            Program.oApplicationS.StatusBar.SetText("Gerando ordens de serviço", BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Warning);
+            Program.oApplicationS.StatusBar.SetText("Gerando ordens de serviço", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Warning);
             string sOSsGeradas = string.Empty;
             //PEGA TODOS OS SELECIONADOS
             Grid gridContratos = (Grid)Form.Items.Item("gridContr").Specific;
@@ -3112,7 +3121,7 @@ namespace Chess.IT.Services.View
                 return;
             }
 
-            Program.oApplicationS.StatusBar.SetText("Gerando faturas", BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Warning);
+            Program.oApplicationS.StatusBar.SetText("Gerando faturas", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Warning);
 
             if (!Program.oCompanyS.InTransaction)
                 Program.oCompanyS.StartTransaction();
@@ -3649,7 +3658,7 @@ namespace Chess.IT.Services.View
                         //}
                         //else
                         //{
-                        //    Program.oApplicationS.StatusBar.SetText("Tipo de Operação inválida: " + faturaGroup.Key.Valor2, BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Error);
+                        //    Program.oApplicationS.StatusBar.SetText("Tipo de Operação inválida: " + faturaGroup.Key.Valor2, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
                         //}
                         // }
                     }
@@ -3740,7 +3749,7 @@ namespace Chess.IT.Services.View
                     }
                 }
 
-                Program.oApplicationS.StatusBar.SetText("Faturas geradas", BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Success);
+                Program.oApplicationS.StatusBar.SetText("Faturas geradas", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Success);
 
                 Program.OpenNotasGeradasView(notasGeradas);
 
@@ -3755,7 +3764,7 @@ namespace Chess.IT.Services.View
                 if (Program.oCompanyS.InTransaction)
                     Program.oCompanyS.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
 
-                Program.oApplicationS.StatusBar.SetText("Erro ao gerar faturas: " + ex.Message, BoMessageTime.bmt_Long, BoStatusBarMessageType.smt_Error);
+                Program.oApplicationS.StatusBar.SetText("Erro ao gerar faturas: " + ex.Message, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
             }
         }
 
