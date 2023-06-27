@@ -1949,8 +1949,8 @@ namespace Chess.IT.Services.View
                         and('{1}' = '' or '{1}' = T0.""CardCode"")
                         and('{2}' = '' or '{2}' = T0.""U_NPlaca"")
                         and('{3}' = '' or '{3}' = (select max(OOAT.""U_Rota"") from RDR1 inner join OOAT on OOAT.""AbsID"" = RDR1.""AgrNo"" where RDR1.""DocEntry"" = T0.""DocEntry""))
-                        and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(T0.""DocDate"" as date) >= '{4}')
-                        and (cast('{5}' as date) = cast('1990-01-01' as date) or cast(T0.""DocDate"" as date) <= '{5}') 
+                        and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(T0.""DocDueDate"" as date) >= '{4}')
+                        and (cast('{5}' as date) = cast('1990-01-01' as date) or cast(T0.""DocDueDate"" as date) <= '{5}') 
                         and ('{6}' = '' or exists ( SELECT T5.""DistNumber""
                                                     FROM RDR1 T1
                                                     INNER JOIN OITL T3 ON T1.""DocEntry"" = T3.""ApplyEntry"" AND T1.""LineNum"" = T3.""ApplyLine""
@@ -2007,7 +2007,7 @@ namespace Chess.IT.Services.View
                     for (int i = 0; i < gridPes.Rows.Count; i++)
                     {
                         M3 = M3 + CalculaM3OS(i, gridPes.DataTable.GetValue(1, i).ToString());
-                        m_LinhasRateioPeso.Add(i + 1);
+                        m_LinhasRateioPeso.Add(i);
                     }
                     ((StaticText)Form.Items.Item("lblM3Tot").Specific).Caption = M3.ToString();
                 }
