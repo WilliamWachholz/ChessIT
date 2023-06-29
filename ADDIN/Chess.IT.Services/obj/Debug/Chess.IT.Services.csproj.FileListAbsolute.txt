@@ -24,3 +24,4 @@ C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\De
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.CopyComplete
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.dll
 C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.pdb
+C:\Users\kuricaambiental_adm\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.AssemblyReference.cache
