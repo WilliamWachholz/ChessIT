@@ -442,10 +442,7 @@ namespace Chess.IT.Services
                     Button btEtiq = (Button)_btCapPeso.Specific;
                     btEtiq.Caption = "Capturar Peso";
 
-                    if (form.Mode == BoFormMode.fm_UPDATE_MODE)
-                    {
-                        form.Mode = BoFormMode.fm_OK_MODE;
-                    }
+                    if (form.Mode != BoFormMode.fm_ADD_MODE) form.Mode = BoFormMode.fm_OK_MODE;
                 }
             }
         }

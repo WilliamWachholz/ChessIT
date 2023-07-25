@@ -1287,7 +1287,7 @@ namespace Chess.IT.Services.View
                                         ComboBox cbUtlRes = (ComboBox)Form.Items.Item("cbUtlRes").Specific;
 
                                         SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                        recordSet.DoQuery(@"select ""ID"", ""Usage"" from OUSG where ""Usage"" LIKE 'V%'");
+                                        recordSet.DoQuery(@"select 0 as ""ID"", '[Selecionar]' as ""Usage"" from dummy union select ""ID"", ""Usage"" from OUSG where ""Usage"" LIKE 'V%'");
 
                                         while (!recordSet.EoF)
                                         {
@@ -2378,6 +2378,7 @@ namespace Chess.IT.Services.View
             }
 
             bool osGeradas = false;
+            string sEsbocos = "";
             List<int> absIDsNotasVencidas = new List<int>();
             List<ErroGerOS> ErroGerOSs = new List<ErroGerOS>();
             //string sTelasGeradas
@@ -2420,6 +2421,7 @@ namespace Chess.IT.Services.View
                                     recordSet.MoveNext();
                                 }
                                 Program.LimparObjeto(recordSet);
+
                                 int result = documents.Add();
 
                                 if (result != 0)
@@ -2446,15 +2448,23 @@ namespace Chess.IT.Services.View
                                 {
                                     osGeradas = true;
 
-                                    LogHelper.InfoSuccess(string.Format("OS {0} Gerado {1}", iNumber, Program.oCompanyS.GetNewObjectKey()));
+                                    //LogHelper.InfoSuccess(string.Format("OS {0} Gerado {1}", iNumber, Program.oCompanyS.GetNewObjectKey()));
 
                                     if (string.IsNullOrEmpty(sOSsGeradas))
                                     {
-                                        sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
+                                        if (Program.oCompanyS.GetNewObjectType() == "112")
+                                            sEsbocos = Program.oCompanyS.GetNewObjectKey();
+                                        else                                            
+                                            sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
+                                        //LogHelper.InfoSuccess($"sOSsGeradas {sOSsGeradas}");
+
                                     }
                                     else
                                     {
-                                        sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
+                                        if (Program.oCompanyS.GetNewObjectType() == "112")
+                                            sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();                                        
+                                        else
+                                            sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
                                     }
                                 }
                                 Program.LimparObjeto(documents);
@@ -2527,15 +2537,23 @@ namespace Chess.IT.Services.View
                                         else
                                         {
                                             osGeradas = true;
-                                            LogHelper.InfoSuccess(string.Format("OS {0} Gerado {1}", iNumber, Program.oCompanyS.GetNewObjectKey()));
+                                            //LogHelper.InfoSuccess(string.Format("OS {0} Gerado {1}", iNumber, Program.oCompanyS.GetNewObjectKey()));
 
                                             if (string.IsNullOrEmpty(sOSsGeradas))
                                             {
-                                                sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
+                                                if (Program.oCompanyS.GetNewObjectType() == "112")
+                                                    sEsbocos = Program.oCompanyS.GetNewObjectKey();                                                
+                                                else
+                                                    sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
+                                                //LogHelper.InfoSuccess($"sOSsGeradas {sOSsGeradas}");
+
                                             }
                                             else
                                             {
-                                                sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
+                                                if (Program.oCompanyS.GetNewObjectType() == "112")
+                                                    sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
+                                                else
+                                                    sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();
                                             }
                                         }
                                         Program.LimparObjeto(documents);
@@ -2575,7 +2593,10 @@ namespace Chess.IT.Services.View
 
                 Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(queryFiltro);
 
-                MostrarOSGeradas(sOSsGeradas, ErroGerOSs);
+                MostrarOSGeradas(sOSsGeradas, sEsbocos, ErroGerOSs);
+
+                ((EditText)Form.Items.Item("etMotora").Specific).String = "";
+                ((EditText)Form.Items.Item("etMotoraN").Specific).String = "";
 
                 ////frmOSsGeradas tela = this.CreateForm<frmOSsGeradas>();
                 ////tela.NGTME = _oForm.DataSources.DBDataSources.Item(JBC_GTME).GetValue("DocEntry", 0);
@@ -2806,6 +2827,14 @@ namespace Chess.IT.Services.View
             documents.TaxDate = taxDate;
             documents.BPL_IDAssignedToInvoice = bplID;
             documents.TaxExtension.Carrier = codTransp;
+            documents.ShipToCode = recordSet.Fields.Item("U_EnderEntrega").Value.ToString();
+            documents.PayToCode = recordSet.Fields.Item("U_EnderAPag").Value.ToString();
+
+            if (recordSet.Fields.Item("salesPrson").Value.ToString() != "0")
+            {
+                documents.SalesPersonCode = int.Parse(recordSet.Fields.Item("salesPrson").Value.ToString());
+            }
+
             documents.UserFields.Fields.Item("U_TipoFat").Value = "1";
 
             documents.UserFields.Fields.Item("U_EstPlaca").Value = estPlaca;
@@ -2861,6 +2890,9 @@ namespace Chess.IT.Services.View
                                                                         ,OAT1.""AgrLineNum""
                                                                         ,OOAT.""Number""
                                                                         ,OOAT.""U_IR_ISS""
+                                                                        ,OOAT.""U_EnderEntrega""
+                                                                        ,OOAT.""U_EnderAPag""
+                                                                        ,OHEM.""salesPrson""
                                                                 from OOAT
                                                                 inner join OAT1 on OAT1.""AgrNo"" = OOAT.""AbsID""        
 
@@ -2870,6 +2902,7 @@ namespace Chess.IT.Services.View
 
                                                                 left join ""@VEICULOS"" ON ""@VEICULOS"".""DocEntry"" = (select MAX(TX.""DocEntry"") from ""@VEICULOS"" TX WHERE TX.""U_Placa"" = '{2}')
                                                                 left join ""@VEICULOS_DADOS"" ON ""@VEICULOS_DADOS"".""Code"" = ""@VEICULOS"".""Code""
+                                                                left join OHEM on OHEM.""Code"" = OOAT.""Owner""
                                                                 where OOAT.""AbsID"" = {0}
                                                                 and OAT1.""AgrLineNum"" in ({1})
                                                                 ", absID, agrLineNums, placaOS, utilizacaoResiduo);
@@ -2878,10 +2911,11 @@ namespace Chess.IT.Services.View
 
             recordSet = (SAPbobsCOM.Recordset)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             recordSet.DoQuery(query);
+
             return recordSet;
         }
 
-        private static void MostrarOSGeradas(string sOSsGeradas, List<ErroGerOS> ErroGerOSs)
+        private static void MostrarOSGeradas(string sOSsGeradas, string sEsbocos, List<ErroGerOS> ErroGerOSs)
         {
             SAPbouiCOM.Form oForm;
             SAPbouiCOM.Item oItem = null;
@@ -2941,9 +2975,14 @@ namespace Chess.IT.Services.View
             {
                 sOSsGeradas = "0";
             }
+            if (string.IsNullOrEmpty(sEsbocos))
+            {
+                sEsbocos = "0";
+            }
             string select = string.Format(@" 
                                                     select 
-	                                                    T0.""DocEntry""
+	                                                    T0.""DocEntry"" as ""OS""
+                                                        ,0 as ""Esboco""
                                                         , T0.""DocNum""
                                                         , T0.""CardCode""
                                                         , T0.""CardName""
@@ -2951,7 +2990,18 @@ namespace Chess.IT.Services.View
                                                         ORDR T0
                                                     where
                                                         T0.""DocEntry"" in ({0})
-                                            ", sOSsGeradas);
+                                                    union
+                                                    select 
+	                                                     0 as ""OS""
+                                                        ,T0.""DocEntry"" as ""Esboco""
+                                                        , T0.""DocNum""
+                                                        , T0.""CardCode""
+                                                        , T0.""CardName""
+                                                    from
+                                                        ODRF T0
+                                                    where
+                                                        T0.""DocEntry"" in ({1})
+                                            ", sOSsGeradas,  sEsbocos);
 
             dtMatrix1.ExecuteQuery(select);
 
@@ -2962,19 +3012,28 @@ namespace Chess.IT.Services.View
             iCountCol++;
 
             oMatrix.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
-            oMatrix.Columns.Item(iCountCol).DataBind.Bind("DT_01", "DocEntry");
-            oMatrix.Columns.Item(iCountCol).TitleObject.Caption = "DocEntry";
+            oMatrix.Columns.Item(iCountCol).DataBind.Bind("DT_01", "OS");
+            oMatrix.Columns.Item(iCountCol).TitleObject.Caption = "OS";
             oMatrix.Columns.Item(iCountCol).TitleObject.Sortable = false;
             oMatrix.Columns.Item(iCountCol).Width = 250;
             oMatrix.Columns.Item(iCountCol).Editable = false;
             ((LinkedButton)oMatrix.Columns.Item(iCountCol).ExtendedObject).LinkedObject = BoLinkedObject.lf_Order;
             iCountCol++;
 
+            oMatrix.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
+            oMatrix.Columns.Item(iCountCol).DataBind.Bind("DT_01", "Esboco");
+            oMatrix.Columns.Item(iCountCol).TitleObject.Caption = "Esboço";
+            oMatrix.Columns.Item(iCountCol).TitleObject.Sortable = false;
+            oMatrix.Columns.Item(iCountCol).Width = 250;
+            oMatrix.Columns.Item(iCountCol).Editable = false;
+            ((LinkedButton)oMatrix.Columns.Item(iCountCol).ExtendedObject).LinkedObject = (BoLinkedObject)112;
+            iCountCol++;
+
 
 
             oMatrix.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
             oMatrix.Columns.Item(iCountCol).DataBind.Bind("DT_01", "DocNum");
-            oMatrix.Columns.Item(iCountCol).TitleObject.Caption = "DocNum";
+            oMatrix.Columns.Item(iCountCol).TitleObject.Caption = "Nº Doc";
             oMatrix.Columns.Item(iCountCol).TitleObject.Sortable = false;
             oMatrix.Columns.Item(iCountCol).Width = 150;
             oMatrix.Columns.Item(iCountCol).Editable = false;
@@ -3212,11 +3271,11 @@ namespace Chess.IT.Services.View
                     }
                 }
 
-                var faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.BaseEntry.ToString(), Valor2 = r.TpOper, Valor3 = r.SeqCode }).ToList();
+                var faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.BaseEntry.ToString(), Valor2 = r.SeqCode }).ToList();
 
                 if (faturamentoAgrupado)
                 {
-                    faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.CardCode.ToString(), Valor2 = r.TpOper, Valor3 = r.SeqCode }).ToList();
+                    faturaGroupList = faturaList.GroupBy(r => new { Valor1 = r.CardCode.ToString(), Valor2 = r.SeqCode }).ToList();
                 }
 
                 List<int> notasTransporteCliente = new List<int>();
