@@ -30,8 +30,57 @@ namespace Chess.IT.Services.View
             Form.EnableMenu("1285", false);
             Form.EnableMenu("1286", false);
 
+            Program.oApplicationS.ItemEvent += HandleItemEvent;
+
             m_Timer.Elapsed += M_Timer_Elapsed;
             m_Timer.Start();
+        }
+
+        private void HandleItemEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
+        {
+            bubbleEvent = true;
+
+            try
+            {
+
+                if (pVal.FormUID == Form.UniqueID)
+                {
+                    switch (pVal.EventType)
+                    {
+                        case BoEventTypes.et_MATRIX_LINK_PRESSED:
+                            {
+                                if (pVal.BeforeAction)
+                                {
+                                    if (pVal.ItemUID == "grNotas")
+                                    {
+                                        if (pVal.ColUID == "Nº Nota")
+                                        {
+                                            bubbleEvent = false;
+
+                                            Grid gridOS = (Grid)Form.Items.Item("grNotas").Specific;
+
+                                            Program.oApplicationS.OpenForm(BoFormObjectEnum.fo_Invoice, "", ((EditTextColumn)gridOS.Columns.Item("DocEntryNF")).GetText(pVal.Row));
+                                        }
+
+                                        if (pVal.ColUID == "Nº Esboço")
+                                        {
+                                            bubbleEvent = false;
+
+                                            Grid gridOS = (Grid)Form.Items.Item("grNotas").Specific;
+
+                                            Program.oApplicationS.OpenForm((BoFormObjectEnum)112, "", ((EditTextColumn)gridOS.Columns.Item("DocEntryDraft")).GetText(pVal.Row));
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Program.oApplicationS.StatusBar.SetText(exception.Message);
+            }
         }
 
         private void M_Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -49,7 +98,7 @@ namespace Chess.IT.Services.View
 
                 foreach (NotaGerada nota in m_Notas)
                 {
-                    query += string.Format(@" select {0} as ""Nº Nota"", {1} as ""Nº Esboço"" from dummy union all", nota.NF, nota.Esboco);
+                    query += string.Format(@" select (select ""DocNum"" from OINV where ""DocEntry"" = {0}) as ""Nº Nota"", (select ""DocNum"" from ODRF where ""DocEntry"" = {1}) as ""Nº Esboço"", {0} as ""DocEntryNF"", {1} as ""DocEntryDraft"" from dummy union all", nota.NF, nota.Esboco);
                     //update = string.Format(@"UPDATE RDR1 
                     //                         SET ""U_NumFat"" = {0}
                     //                         where ""U_DocEntry"" = {1}", nota.Key, nota.Value);
@@ -68,13 +117,17 @@ namespace Chess.IT.Services.View
 
                         gridOS.Columns.Item("Nº Nota").Editable = false;
 
-                        ((EditTextColumn)gridOS.Columns.Item("Nº Nota")).LinkedObjectType = "13";
+                        ((EditTextColumn)gridOS.Columns.Item("Nº Nota")).LinkedObjectType = "999";
 
 
                         gridOS.Columns.Item("Nº Nota").Editable = false;
                         gridOS.Columns.Item("Nº Esboço").Editable = false;
+                        gridOS.Columns.Item("DocEntryNF").Visible = false;
+                        gridOS.Columns.Item("DocEntryDraft").Visible = false;
 
-                        ((EditTextColumn)gridOS.Columns.Item("Nº Esboço")).LinkedObjectType = "112";
+                        ((EditTextColumn)gridOS.Columns.Item("Nº Esboço")).LinkedObjectType = "999";
+
+                        gridOS.AutoResizeColumns();
                     }
                     catch (Exception ex)
                     {
@@ -85,12 +138,6 @@ namespace Chess.IT.Services.View
                         Form.Freeze(false);
                     }
                 }                
-            }
-            else
-            {
-
-                Program.oApplicationS.StatusBar.SetText("Z" + m_Notas.Count);
-
             }
         }
 

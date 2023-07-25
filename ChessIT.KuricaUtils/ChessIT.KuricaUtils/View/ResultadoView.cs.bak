@@ -48,56 +48,8 @@ namespace ChessIT.KuricaUtils.View
             Form.EnableMenu("1285", false);
             Form.EnableMenu("1286", false);
 
-            Controller.MainController.Application.ItemEvent += HandleItemEvent;
-
             m_Timer.Elapsed += M_Timer_Elapsed;
             m_Timer.Start();
-        }
-
-        private void HandleItemEvent(string formUID, ref ItemEvent pVal, out bool bubbleEvent)
-        {
-            bubbleEvent = true;
-
-            try
-            {
-
-                if (pVal.FormUID == Form.UniqueID)
-                {
-                    switch (pVal.EventType)
-                    {
-                        case BoEventTypes.et_MATRIX_LINK_PRESSED:
-                            {
-                                if (pVal.BeforeAction)
-                                {
-                                    if (pVal.ItemUID == "grid")
-                                    {
-                                        if (pVal.ColUID == "Nº Contrato")
-                                        {
-                                            bubbleEvent = false;
-
-                                            Grid gridOS = (Grid)Form.Items.Item("grid").Specific;
-
-                                            Controller.MainController.Application.OpenForm((BoFormObjectEnum)1250000025, "", ((EditTextColumn)gridOS.Columns.Item("DocEntry")).GetText(pVal.Row));
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case BoEventTypes.et_FORM_CLOSE:
-                            {
-                                if (!pVal.BeforeAction)
-                                {
-                                    Controller.MainController.Application.ItemEvent -= HandleItemEvent;
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Controller.MainController.Application.StatusBar.SetText(exception.Message);
-            }
         }
 
         private void M_Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -150,9 +102,8 @@ namespace ChessIT.KuricaUtils.View
             {
                 string query = "";
 
-                query = "select (select \"DocNum\" from OQUT where \"DocEntry\" = " + m_ResultadoProposta.Proposta + ") as \"Nº Proposta\", " +
-                               " (select \"Number\" from OOAT where \"AbsID\" = " + m_ResultadoProposta.Contrato.ToString() + ") as \"Nº Contrato\", " +
-                               "" + m_ResultadoProposta.Contrato.ToString() + " as \"DocEntry\", " +
+                query = "select " + m_ResultadoProposta.Proposta + " as \"Nº Proposta\", " +
+                               "" + m_ResultadoProposta.Contrato.ToString() + " as \"Nº Contrato\", " +
                                "'" + m_ResultadoProposta.Resultado + "' as \"Resultado\" " +
                         " from dummy ";
 
@@ -167,10 +118,9 @@ namespace ChessIT.KuricaUtils.View
 
                         grid.Columns.Item("Nº Proposta").Editable = false;
                         grid.Columns.Item("Nº Contrato").Editable = false;
-                        grid.Columns.Item("DocEntry").Visible = false;
                         grid.Columns.Item("Resultado").Editable = false;
 
-                        ((EditTextColumn)grid.Columns.Item("Nº Contrato")).LinkedObjectType = "999";
+                        ((EditTextColumn)grid.Columns.Item("Nº Contrato")).LinkedObjectType = "1250000025";
                     }
                     catch (Exception ex)
                     {
