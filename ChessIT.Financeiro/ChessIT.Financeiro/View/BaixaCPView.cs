@@ -349,6 +349,23 @@ namespace ChessIT.Financeiro.View
 
                                         Totalizar();
                                     }
+
+                                    if (pVal.ColUID == "Total a Pagar")
+                                    {
+                                        Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
+
+                                        double valorTotal = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(pVal.Row));
+
+                                        if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(pVal.Row))
+                                        {                                            
+                                            if (!m_TotaisPagar.ContainsKey(pVal.Row))
+                                                m_TotaisPagar.Add(pVal.Row, 0);
+
+                                            m_TotaisPagar[pVal.Row] = valorTotal;
+                                        }
+
+                                        Totalizar();
+                                    }
                                 }
                             }
 
@@ -854,7 +871,7 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Data Baixa").Editable = false;
                 gridTitulos.Columns.Item("Parcela").Editable = false;
                 gridTitulos.Columns.Item("Valor Parcela").Editable = false;
-                gridTitulos.Columns.Item("Total a Pagar").Editable = false;
+                //gridTitulos.Columns.Item("Total a Pagar").Editable = false;
                 gridTitulos.Columns.Item("Valor Pago").Editable = false;
                 gridTitulos.Columns.Item("Valor Saldo").Editable = false;
                 gridTitulos.Columns.Item("Conta").Editable = false;
