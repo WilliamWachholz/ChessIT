@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ChessIT" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="Financeiro" ExtVersion="2.0.2" Contdata="" Partner="ChessIT" DBType="HANA" ClientType="A">
+<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ChessIT" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="Financeiro" ExtVersion="2.0.1" Contdata="" Partner="ChessIT" DBType="HANA" ClientType="A">
   <Validity>
     <SBOCompatibility>
       <Version From="" To="" />
@@ -26,7 +26,7 @@
           <Files />
         </Uninstallation>
       </x86>
-      <x64 AddonExe="C:\Users\william.wachholz\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Release\ChessIT.Financeiro.exe" AddonSig="">
+      <x64 AddonExe="C:\Users\william.wachholz\source\repos\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Release\ChessIT.Financeiro.exe" AddonSig="">
         <Installation>
           <Files>
             <File FileName="ChessIT.Financeiro.exe">
