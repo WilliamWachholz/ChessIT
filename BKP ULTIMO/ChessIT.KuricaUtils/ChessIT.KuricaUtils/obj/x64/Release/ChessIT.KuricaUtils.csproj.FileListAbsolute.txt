@@ -1,0 +1,62 @@
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmAprovacao.srf
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe.config
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.pdb
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SAPBusinessOneSDK.dll
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.Properties.Resources.resources
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.GenerateResource.cache
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.CoreCompileInputs.cache
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.CopyComplete
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.exe
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.pdb
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmResultado.srf
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\Menu.xml
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmPropostaContrato.srf
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmRecusa.srf
+C:\AddOn\ChessIT\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csprojAssemblyReference.cache
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\Menu.xml
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmAprovacao.srf
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmPropostaContrato.srf
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmRecusa.srf
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmResultado.srf
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe.config
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.pdb
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SAPBusinessOneSDK.dll
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csprojAssemblyReference.cache
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.Properties.Resources.resources
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.GenerateResource.cache
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.CoreCompileInputs.cache
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.CopyComplete
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.exe
+C:\Desenv\Chess IT\Fontes\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.pdb
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\Menu.xml
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmAprovacao.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmPropostaContrato.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmRecusa.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmResultado.srf
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe.config
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.pdb
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SAPBusinessOneSDK.dll
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.AssemblyReference.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.Properties.Resources.resources
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.GenerateResource.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.CoreCompileInputs.cache
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.CopyComplete
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.exe
+C:\Users\kuricaambiental_adm\source\repos\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.pdb
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\Menu.xml
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmAprovacao.srf
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmPropostaContrato.srf
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmRecusa.srf
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\SrfFiles\FrmResultado.srf
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe.config
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.exe
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\bin\x64\Release\ChessIT.KuricaUtils.pdb
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.AssemblyReference.cache
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.Properties.Resources.resources
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.GenerateResource.cache
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.csproj.CoreCompileInputs.cache
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.exe
+C:\Users\partner\Desktop\ChessIT.KuricaUtils\ChessIT.KuricaUtils\obj\x64\Release\ChessIT.KuricaUtils.pdb

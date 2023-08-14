@@ -1,0 +1,7 @@
+﻿<Application>
+	<Menus>
+		<action type="add">
+			<Menu Checked="0" Enabled="1" FatherUID="1536" Position="5" String="Aprovador de Documentos" Type="1" UniqueID="FrmAprovacao" />
+		</action>
+	</Menus>
+</Application>

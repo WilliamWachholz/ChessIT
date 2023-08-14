@@ -1,0 +1,1 @@
+select 18 as "Nº Proposta", 880 as "Nº Contrato", 'Contrato criado com sucesso' as "Resultado" 
