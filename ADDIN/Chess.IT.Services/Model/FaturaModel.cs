@@ -44,5 +44,7 @@ namespace Chess.IT.Services.Model
 
         public int SeqCode { get; set; }
 
+        public string RespFat { get; set; }
+
     }
 }

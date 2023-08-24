@@ -68,111 +68,109 @@ namespace Chess.IT.Services.View
                                         Form.Freeze(true);
                                         try
                                         {
-                                            Form.Items.Item("8").Left = Form.Items.Item("20").Left;
-                                            Form.Items.Item("etNrCtr").Left = Form.Items.Item("cbDiaCol").Left;
-                                            Form.Items.Item("11").Left = Form.Items.Item("20").Left;
-                                            Form.Items.Item("cbModCtr").Left = Form.Items.Item("cbDiaCol").Left;
-                                            Form.Items.Item("26").Top = 59;
-                                            Form.Items.Item("etNrPlaca").Top = 59;
-                                            Form.Items.Item("26").Visible = true;
-                                            Form.Items.Item("etNrPlaca").Visible = true;
+                                            //    Form.Items.Item("2").Left = 6;
+                                            //    Form.Items.Item("2").Top = 13;
+                                            //    Form.Items.Item("etCliente").Top = 13;
+                                            //    Form.Items.Item("etClienteN").Top = 13;
+                                            //    Form.Items.Item("etClienteN").Visible = true;
+                                            //    Form.Items.Item("etCliente").Visible = true;
+                                            //    Form.Items.Item("2").Visible = true;
+                                            //    ((EditText)Form.Items.Item("etCliente").Specific).TabOrder = 1;
 
+                                            //    //data OS
+                                            //    Form.Items.Item("59").Left = 6;
+                                            //    Form.Items.Item("59").Top = 31;
+                                            //    Form.Items.Item("58").Top = 31;
+                                            //    Form.Items.Item("etDtOSI").Top = 31;
+                                            //    Form.Items.Item("etDtOSF").Top = 31;
 
-                                            Form.Items.Item("18").Visible = true;
-                                            Form.Items.Item("etNrRota").Visible = true;
+                                            //    Form.Items.Item("59").Visible = true;
+                                            //    Form.Items.Item("58").Visible = true;
+                                            //    Form.Items.Item("etDtOSI").Visible = true;
+                                            //    Form.Items.Item("etDtOSF").Visible = true;
+                                            //    ((EditText)Form.Items.Item("etDtOSI").Specific).TabOrder = 2;
+                                            //    ((EditText)Form.Items.Item("etDtOSF").Specific).TabOrder = 3;
 
-                                            Form.Items.Item("59").Visible = true;
-                                            Form.Items.Item("58").Visible = true;
-                                            Form.Items.Item("etDtOSI").Visible = true;
-                                            Form.Items.Item("etDtOSF").Visible = true;
+                                            //    //placa
+                                            //    Form.Items.Item("26").Left = 6;
+                                            //    Form.Items.Item("26").Top = 50;
+                                            //    Form.Items.Item("26").Visible = true;
+                                            //    Form.Items.Item("etNrPlaca").Left = Form.Items.Item("etCliente").Left;
+                                            //    Form.Items.Item("etNrPlaca").Top = 50;
+                                            //    Form.Items.Item("etNrPlaca").Visible = true;
+                                            //    ((EditText)Form.Items.Item("etNrPlaca").Specific).TabOrder = 4;
 
-                                            Form.Items.Item("btPesqPes").Visible = true;
+                                            //    //rota
+                                            //    Form.Items.Item("18").Left = 6;
+                                            //    Form.Items.Item("18").Top = 68;
+                                            //    Form.Items.Item("etNrRota").Left = Form.Items.Item("etCliente").Left;
+                                            //    Form.Items.Item("etNrRota").Top = 68;
+                                            //    Form.Items.Item("18").Visible = true;
+                                            //    Form.Items.Item("etNrRota").Visible = true;
+                                            //    ((EditText)Form.Items.Item("etNrRota").Specific).TabOrder = 5;
 
-                                            Form.Items.Item("etClienteN").Visible = true;
-                                            Form.Items.Item("etCliente").Visible = true;
-                                            Form.Items.Item("2").Visible = true;
+                                            //    // Número de Série
+                                            //    Form.Items.Item("Item_4").Left = 6;
+                                            //    Form.Items.Item("Item_4").Top = 86;
+                                            //    Form.Items.Item("Item_5").Left = Form.Items.Item("etCliente").Left;
+                                            //    Form.Items.Item("Item_5").Top = 86;
+                                            //    Form.Items.Item("Item_4").Visible = true;
+                                            //    Form.Items.Item("Item_5").Visible = true;
+                                            //    ((EditText)Form.Items.Item("Item_5").Specific).TabOrder = 6;
 
-                                            //rota
-                                            Form.Items.Item("18").Left = 17;
-                                            Form.Items.Item("etNrRota").Left = 98;
-                                            //placa
-                                            Form.Items.Item("26").Left = 17;
-                                            Form.Items.Item("26").Top = 27;
-                                            Form.Items.Item("etNrPlaca").Left = 98;
-                                            Form.Items.Item("etNrPlaca").Top = 27;
+                                            //    Form.Items.Item("btPesqPes").Visible = true;
 
+                                            //    Form.Items.Item("6658").Visible = false;
+                                            //    Form.Items.Item("cbUtlRes").Visible = false;
 
-                                            //cliente
-                                            Form.Items.Item("2").Top = 60;
-                                            Form.Items.Item("etCliente").Top = 60;
-                                            Form.Items.Item("etClienteN").Top = 60;
+                                            //    ((ComboBox)Form.Items.Item("cbDCol").Specific).TabOrder = 7;
+                                            //    ((EditText)Form.Items.Item("edtPeso").Specific).TabOrder = 8;
+                                            //    ((ComboBox)Form.Items.Item("cbTpRateio").Specific).TabOrder = 9;
 
-                                            //motorista
-                                            Form.Items.Item("22").Top = 27;
-                                            Form.Items.Item("22").Left = 510;
-                                            Form.Items.Item("etMotora").Top = 27;
-                                            Form.Items.Item("etMotora").Left = 590;
-                                            Form.Items.Item("etMotoraN").Top = 27;
-                                            Form.Items.Item("etMotoraN").Left = 670;
+                                            //    string query = @"
+                                            //            select 
+                                            //             'N' as ""#""
+                                            //                , T0.""DocEntry"" as ""Nº Interno""
+                                            //                , T0.""DocNum"" AS ""Nº OS""
+                                            //                , T0.""CardCode""
+                                            //                , T0.""CardName"" ""Cliente""
+                                            //                , T0.""U_NPlaca"" ""Placa""
+                                            //                ,(
+                                            //                 select 
+                                            //                     sum(T11.""Quantity"")
+                                            //                    from
+                                            //                        ORDR T00
+                                            //                     inner join RDR1 T11 on T11.""DocEntry""=T00.""DocEntry""    
+                                            //                     inner join OITM T22 on T22.""ItemCode""=T11.""ItemCode""
+                                            //                     inner join OITB t33 on t33.""ItmsGrpCod""=T22.""ItmsGrpCod""
+                                            //                    where 
+                                            //                     t33.""ItmsGrpCod"" IN (102, 118)
+                                            //                        and ( T00.""DocEntry""  in (T0.""DocEntry"") )
 
-                                            //data OS
-                                            Form.Items.Item("59").Top = 42;
-                                            Form.Items.Item("58").Top = 42;
-                                            Form.Items.Item("etDtOSI").Top = 42;
-                                            Form.Items.Item("etDtOSF").Top = 42;
+                                            //                ) ""m3""
+                                            //                , T0.""U_Tara"" ""Tara""
+                                            //                , T0.""U_PesoBruto"" ""Peso Bruto""
+                                            //                , T0.""U_PesoLiq"" ""Peso Liq.""
+                                            //            from
+                                            //                ORDR T0
+                                            //                left join ""@VEICULOS"" ON ""@VEICULOS"".""U_Placa"" = T0.""U_NPlaca""
+                                            //                left join OCRD TRANSP ON TRANSP.""CardCode"" = T0.""U_CodTransp""
+                                            //                left join OUSR ON T0.""UserSign"" = OUSR.""USERID""
+                                            //            where
+                                            //                T0.""CANCELED"" = 'N'
+                                            //                and T0.""DocStatus"" = 'O'
+                                            //                and T0.""U_Status"" = 'P'
+                                            //                and T0.""U_Situacao"" = 33
+                                            //    ";
 
-                                            Form.Items.Item("6658").Visible = false;
-                                            Form.Items.Item("cbUtlRes").Visible = false;
+                                            //    Form.DataSources.DataTables.Item("dtPes").ExecuteQuery(query);
 
-                                            string query = @"
-                                                    select 
-	                                                    'N' as ""#""
-                                                        , T0.""DocEntry"" as ""Nº Interno""
-                                                        , T0.""DocNum"" AS ""Nº OS""
-                                                        , T0.""CardCode""
-                                                        , T0.""CardName"" ""Cliente""
-                                                        , T0.""U_NPlaca"" ""Placa""
-                                                        ,(
-	                                                        select 
-	                                                            sum(T11.""Quantity"")
-                                                            from
-                                                                ORDR T00
-	                                                            inner join RDR1 T11 on T11.""DocEntry""=T00.""DocEntry""    
-	                                                            inner join OITM T22 on T22.""ItemCode""=T11.""ItemCode""
-	                                                            inner join OITB t33 on t33.""ItmsGrpCod""=T22.""ItmsGrpCod""
-                                                            where 
-	                                                            t33.""ItmsGrpCod"" IN (102, 118)
-                                                                and ( T00.""DocEntry""  in (T0.""DocEntry"") )
+                                            //    ((CheckBox)Form.Items.Item("ckSelTPes").Specific).ValOff = "N";
+                                            //    ((CheckBox)Form.Items.Item("ckSelTPes").Specific).ValOn = "Y";
 
-                                                        ) ""m3""
-                                                        , T0.""U_Tara"" ""Tara""
-                                                        , T0.""U_PesoBruto"" ""Peso Bruto""
-                                                        , T0.""U_PesoLiq"" ""Peso Liq.""
-                                                    from
-                                                        ORDR T0
-                                                        left join ""@VEICULOS"" ON ""@VEICULOS"".""U_Placa"" = T0.""U_NPlaca""
-                                                        left join OCRD TRANSP ON TRANSP.""CardCode"" = T0.""U_CodTransp""
-                                                        left join OUSR ON T0.""UserSign"" = OUSR.""USERID""
-                                                    where
-                                                        T0.""CANCELED"" = 'N'
-                                                        and T0.""DocStatus"" = 'O'
-                                                        and T0.""U_Status"" = 'P'
-                                                        and T0.""U_Situacao"" = 33
-                                            ";
-
-                                            Form.DataSources.DataTables.Item("dtPes").ExecuteQuery(query);
-
-                                            //Form.DataSources.UserDataSources.Add("chkTdPes", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 1);
-                                            //((CheckBox)Form.Items.Item("ckSelTPes").Specific).DataBind.SetBound(true, "", "chkTdPes");
-
-                                            ((CheckBox)Form.Items.Item("ckSelTPes").Specific).ValOff = "N";
-                                            ((CheckBox)Form.Items.Item("ckSelTPes").Specific).ValOn = "Y";
-
-                                            ConfiguraGridPes();
-                                            ((ComboBox)Form.Items.Item("cbAgrOS").Specific).Select("0");
-                                            ((ComboBox)Form.Items.Item("cbPeriodOS").Specific).Select("0");
-                                            //((ComboBox)Form.Items.Item("cbRespFat").Specific).Select("0");
-
+                                            //    ConfiguraGridPes();
+                                            //    ((ComboBox)Form.Items.Item("cbAgrOS").Specific).Select("0");
+                                            //    ((ComboBox)Form.Items.Item("cbPeriodOS").Specific).Select("0");
                                         }
                                         finally
                                         {
@@ -186,56 +184,73 @@ namespace Chess.IT.Services.View
                                         Form.Freeze(true);
                                         try
                                         {
-                                            Form.Items.Item("2").Left = 6;
-                                            Form.Items.Item("8").Left = 6;
-                                            Form.Items.Item("etNrCtr").Left = 98;
-                                            Form.Items.Item("11").Left = 6;
-                                            Form.Items.Item("cbModCtr").Left = 98;
-                                            //Form.Items.Item("26").Top = 42;
-                                            //Form.Items.Item("etNrPlaca").Top = 42;
-                                            Form.Items.Item("26").Visible = false;
-                                            Form.Items.Item("etNrPlaca").Visible = false;
-                                            Form.Items.Item("btPesqPes").Visible = false;
+                                            ////cliente
+                                            //Form.Items.Item("2").Left = 6;
+                                            //Form.Items.Item("2").Top = 13;
+                                            //Form.Items.Item("etCliente").Top = 13;
+                                            //Form.Items.Item("etClienteN").Top = 13;
+                                            
+                                            //Form.Items.Item("8").Left = 6;
+                                            //Form.Items.Item("etNrCtr").Left = Form.Items.Item("etCliente").Left;
+
+                                            //Form.Items.Item("11").Left = 6;
+                                            //Form.Items.Item("11").Top = 70;
+                                            //Form.Items.Item("cbModCtr").Left = Form.Items.Item("etCliente").Left;
+                                            //Form.Items.Item("cbModCtr").Top = 70;
+
+                                            //Form.Items.Item("26").Visible = false;
+                                            //Form.Items.Item("etNrPlaca").Visible = false;
+                                            //Form.Items.Item("btPesqPes").Visible = false;
+
+                                            ////rota
+                                            //Form.Items.Item("18").Left = 6;
+                                            //Form.Items.Item("18").Top = 88;
+                                            //Form.Items.Item("etNrRota").Left = Form.Items.Item("etCliente").Left;
+                                            //Form.Items.Item("etNrRota").Top = 88;
+
+                                            //Form.Items.Item("20").Left = 6;
+                                            //Form.Items.Item("20").Top = 106;
+                                            //Form.Items.Item("cbDiaCol").Left = Form.Items.Item("etCliente").Left;
+                                            //Form.Items.Item("cbDiaCol").Top = 106;
+
+                                            ////motorista
+                                            //Form.Items.Item("22").Top = Form.Items.Item("etDtCtrI").Top;
+                                            //Form.Items.Item("22").Left = Form.Items.Item("6658").Left;
+                                            //Form.Items.Item("etMotora").Top = Form.Items.Item("etDtCtrI").Top;
+                                            //Form.Items.Item("etMotora").Left = Form.Items.Item("cbUtlRes").Left;
+                                            //Form.Items.Item("etMotoraN").Top = Form.Items.Item("etNrCtr").Top;
+                                            //Form.Items.Item("etMotoraN").Left = Form.Items.Item("6658").Left;
+
+                                            //Form.Items.Item("6658").Top = Form.Items.Item("etCliente").Top;
+                                            //Form.Items.Item("6658").Visible = true;
+                                            //Form.Items.Item("cbUtlRes").Top = Form.Items.Item("etCliente").Top;
+                                            //Form.Items.Item("cbUtlRes").Visible = true;
+
+                                            ////placa
+                                            //Form.Items.Item("31").Left = Form.Items.Item("6658").Left;
+                                            //Form.Items.Item("31").Top = Form.Items.Item("cbModCtr").Top;
+                                            //Form.Items.Item("etDtSaida").Left = Form.Items.Item("cbUtlRes").Left;
+                                            //Form.Items.Item("etDtSaida").Top = Form.Items.Item("cbModCtr").Top;
+
+                                            //Form.Items.Item("32").Left = Form.Items.Item("6658").Left;
+                                            //Form.Items.Item("32").Top = Form.Items.Item("etNrRota").Top;
+                                            //Form.Items.Item("etHrSaida").Left = Form.Items.Item("cbUtlRes").Left;
+                                            //Form.Items.Item("etHrSaida").Top = Form.Items.Item("etNrRota").Top;
+
+                                            //Form.Items.Item("34").Left = Form.Items.Item("6658").Left;
+                                            //Form.Items.Item("34").Top = Form.Items.Item("cbDiaCol").Top;
+                                            //Form.Items.Item("etNrPlOS").Left = Form.Items.Item("cbUtlRes").Left;
+                                            //Form.Items.Item("etNrPlOS").Top = Form.Items.Item("cbDiaCol").Top;
 
 
-                                            //rota
-                                            Form.Items.Item("18").Left = 350;
-                                            Form.Items.Item("etNrRota").Left = 400;
-                                            //placa
-                                            Form.Items.Item("26").Left = 510;
-                                            Form.Items.Item("26").Top = 42;
-                                            Form.Items.Item("etNrPlaca").Left = 590;
-                                            Form.Items.Item("etNrPlaca").Top = 42;
 
+                                            //string query = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"", 0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"", cast('' as varchar(254)) as ""CodTransp"" from dummy";
 
-                                            //cliente
-                                            Form.Items.Item("2").Top = 13;
-                                            Form.Items.Item("etCliente").Top = 13;
-                                            Form.Items.Item("etClienteN").Top = 13;
+                                            //Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(query);
 
-                                            //motorista
-                                            Form.Items.Item("22").Top = 100;
-                                            Form.Items.Item("22").Left = Form.Items.Item("6658").Left;
-                                            Form.Items.Item("etMotora").Top = 100;
-                                            Form.Items.Item("etMotora").Left = Form.Items.Item("6658").Left + 60;
-                                            Form.Items.Item("etMotoraN").Top = 120;
-                                            Form.Items.Item("etMotoraN").Left = Form.Items.Item("6658").Left;
-
-                                            Form.Items.Item("6658").Visible = true;
-                                            Form.Items.Item("cbUtlRes").Visible = true;
-
-                                            Form.Items.Item("20").Top = 30;
-                                            Form.Items.Item("20").Left = 490;
-                                            Form.Items.Item("cbDiaCol").Top = 30;
-                                            Form.Items.Item("cbDiaCol").Left = 570;
-
-                                            string query = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"", 0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"", cast('' as varchar(254)) as ""CodTransp"" from dummy";
-
-                                            Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(query);
-
-                                            ((ComboBox)Form.Items.Item("cbAgrOS").Specific).Select("0");
-                                            ((ComboBox)Form.Items.Item("cbPeriodOS").Specific).Select("0");
-                                            ((ComboBox)Form.Items.Item("cbRespFat").Specific).Select("0");
+                                            //((ComboBox)Form.Items.Item("cbAgrOS").Specific).Select("0");
+                                            //((ComboBox)Form.Items.Item("cbPeriodOS").Specific).Select("0");
+                                            //((ComboBox)Form.Items.Item("cbRespFat").Specific).Select("0");
                                         }
                                         finally
                                         {
@@ -249,61 +264,127 @@ namespace Chess.IT.Services.View
                                         Form.Freeze(true);
                                         try
                                         {
-                                            Form.Items.Item("2").Left = 17;
-                                            Form.Items.Item("8").Left = 670;
-                                            Form.Items.Item("etNrCtr").Left = 750;
-                                            Form.Items.Item("11").Left = 670;
-                                            Form.Items.Item("cbModCtr").Left = 750;
-                                            Form.Items.Item("26").Top = 59;
-                                            Form.Items.Item("etNrPlaca").Top = 59;
-                                            Form.Items.Item("26").Visible = true;
-                                            Form.Items.Item("etNrPlaca").Visible = true;
-                                            Form.Items.Item("btPesqPes").Visible = false;
+                                            ////cliente
+                                            //Form.Items.Item("2").Left = 6;
+                                            //Form.Items.Item("2").Top = 13;
+                                            //Form.Items.Item("etCliente").Top = 13;
+                                            //Form.Items.Item("etClienteN").Top = 13;
 
-                                            Form.Items.Item("6658").Visible = false;
-                                            Form.Items.Item("cbUtlRes").Visible = false;
+                                            ////data OS
+                                            //Form.Items.Item("59").Left = 6;
+                                            //Form.Items.Item("59").Top = 31;
+                                            //Form.Items.Item("58").Top = 31;
+                                            //Form.Items.Item("etDtOSI").Top = 31;
+                                            //Form.Items.Item("etDtOSF").Top = 31;
+                                            //Form.Items.Item("59").Visible = true;
+                                            //Form.Items.Item("58").Visible = true;
+                                            //Form.Items.Item("etDtOSI").Visible = true;
+                                            //Form.Items.Item("etDtOSF").Visible = true;
 
-                                            Form.Items.Item("20").Top = 10;
-                                            Form.Items.Item("20").Left = 670;
-                                            Form.Items.Item("cbDiaCol").Top = 10;
-                                            Form.Items.Item("cbDiaCol").Left = 750;
+                                            //Form.Items.Item("49").Left = 6;
+                                            //Form.Items.Item("49").Top = 49;
+                                            //Form.Items.Item("etNrOS").Top = 49;
 
-                                            //rota
-                                            Form.Items.Item("18").Left = 510;
-                                            Form.Items.Item("etNrRota").Left = 590;
-                                            //placa
-                                            Form.Items.Item("26").Left = 510;
-                                            Form.Items.Item("26").Top = 42;
-                                            Form.Items.Item("etNrPlaca").Left = 590;
-                                            Form.Items.Item("etNrPlaca").Top = 42;
+                                            //Form.Items.Item("51").Left = 6;
+                                            //Form.Items.Item("51").Top = 67;
+                                            //Form.Items.Item("cbTpOper").Top = 67;
+
+                                            //Form.Items.Item("53").Left = 6;
+                                            //Form.Items.Item("53").Top = 85;
+                                            //Form.Items.Item("cbSitOS").Top = 85;
+
+                                            //Form.Items.Item("45").Left = 6;
+                                            //Form.Items.Item("45").Top = 103;
+                                            //Form.Items.Item("cbAgrOS").Left = Form.Items.Item("etCliente").Left;
+                                            //Form.Items.Item("cbAgrOS").Top = 103;
+
+                                            //Form.Items.Item("62").Left = 6;
+                                            //Form.Items.Item("62").Top = 121;
+                                            //Form.Items.Item("cbPeriodOS").Left = Form.Items.Item("etCliente").Left;
+                                            //Form.Items.Item("cbPeriodOS").Top = 121;
 
 
-                                            //cliente
-                                            Form.Items.Item("2").Top = 13;
-                                            Form.Items.Item("etCliente").Top = 13;
-                                            Form.Items.Item("etClienteN").Top = 13;
 
-                                            //motorista
-                                            Form.Items.Item("22").Top = 27;
-                                            Form.Items.Item("22").Left = 510;
-                                            Form.Items.Item("etMotora").Top = 27;
-                                            Form.Items.Item("etMotora").Left = 590;
-                                            Form.Items.Item("etMotoraN").Top = 27;
-                                            Form.Items.Item("etMotoraN").Left = 670;
+                                            //Form.Items.Item("6658").Top = Form.Items.Item("etCliente").Top;
+                                            //Form.Items.Item("6658").Visible = false;
+                                            //Form.Items.Item("cbUtlRes").Top = Form.Items.Item("etCliente").Top;
+                                            //Form.Items.Item("cbUtlRes").Visible = false;
 
-                                            //data OS
-                                            Form.Items.Item("59").Top = 28;
-                                            Form.Items.Item("58").Top = 28;
-                                            Form.Items.Item("etDtOSI").Top = 28;
-                                            Form.Items.Item("etDtOSF").Top = 28;
 
-                                            string query = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"", 0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"", cast('' as varchar(254)) as ""CodTransp"" from dummy";
+                                            //Form.Items.Item("57").Top = Form.Items.Item("etCliente").Top;
+                                            //Form.Items.Item("57").Left = Form.Items.Item("6658").Left;
+                                            //Form.Items.Item("etUsuResp").Top = Form.Items.Item("etCliente").Top;
+                                            //Form.Items.Item("etUsuResp").Left = Form.Items.Item("cbUtlRes").Left;
 
-                                            Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(query);
 
-                                            ((ComboBox)Form.Items.Item("cbAgrOS").Specific).Select("0");
-                                            ((ComboBox)Form.Items.Item("cbPeriodOS").Specific).Select("0");
-                                            ((ComboBox)Form.Items.Item("cbRespFat").Specific).Select("0");
+                                            //Form.Items.Item("8").Left = Form.Items.Item("47").Left;
+                                            //Form.Items.Item("etNrCtr").Left = Form.Items.Item("cbRespFat").Left;
+
+                                            ////motorista
+                                            //Form.Items.Item("22").Top = Form.Items.Item("etDtOSI").Top;
+                                            //Form.Items.Item("22").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("etMotora").Top = Form.Items.Item("etDtOSI").Top;
+                                            //Form.Items.Item("etMotora").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("etMotoraN").Top = Form.Items.Item("etNrOS").Top;
+                                            //Form.Items.Item("etMotoraN").Left = Form.Items.Item("57").Left;
+
+                                           
+
+                                            ////placa
+                                            //Form.Items.Item("31").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("31").Top = Form.Items.Item("cbModCtr").Top;
+                                            //Form.Items.Item("etDtSaida").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("etDtSaida").Top = Form.Items.Item("cbModCtr").Top;
+
+                                            //Form.Items.Item("32").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("32").Top = Form.Items.Item("etNrRota").Top;
+                                            //Form.Items.Item("etHrSaida").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("etHrSaida").Top = Form.Items.Item("etNrRota").Top;
+
+                                            //Form.Items.Item("26").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("26").Top = Form.Items.Item("cbTpOper").Top;
+                                            //Form.Items.Item("etNrPlaca").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("etNrPlaca").Top = Form.Items.Item("cbTpOper").Top;
+
+                                            //Form.Items.Item("11").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("11").Top = Form.Items.Item("cbSitOS").Top;
+                                            //Form.Items.Item("cbModCtr").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("cbModCtr").Top = Form.Items.Item("cbSitOS").Top;
+
+                                            //Form.Items.Item("Item_9").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("Item_9").Top = Form.Items.Item("cbAgrOS").Top;
+                                            //Form.Items.Item("edTransp").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("edTransp").Top = Form.Items.Item("cbAgrOS").Top;
+
+                                            //Form.Items.Item("Item_9").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("Item_9").Top = Form.Items.Item("cbAgrOS").Top;
+                                            //Form.Items.Item("edTransp").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("edTransp").Top = Form.Items.Item("cbAgrOS").Top;
+
+                                            //Form.Items.Item("18").Left = Form.Items.Item("57").Left;
+                                            //Form.Items.Item("18").Top = Form.Items.Item("cbPeriodOS").Top;
+                                            //Form.Items.Item("etNrRota").Left = Form.Items.Item("etUsuResp").Left;
+                                            //Form.Items.Item("etNrRota").Top = Form.Items.Item("cbPeriodOS").Top;
+
+                                            //Form.Items.Item("26").Visible = true;
+                                            //Form.Items.Item("etNrPlaca").Visible = true;
+                                            //Form.Items.Item("btPesqPes").Visible = false;
+
+                                            //Form.Items.Item("6658").Visible = false;
+                                            //Form.Items.Item("cbUtlRes").Visible = false;
+
+                                            //Form.Items.Item("20").Top = 10;
+                                            //Form.Items.Item("20").Left = 670;
+                                            //Form.Items.Item("cbDiaCol").Top = 10;
+                                            //Form.Items.Item("cbDiaCol").Left = 750;
+
+                                            //string query = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"", 0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"", cast('' as varchar(254)) as ""CodTransp"" from dummy";
+
+                                            //Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(query);
+
+                                            //((ComboBox)Form.Items.Item("cbAgrOS").Specific).Select("0");
+                                            //((ComboBox)Form.Items.Item("cbPeriodOS").Specific).Select("0");
+                                            //((ComboBox)Form.Items.Item("cbRespFat").Specific).Select("0");
                                         }
                                         finally
                                         {
@@ -1165,7 +1246,11 @@ namespace Chess.IT.Services.View
                                             }
 
                                         }
-                                        if (pVal.ItemUID.Equals("edTransp"))
+                                        else if (pVal.ItemUID.Equals("etNrPlPs"))
+                                        {
+                                            Form.DataSources.UserDataSources.Item("PlacaPs").Value = chooseFromListEvent.SelectedObjects.GetValue("U_Placa", 0).ToString();
+                                        }
+                                        else if (pVal.ItemUID.Equals("edTransp"))
                                         {
                                             Form.DataSources.DataTables.Item("dtFiltro").SetValue("CodTransp", 0, chooseFromListEvent.SelectedObjects.GetValue("CardCode", 0).ToString());
 
@@ -1898,7 +1983,7 @@ namespace Chess.IT.Services.View
 
             string selecionar = ((CheckBox)Form.Items.Item("ckSelTPes").Specific).Checked ? "Y" : "N";
             string cliente = ((EditText)Form.Items.Item("etCliente").Specific).String;
-            string placa = ((EditText)Form.Items.Item("etNrPlaca").Specific).String;
+            string placa = ((EditText)Form.Items.Item("etNrPlPs").Specific).String;
             string nrRota = ((EditText)Form.Items.Item("etNrRota").Specific).String;
             string nrSerie = ((EditText)Form.Items.Item("Item_5").Specific).String;
             ComboBox cbEndereco = ((ComboBox)Form.Items.Item("Item_8").Specific);
@@ -2860,6 +2945,7 @@ namespace Chess.IT.Services.View
             documents.Lines.UnitPrice = unitPrice;
             documents.Lines.AgreementNo = contrato;
             documents.Lines.AgreementRowNumber = AgrLineNum;
+            documents.Lines.TaxCode = "ISS_5";
             documents.Lines.UserFields.Fields.Item("U_UtilTax").Value = usage;
 
             documents.Lines.Add();
@@ -3211,7 +3297,8 @@ namespace Chess.IT.Services.View
                                                               case OCRD.""U_TipoFat"" when '1' then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')
                                                               						  when '2' then case OITM.""ItmsGrpCod"" when 102 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'FAT') 
                                                               															     when 118 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')  end 
-                                                              end as ""SeqCode""
+                                                              end as ""SeqCode"",
+                                                              ORDR.""U_RespFat""
                                                          from ORDR
                                                          inner join RDR1 on RDR1.""DocEntry"" = ORDR.""DocEntry""
                                                          inner join OITM on OITM.""ItemCode"" = RDR1.""ItemCode""   
@@ -3250,6 +3337,7 @@ namespace Chess.IT.Services.View
                                 faturaModel.Draft = ((CheckBoxColumn)gridOS.Columns.Item("Esboço")).IsChecked(row);
                                 faturaModel.GroupNum = recordSet.Fields.Item(11).Value.ToString();
                                 faturaModel.SeqCode = Convert.ToInt32(recordSet.Fields.Item("SeqCode").Value);
+                                faturaModel.RespFat = recordSet.Fields.Item("RespFat").Value.ToString();
 
                                 if (faturaModel.Quantity <= 0)
                                 {
@@ -3322,6 +3410,7 @@ namespace Chess.IT.Services.View
                         //documentNFSE.DocDueDate = DateTime.Now;
                         documentNFSE.BPL_IDAssignedToInvoice = 1;
                         documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);
+                        documentNFSE.UserFields.Fields.Item("U_RespFat").Value = faturaGroup.First().RespFat;
 
                         foreach (Model.FaturaModel faturaModel in faturaGroup)
                         {

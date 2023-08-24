@@ -6,12 +6,12 @@
     </AdmInfo>
     <UserFieldsMD>
       <row>
-        <Name>MotoPrinc</Name>
+        <Name>Motorista</Name>
         <Type>db_Alpha</Type>
         <Size>50</Size>
-        <Description>Motorista Principal:</Description>
+        <Description>Motorista:</Description>
         <SubType>st_None</SubType>
-        <TableName>@VEICULOS_DADOS</TableName>
+        <TableName>@VEICULOS</TableName>
         <FieldID>10</FieldID>
         <EditSize>50</EditSize>
         <Mandatory>tNO</Mandatory>
@@ -25,12 +25,12 @@
     </AdmInfo>
     <UserFieldsMD>
       <row>
-        <Name>CapCargaKG</Name>
+        <Name>Capacidade</Name>
         <Type>db_Float</Type>
         <Size>16</Size>
-        <Description>Capacidade de Carga (m3):</Description>
+        <Description>Capacidade:</Description>
         <SubType>st_Measurement</SubType>
-        <TableName>@VEICULOS_DADOS</TableName>
+        <TableName>@VEICULOSS</TableName>
         <FieldID>8</FieldID>
         <EditSize>16</EditSize>
         <Mandatory>tNO</Mandatory>

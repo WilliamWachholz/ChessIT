@@ -129,9 +129,6 @@
     <EmbeddedResource Include="SrfFiles\FrmCnfIntegraBalanca.srf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="SrfFiles\FrmGeraOS.srf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="SrfFiles\FrmNotasGeradas.srf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -186,6 +183,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="services\hana\AtualizaCertificadoOS.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SrfFiles\FrmGeraOS.srf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
