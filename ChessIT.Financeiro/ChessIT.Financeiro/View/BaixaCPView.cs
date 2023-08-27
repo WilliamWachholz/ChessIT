@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -341,23 +341,6 @@ namespace ChessIT.Financeiro.View
 
                                             m_TotaisDesconto[pVal.Row] = valorDesc;
 
-                                            if (!m_TotaisPagar.ContainsKey(pVal.Row))
-                                                m_TotaisPagar.Add(pVal.Row, 0);
-
-                                            m_TotaisPagar[pVal.Row] = valorTotal;
-                                        }
-
-                                        Totalizar();
-                                    }
-
-                                    if (pVal.ColUID == "Total a Pagar")
-                                    {
-                                        Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
-
-                                        double valorTotal = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(pVal.Row));
-
-                                        if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(pVal.Row))
-                                        {                                            
                                             if (!m_TotaisPagar.ContainsKey(pVal.Row))
                                                 m_TotaisPagar.Add(pVal.Row, 0);
 
@@ -714,7 +697,7 @@ namespace ChessIT.Financeiro.View
 		                            OCRD.""CardName"" AS ""Fornecedor"",
                                     JDT1.""DueDate"" AS ""Data Vcto."",
                                     (select max(OITR.""ReconDate"") from ITR1 inner join OITR on OITR.""ReconNum"" = ITR1.""ReconNum"" where OITR.""Canceled"" = 'N' and ITR1.""TransId"" = JDT1.""TransId"" and ITR1.""TransRowId"" = JDT1.""Line_ID"") as ""Data Baixa"",
-		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) || '/' || cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and TX.""ShortName"" LIKE 'FOR%') as varchar(10)) as ""Parcela"",
+		                            cast((JDT1.""Line_ID"" + 1) as varchar(10)) || '/' || cast((select count(*) from JDT1 TX where TX.""TransId"" = JDT1.""TransId"" and (TX.""ShortName"" LIKE 'FOR%' OR TX.""ShortName"" LIKE 'FUN%')) as varchar(10)) as ""Parcela"",
 		                            JDT1.""Credit"" AS ""Valor Parcela"",
 		                            COALESCE((select sum(""U_ValorDoDesconto"")
                                     from VPM2 
@@ -794,7 +777,7 @@ namespace ChessIT.Financeiro.View
                             and OJDT.""TransType"" <> 204
                             and JDT1.""Credit"" > 0
                             --and ""MthDate"" is null
-                            and JDT1.""ShortName"" LIKE 'FOR%'
+                            and (JDT1.""ShortName"" LIKE 'FOR%' OR JDT1.""ShortName"" LIKE 'FUN%')
                             and OJDT.""StornoToTr"" IS NULL
                             and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
                             and ('{0}' = '' or OJDT.""U_NDocFin"" = '{0}')
@@ -871,7 +854,7 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Data Baixa").Editable = false;
                 gridTitulos.Columns.Item("Parcela").Editable = false;
                 gridTitulos.Columns.Item("Valor Parcela").Editable = false;
-                //gridTitulos.Columns.Item("Total a Pagar").Editable = false;
+                gridTitulos.Columns.Item("Total a Pagar").Editable = false;
                 gridTitulos.Columns.Item("Valor Pago").Editable = false;
                 gridTitulos.Columns.Item("Valor Saldo").Editable = false;
                 gridTitulos.Columns.Item("Conta").Editable = false;
@@ -1217,14 +1200,15 @@ namespace ChessIT.Financeiro.View
                         }
 
                         payments.Invoices.DocLine = baixaCPModel.Parcela - 1;
-                        payments.Invoices.SumApplied = baixaCPModel.TotalPagar + baixaCPModel.ValorDesconto;
+                        payments.Invoices.SumApplied = (baixaCPModel.TotalPagar + baixaCPModel.ValorDesconto) * proporcionalGrupo;
+                        
                         //payments.Invoices.TotalDiscount = baixaCPModel.ValorDesconto;
 
-                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
-                        payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto;
-                        payments.Invoices.UserFields.Fields.Item("U_ValorDoJurosMora").Value = baixaCPModel.ValorJuros;
-                        payments.Invoices.UserFields.Fields.Item("U_ValorMulta").Value = baixaCPModel.ValorMulta;
-                        payments.Invoices.UserFields.Fields.Item("U_TotalDoPagamento").Value = baixaCPModel.TotalPagar - baixaCPModel.ValorDesconto + baixaCPModel.ValorJuros + baixaCPModel.ValorMulta;
+                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar * proporcionalGrupo;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto * proporcionalGrupo;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorDoJurosMora").Value = baixaCPModel.ValorJuros * proporcionalGrupo;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorMulta").Value = baixaCPModel.ValorMulta * proporcionalGrupo;
+                        payments.Invoices.UserFields.Fields.Item("U_TotalDoPagamento").Value = (baixaCPModel.TotalPagar - baixaCPModel.ValorDesconto + baixaCPModel.ValorJuros + baixaCPModel.ValorMulta) * proporcionalGrupo;
 
                     }
 
