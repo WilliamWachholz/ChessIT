@@ -349,6 +349,23 @@ namespace ChessIT.Financeiro.View
 
                                         Totalizar();
                                     }
+
+                                    if (pVal.ColUID == "Total a Pagar")
+                                    {
+                                        Grid gridTitulos = (Grid)Form.Items.Item("gridTitulo").Specific;
+
+                                        double valorTotal = Controller.MainController.ConvertDouble(((EditTextColumn)gridTitulos.Columns.Item("Total a Pagar")).GetText(pVal.Row));
+
+                                        if (((CheckBoxColumn)gridTitulos.Columns.Item("Check")).IsChecked(pVal.Row))
+                                        {
+                                            if (!m_TotaisPagar.ContainsKey(pVal.Row))
+                                                m_TotaisPagar.Add(pVal.Row, 0);
+
+                                            m_TotaisPagar[pVal.Row] = valorTotal;
+                                        }
+
+                                        Totalizar();
+                                    }
                                 }
                             }
 
@@ -854,7 +871,7 @@ namespace ChessIT.Financeiro.View
                 gridTitulos.Columns.Item("Data Baixa").Editable = false;
                 gridTitulos.Columns.Item("Parcela").Editable = false;
                 gridTitulos.Columns.Item("Valor Parcela").Editable = false;
-                gridTitulos.Columns.Item("Total a Pagar").Editable = false;
+                //gridTitulos.Columns.Item("Total a Pagar").Editable = false;
                 gridTitulos.Columns.Item("Valor Pago").Editable = false;
                 gridTitulos.Columns.Item("Valor Saldo").Editable = false;
                 gridTitulos.Columns.Item("Conta").Editable = false;
@@ -1200,15 +1217,15 @@ namespace ChessIT.Financeiro.View
                         }
 
                         payments.Invoices.DocLine = baixaCPModel.Parcela - 1;
-                        payments.Invoices.SumApplied = (baixaCPModel.TotalPagar + baixaCPModel.ValorDesconto) * proporcionalGrupo;
+                        payments.Invoices.SumApplied = (baixaCPModel.TotalPagar + baixaCPModel.ValorDesconto) ;
                         
                         //payments.Invoices.TotalDiscount = baixaCPModel.ValorDesconto;
 
-                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar * proporcionalGrupo;
-                        payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto * proporcionalGrupo;
-                        payments.Invoices.UserFields.Fields.Item("U_ValorDoJurosMora").Value = baixaCPModel.ValorJuros * proporcionalGrupo;
-                        payments.Invoices.UserFields.Fields.Item("U_ValorMulta").Value = baixaCPModel.ValorMulta * proporcionalGrupo;
-                        payments.Invoices.UserFields.Fields.Item("U_TotalDoPagamento").Value = (baixaCPModel.TotalPagar - baixaCPModel.ValorDesconto + baixaCPModel.ValorJuros + baixaCPModel.ValorMulta) * proporcionalGrupo;
+                        payments.Invoices.UserFields.Fields.Item("U_TotalAPagar").Value = baixaCPModel.TotalPagar;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorDoDesconto").Value = baixaCPModel.ValorDesconto;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorDoJurosMora").Value = baixaCPModel.ValorJuros;
+                        payments.Invoices.UserFields.Fields.Item("U_ValorMulta").Value = baixaCPModel.ValorMulta;
+                        payments.Invoices.UserFields.Fields.Item("U_TotalDoPagamento").Value = (baixaCPModel.TotalPagar - baixaCPModel.ValorDesconto + baixaCPModel.ValorJuros + baixaCPModel.ValorMulta) ;
 
                     }
 
