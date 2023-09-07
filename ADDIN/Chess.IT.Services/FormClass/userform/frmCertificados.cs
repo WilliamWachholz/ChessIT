@@ -1,4 +1,4 @@
-﻿using Castle.Core.Logging;
+using Castle.Core.Logging;
 using Chess.IT.Services.services;
 using JBC.Framework.Attribute;
 using JBC.Framework.Form;
@@ -56,6 +56,7 @@ namespace Chess.IT.Services.FormClass.userform
                 return _JBCKURICAService;
             }
         }
+
         public override void OnInitializeComponent()
         {
             try
@@ -94,6 +95,7 @@ namespace Chess.IT.Services.FormClass.userform
             }
 
         }
+
         private void ConfiguraTela()
         {
             try
@@ -130,6 +132,7 @@ namespace Chess.IT.Services.FormClass.userform
                 this._oForm.Freeze(false);
             }
         }
+
         private void ConfiguraMatrix1()
         {
             try
@@ -150,6 +153,7 @@ namespace Chess.IT.Services.FormClass.userform
                 //_oForm.Freeze(false);
             }
         }
+
         private void Consultar(bool bIncialConfig = false)
         {
             try
@@ -206,6 +210,7 @@ namespace Chess.IT.Services.FormClass.userform
                 //Application.ActivateMenuItem("1304");
             }
         }
+
         private void ConfigurarColunas()
         {
             try
@@ -223,7 +228,7 @@ namespace Chess.IT.Services.FormClass.userform
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "CardCode");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "CardCode";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Código";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 50;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
@@ -232,12 +237,11 @@ namespace Chess.IT.Services.FormClass.userform
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "CardName");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "CardName";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Razão Social";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
                 iCountCol++;
-
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "Carrier");
@@ -257,53 +261,57 @@ namespace Chess.IT.Services.FormClass.userform
                 iCountCol++;
 
 
-                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
+                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "OS");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "OS";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
-                this._oMatrix1.Columns.Item(iCountCol).Width = 50;
-                this._oMatrix1.Columns.Item(iCountCol).Editable = false;
-                ((LinkedButton)this._oMatrix1.Columns.Item(iCountCol).ExtendedObject).LinkedObject = BoLinkedObject.lf_Order;
+                this._oMatrix1.Columns.Item(iCountCol).Width = 10;
+                this._oMatrix1.Columns.Item(iCountCol).Visible = false;
+                                
                 iCountCol++;
 
-                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
+                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "DocNumOS");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "DocNumOS";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "OS";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
+                ((LinkedButton)this._oMatrix1.Columns.Item(iCountCol).ExtendedObject).LinkedObject = BoLinkedObject.lf_Order;
+
+
                 iCountCol++;
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "DocDateOS");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "DocDateOS";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Data OS";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
                 iCountCol++;
 
-
-                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
-                this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "NFS");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "NFS";
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
-                this._oMatrix1.Columns.Item(iCountCol).Width = 50;
-                this._oMatrix1.Columns.Item(iCountCol).Editable = false;
-                ((LinkedButton)this._oMatrix1.Columns.Item(iCountCol).ExtendedObject).LinkedObject = BoLinkedObject.lf_Invoice;
-                iCountCol++;
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
+                this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "NFS");
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
+                this._oMatrix1.Columns.Item(iCountCol).Width = 10;
+                this._oMatrix1.Columns.Item(iCountCol).Visible = false;
+                
+                iCountCol++;
+
+                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "DocNumNFS");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "DocNumNFS";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "NF";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
+                ((LinkedButton)this._oMatrix1.Columns.Item(iCountCol).ExtendedObject).LinkedObject = BoLinkedObject.lf_Invoice;
                 iCountCol++;
 
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "NNF");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Nº NF";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Nº";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
@@ -354,6 +362,7 @@ namespace Chess.IT.Services.FormClass.userform
                 //_oForm.Freeze(false);
             }
         }
+
         private void AddChooseFromListOS()
         {
             try
@@ -396,6 +405,7 @@ namespace Chess.IT.Services.FormClass.userform
                 Log.Error(ex.Message, ex);
             }
         }
+
         private void AddChooseFromListNFS()
         {
             try
@@ -438,6 +448,7 @@ namespace Chess.IT.Services.FormClass.userform
                 Log.Error(ex.Message, ex);
             }
         }
+
         private void AddChooseFromListPN()
         {
             try
@@ -511,6 +522,7 @@ namespace Chess.IT.Services.FormClass.userform
 
             }
         }
+
         private void SetMascaraDeData()
         {
             //this._oForm.DataSources.UserDataSources.Add("DtDe", SAPbouiCOM.BoDataType.dt_DATE, 0);
@@ -519,6 +531,7 @@ namespace Chess.IT.Services.FormClass.userform
             //this._oForm.DataSources.UserDataSources.Add("DtAte", SAPbouiCOM.BoDataType.dt_DATE, 0);
             //this._EditTextDataAte.DataBind.SetBound(true, "", "DtAte");
         }
+
         private void GetUIControls()
         {
             this._oForm = ((JBC.Framework.Form.JBCFormBase)(this)).UIAPIRawForm;
@@ -546,6 +559,7 @@ namespace Chess.IT.Services.FormClass.userform
             this._ButtonDesmarcarTudo = (Button)this.GetItem("Item_24").Specific;            
             this._oMatrix1 = ((SAPbouiCOM.Matrix)(this.GetItem("Item_9")).Specific);
         }
+
         protected override void OnFormCloseAfter(SBOItemEventArg pVal)
         {
             try
@@ -561,6 +575,7 @@ namespace Chess.IT.Services.FormClass.userform
 
             }
         }
+
         private void SetEventHandlers(bool exit = false)
         {
             if (!exit)
@@ -579,10 +594,11 @@ namespace Chess.IT.Services.FormClass.userform
 
                 this._ButtonConsultar.ClickAfter += _ButtonConsultar_ClickAfter;
 
-
                 this._ButtonCertificar.PressedAfter += _ButtonCertificar_PressedAfter;
                 this._ButtonCancelar.PressedAfter += _ButtonCancelar_PressedAfter;
                 this._ButtonImprimir.PressedAfter += _ButtonImprimir_PressedAfter;
+
+                this._oMatrix1.LinkPressedBefore += _oMatrix1_LinkPressedBefore;
             }
             else
             {
@@ -603,6 +619,30 @@ namespace Chess.IT.Services.FormClass.userform
                 this._ButtonCertificar.PressedAfter -= _ButtonCertificar_PressedAfter;
                 this._ButtonCancelar.PressedAfter -= _ButtonCancelar_PressedAfter;
                 this._ButtonImprimir.PressedAfter -= _ButtonImprimir_PressedAfter;
+
+                this._oMatrix1.LinkPressedBefore -= _oMatrix1_LinkPressedBefore;
+            }
+        }
+
+        private void _oMatrix1_LinkPressedBefore(object sboObject, SBOItemEventArg pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+
+            if (pVal.ColUID == "C7")
+            {
+                BubbleEvent = false;
+
+                string docEntry = ((EditText)_oMatrix1.Columns.Item("C6").Cells.Item(pVal.Row).Specific).String;
+
+                app.OpenForm(BoFormObjectEnum.fo_Order, "17", docEntry);
+            }
+            else if(pVal.ColUID == "C10")
+            {
+                BubbleEvent = false;
+
+                string docEntry = ((EditText)_oMatrix1.Columns.Item("C9").Cells.Item(pVal.Row).Specific).String;
+
+                app.OpenForm(BoFormObjectEnum.fo_Invoice, "13", docEntry);
             }
         }
 
@@ -637,12 +677,12 @@ namespace Chess.IT.Services.FormClass.userform
                 }
                 else if (bSelecionouVariosClientes)
                 {
-                    Log.ErrorFormat("Não é permitida imprimir vários certificados.");
+                    Log.ErrorFormat("Não é permitido imprimir vários certificados.");
                 }
                 else
                 {
-
-                    oApplication.ActivateMenuItem("794607f5742c487289b6f15ec790feb4");
+                    oApplication.ActivateMenuItem("9623aca5034543ebb5d84076e357dd56");
+                    //oApplication.ActivateMenuItem("794607f5742c487289b6f15ec790feb4");
 
                     Form oForm = oApplication.Forms.GetFormByTypeAndCount(410000100, 1);
 
@@ -781,12 +821,22 @@ namespace Chess.IT.Services.FormClass.userform
                 if (oApplication.MessageBox(string.Format("{0}, você confirma a Geração de uma nova numeração de Certificado?", oJBCKURICAService.UserName()), 1, "Sim", "Não") == 1)
                 {
                     string cardCode = "";
+                    Dictionary<string, int> totalOSPorNF = new Dictionary<string, int>();
+                    Dictionary<string, int> marcadasOSPorNF = new Dictionary<string, int>();
 
                     this._oMatrix1.FlushToDataSource();
                     bool bSelecionouAlgo = false;
                     bool bSelecionouVariosClientes = false;
+                    bool bSelecionouJaCertificado = false;
                     for (int i = 0; i < this.dtMatrix1.Rows.Count; i++)
                     {
+                        string nota = this.dtMatrix1.GetValue("NFS", i).ToString();
+
+                        if (totalOSPorNF.ContainsKey(nota))
+                            totalOSPorNF[nota] = totalOSPorNF[nota] + 1;
+                        else
+                            totalOSPorNF[nota] = 1;
+
                         if (this.dtMatrix1.GetValue("SEL", i).ToString().Equals("Y"))
                         {
                             bSelecionouAlgo = true;
@@ -797,16 +847,35 @@ namespace Chess.IT.Services.FormClass.userform
                                 break;
                             }
 
+                            if (this.dtMatrix1.GetValue("CertificadoOS", i).ToString() != "")
+                            {
+                                bSelecionouJaCertificado = true;
+                                break;
+                            }
+
                             cardCode = this.dtMatrix1.GetValue("CardCode", i).ToString();
+
+                            if (marcadasOSPorNF.ContainsKey(nota))
+                                marcadasOSPorNF[nota] = marcadasOSPorNF[nota] + 1;
+                            else
+                                marcadasOSPorNF[nota] = 1;
                         }
                     }
                     if (!bSelecionouAlgo)
                     {
-                        Log.ErrorFormat("Por favor selecione registros para gerar o certificado!!");
+                        Log.ErrorFormat("Por favor selecione registros para gerar o certificado.");
+                    }
+                    else if (bSelecionouJaCertificado)
+                    {
+                        Log.ErrorFormat("Não é permitida a geração de certificado para documentos já certificados.");
                     }
                     else if (bSelecionouVariosClientes)
                     {
                         Log.ErrorFormat("Não é permitida a geração de certificado para clientes diferentes na mesma requisição.");
+                    }
+                    else if (marcadasOSPorNF.Where(r => r.Value != totalOSPorNF[r.Key]).Count() > 0)
+                    {
+                        Log.ErrorFormat("Selecionar todas as OS da nota para gerar um único certificado para a mesma.");
                     }
                     else
                     {
