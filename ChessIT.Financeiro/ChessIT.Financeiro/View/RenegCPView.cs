@@ -369,101 +369,7 @@ namespace ChessIT.Financeiro.View
 
         private void Pesquisar()
         {
-#if DEBUG
 
-            string query = @"select '{8}' AS ""Check"",
-                                    OPCH.""BPLName"" AS ""Filial"",
-		                            'NE' AS ""Tipo Doc"",
-                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
-		                            OPCH.""DocEntry"" AS ""Nº Interno"",
-		                            OPCH.""DocNum"" AS ""Nº SAP"",
-		                            OPCH.""Serial"" AS ""Nº NF"",
-		                            OPCH.""CardName"" AS ""Fornecedor"",
-                                    OPCH.""DocDueDate"" AS ""Data Vcto."",
-		                            cast(PCH6.""InstlmntID"" as nvarchar) + '/' + cast((select count(*) from PCH6 aux where aux.""DocEntry"" = OPCH.""DocEntry"") as nvarchar) AS ""Parcela"",
-		                            PCH6.""InsTotal"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            PCH6.""InsTotal"" - PCH6.""PaidToDate"" AS ""Total a Pagar"",
-		                            OPCH.""PeyMethod"" AS ""Forma Pgto.""
-                            from OPCH
-                            inner join PCH6 on PCH6.""DocEntry"" = OPCH.""DocEntry""                                                        
-                            where ""DocStatus"" = 'O'
-                            and PCH6.""PaidToDate"" < PCH6.""InsTotal""
-                            and ('{0}' = '' or OPCH.""Serial"" = '{0}')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDate"" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OPCH.""DocDueDate"" as date) <= cast('{4}' as date))
-                            and ({5} = 0 or {5} = OPCH.""BPLId"")
-                            and ('{6}' = '' or '{6}' = OPCH.""CardCode"")
-                            and ('{7}' = '' or '{7}' = OPCH.""PeyMethod"")
-                            union
-                            select  '{8}' AS ""Check"",
-                                    ODPO.""BPLName"" AS ""Filial"",
-		                            'ADT' AS ""Tipo Doc"",
-                                    OPCH.""CardCode"" AS ""Nº Fornecedor"",
-		                            ODPO.""DocEntry"" AS ""Nº Interno"",
-		                            ODPO.""DocNum"" AS ""Nº SAP"",
-		                            0 AS ""Nº NF"",
-		                            ODPO.""CardName"" AS ""Fornecedor"",
-                                    ODPO.""DocDueDate"" AS ""Data Vcto."",
-		                            cast(DPO6.""InstlmntID"" as nvarchar) + '/' + cast((select count(*) from DPO6 aux where aux.""DocEntry"" = ODPO.""DocEntry"") as nvarchar) AS ""Parcela"",
-		                            DPO6.""InsTotal"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            DPO6.""InsTotal"" - DPO6.""PaidToDate"" AS ""Total a Pagar"",
-		                            ODPO.""PeyMethod"" AS ""Forma Pgto.""
-                            from ODPO
-                            inner join DPO6 on DPO6.""DocEntry"" = ODPO.""DocEntry""                            
-                            where ""DocStatus"" = 'O'
-                            and DPO6.""PaidToDate"" < DPO6.""InsTotal""
-                            and ('{0}' = '')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDate"" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(ODPO.""DocDueDate"" as date) <= cast('{4}' as date))                            
-                            and ({5} = 0 or {5} = ODPO.""BPLId"")
-                            and ('{6}' = '' or '{6}' = ODPO.""CardCode"")
-                            and ('{7}' = '' or '{7}' = ODPO.""PeyMethod"")
-                            union
-                            select  '{8}' AS ""Check"",
-                                    JDT1.""BPLName"" AS ""Filial"",
-		                            'LC' AS ""Tipo Doc"",
-                                    OCRD.""CardCode"" AS ""Nº Fornecedor"",
-		                            OJDT.""TransId"" AS ""Nº Interno"",
-		                            OJDT.""TransId"" AS ""Nº SAP"",
-		                            0 AS ""Nº NF"",
-		                            OCRD.""CardName"" AS ""Fornecedor"",
-                                    OJDT.""DueDate"" AS ""Data Vcto."",
-		                            '1/1' as ""Parcela"",
-		                            JDT1.""Credit"" AS ""Valor Parcela"",
-		                            0.0 as ""Valor Desc."",
-		                            0.0 as ""Valor Multa"",
-		                            0.0 as ""Valor Juros"",
-		                            JDT1.""BalDueCred"" AS ""Total A Pagar"",
-		                            '' AS ""Forma Pgto.""
-                            from JDT1
-                            inner join OJDT on OJDT.""TransId"" = JDT1.""TransId""
-                            inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
-                            where ""BalDueCred"" > 0
-                            and ""MthDate"" is null
-                            and OJDT.""TransType"" <> 18
-                            and JDT1.""ShortName"" LIKE 'FOR%'
-                            and OJDT.""StornoToTr"" IS NULL
-                            and not exists (select * from OJDT aux where aux.""StornoToTr"" = OJDT.""TransId"")
-                            and ('{0}' = '' or '' = '{0}')
-                            and (cast('{1}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) >= cast('{1}' as date))
-                            and (cast('{2}' as date) = cast('1990-01-01' as date) or cast(OJDT.""RefDate"" as date) <= cast('{2}' as date))
-                            and (cast('{3}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) >= cast('{3}' as date))
-                            and (cast('{4}' as date) = cast('1990-01-01' as date) or cast(OJDT.""DueDate"" as date) <= cast('{4}' as date))                            
-                            and ({5} = 0 or {5} = JDT1.""BPLId"")
-                            and ('{6}' = '' or '{6}' = JDT1.""ShortName"")
-                            and ('{7}' = '' or '{7}' = '')";
-
-#else
             string query = @"select '{8}' AS ""Check"",
                                     OPCH.""BPLName"" AS ""Filial"",
 		                            'NE' AS ""Tipo Doc"",
@@ -555,7 +461,6 @@ namespace ChessIT.Financeiro.View
                             and ({5} = 0 or {5} = JDT1.""BPLId"")
                             and ('{6}' = '' or '{6}' = JDT1.""ShortName"")
                             and ('{7}' = '' or '{7}' = OJDT.""U_FPagFin"")";
-#endif
 
 
             string numNF = ((EditText)Form.Items.Item("etNumNF").Specific).String;
@@ -821,7 +726,7 @@ namespace ChessIT.Financeiro.View
 
                             int transIdNE = Convert.ToInt32(recordSetNE.Fields.Item(0).Value);
 
-                            GerarContraLC(transIdNE, Convert.ToInt32(parcelaID), Convert.ToInt32(parcelaQtd));
+                            GerarContraLC(transIdNE, Convert.ToInt32(parcelaID), Convert.ToInt32(parcelaQtd), valorParcela, totalPagar);
                             break;
 
                         case "ADT":
@@ -830,7 +735,7 @@ namespace ChessIT.Financeiro.View
 
                             int transIdADT = Convert.ToInt32(recordSetADT.Fields.Item(0).Value);
 
-                            GerarContraLC(transIdADT, Convert.ToInt32(parcelaID), Convert.ToInt32(parcelaQtd));
+                            GerarContraLC(transIdADT, Convert.ToInt32(parcelaID), Convert.ToInt32(parcelaQtd), valorParcela, totalPagar);
                             break;
 
                         case "LC":
@@ -888,21 +793,6 @@ namespace ChessIT.Financeiro.View
                         }
                         else if (tipoDoc == "LC")
                         {
-#if DEBUG
-                            query = @"select    OCRD.""CardCode"",
-                                                OCRD.""CardName"",
-                                                OJDT.""TaxDate"", 
-                                                OJDT.""RefDate"",
-                                                OJDT.""DueDate"",
-                                                0,
-                                                ''
-                                        from OJDT
-                                        inner join JDT1 on JDT1.""TransId"" = OJDT.""TransId"" and JDT1.""Line_ID"" = 0
-                                        inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
-                                        where OJDT.""TransId"" = " + docEntry;
-
-#else
-
                             query = @"select    OCRD.""CardCode"",
                                                 OCRD.""CardName"",
                                                 OJDT.""TaxDate"", 
@@ -915,7 +805,7 @@ namespace ChessIT.Financeiro.View
                                         inner join JDT1 on JDT1.""TransId"" = OJDT.""TransId"" and JDT1.""Line_ID"" = 0
                                         inner join OCRD on OCRD.""CardCode"" = JDT1.""ShortName""
                                         where OJDT.""TransId"" = " + docEntry;
-#endif
+
                         }
 
                         SAPbobsCOM.Recordset recordSet = (SAPbobsCOM.Recordset)Controller.MainController.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -942,10 +832,10 @@ namespace ChessIT.Financeiro.View
                             ((EditText)lcForm.Items.Item("97").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(2).Value).ToString("dd/MM/yyyy");
                             ((EditText)lcForm.Items.Item("6").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(3).Value).ToString("dd/MM/yyyy");
                             ((EditText)lcForm.Items.Item("102").Specific).String = Convert.ToDateTime(recordSet.Fields.Item(4).Value).ToString("dd/MM/yyyy");
-#if !DEBUG
+
                             ((EditText)lcForm.Items.Item("U_NDocFin").Specific).String = recordSet.Fields.Item(5).Value.ToString();
                             ((EditText)lcForm.Items.Item("U_FPagFin").Specific).String = recordSet.Fields.Item(6).Value.ToString();
-#endif
+
 
                             Matrix grid = (Matrix)lcForm.Items.Item("76").Specific;
 
@@ -999,7 +889,7 @@ namespace ChessIT.Financeiro.View
             Controller.MainController.Application.StatusBar.SetText("Operação completada com êxito", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Success);
         }
 
-        private void GerarContraLC(int transIdRef, int parcela, int qtdParcela)
+        private void GerarContraLC(int transIdRef, int parcela, int qtdParcela, double valorParcela, double totalPagar)
         {
             int transId = 0;
 
@@ -1036,18 +926,15 @@ namespace ChessIT.Financeiro.View
 
                 double diferencaContra = 0;
 
+                double proporcao = Math.Round(totalPagar / valorParcela, 4);
+
                 for (int linha = 0; linha < journalRef.Lines.Count; linha++)
                 {
                     journalRef.Lines.SetCurrentLine(linha);
 
-#if DEBUG
-                    if (journalRef.Lines.ShortName.StartsWith("V") && parcela - 1 != linha)
-                        continue;
-#else
                     if (journalRef.Lines.ShortName.StartsWith("F") && parcela - 1 != linha)
                         continue;
 
-#endif
                     if (linhaEntry > 0)
                         journalEntry.Lines.Add();
 
@@ -1059,10 +946,7 @@ namespace ChessIT.Financeiro.View
                     journalEntry.Lines.AccountCode = journalRef.Lines.AccountCode;
                     journalEntry.Lines.ShortName = journalRef.Lines.ShortName;
 
-#if DEBUG
-                    if (journalRef.Lines.ShortName.StartsWith("V"))
-                        fornecedor = journalRef.Lines.ShortName;
-#else
+
                     if (journalRef.Lines.ShortName.StartsWith("F"))
                     {
                         fornecedor = journalRef.Lines.ShortName;
@@ -1072,8 +956,6 @@ namespace ChessIT.Financeiro.View
                         lineNumRef = linha;
                         lineNumEntry = linhaEntry - 1;
                     }
-
-#endif
 
                     journalEntry.Lines.BPLID = journalRef.Lines.BPLID;
                     journalEntry.Lines.CostingCode = journalRef.Lines.CostingCode;
@@ -1089,49 +971,34 @@ namespace ChessIT.Financeiro.View
                     journalEntry.Lines.ReferenceDate2 = journalRef.Lines.ReferenceDate2;
                     journalEntry.Lines.TaxDate = journalRef.Lines.TaxDate;
 
-#if DEBUG
-                    if (journalRef.Lines.ShortName.StartsWith("V"))
-                    {
-                        if (journalRef.Lines.Debit > 0)
-                            journalEntry.Lines.Credit = journalRef.Lines.Debit;
-                        else
-                            journalEntry.Lines.Debit = journalRef.Lines.Credit;
-                    }
-                    else
-                    {
-                        if (journalRef.Lines.Debit > 0)
-                            journalEntry.Lines.Credit = journalRef.Lines.Debit / qtdParcela;
-                        else
-                            journalEntry.Lines.Debit = journalRef.Lines.Credit / qtdParcela;
-                    }
-#else
+
                     if (journalRef.Lines.ShortName.StartsWith("F"))
                     {
                         if (journalRef.Lines.Debit > 0)
-                            journalEntry.Lines.Credit = journalRef.Lines.Debit;
+                            journalEntry.Lines.Credit = totalPagar;
                         else
-                            journalEntry.Lines.Debit = journalRef.Lines.Credit;
+                            journalEntry.Lines.Debit = totalPagar;
                     }
                     else
                     {
                         if (journalRef.Lines.Debit > 0)
-                            journalEntry.Lines.Credit = journalRef.Lines.Debit / qtdParcela;
+                            journalEntry.Lines.Credit = Math.Round((journalRef.Lines.Debit / qtdParcela) * proporcao, 4);
                         else
-                            journalEntry.Lines.Debit = journalRef.Lines.Credit / qtdParcela;
+                            journalEntry.Lines.Debit = Math.Round((journalRef.Lines.Credit / qtdParcela) * proporcao, 4);
                     }
 
-                    somaCredito += journalEntry.Lines.Credit;
-                    somaDebito += journalEntry.Lines.Debit;
+                    somaCredito += Math.Round(journalEntry.Lines.Credit, 4);
+                    somaDebito +=  Math.Round(journalEntry.Lines.Debit, 4);
 
                     if (journalEntry.Lines.AccountCode == contaContra)
                         linhaContra = linhaEntry - 1;
-#endif
+
 
                 }
 
                 if (linhaContra >= 0)
                 {
-                    diferencaContra = somaCredito - somaDebito;
+                    diferencaContra = Math.Round(Math.Round(somaCredito, 4) - Math.Round(somaDebito, 4), 4);
 
                     journalEntry.Lines.SetCurrentLine(linhaContra);
 
@@ -1166,7 +1033,6 @@ namespace ChessIT.Financeiro.View
                 System.Runtime.InteropServices.Marshal.ReleaseComObject(journalEntry);
             }
 
-#if !DEBUG
             SAPbobsCOM.CompanyService companyService2 = null;
             SAPbobsCOM.InternalReconciliationsService internalReconciliationService2 = null;
             SAPbobsCOM.InternalReconciliationOpenTransParams internalReconciliationParams2 = null;
@@ -1211,7 +1077,7 @@ namespace ChessIT.Financeiro.View
 
                 GC.Collect();
             }
-#endif
+
         }
     }
 }
