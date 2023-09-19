@@ -444,7 +444,7 @@ namespace Chess.IT.Services.View
                                                     //	ORDR.U_Situacao = 10(Coleta não faturada)
                                                     //	ORDR.U_DataEntradaOS = Data atual
                                                     //	ORDR.U_HoraEntradaOS = Horário atualOBalanca.pesoHora
-                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "10";
+                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                     oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
                                                     oOrder.UserFields.Fields.Item("U_HoraEntradaOS").Value = myTime.ToString("hh:mm");
 
@@ -583,7 +583,7 @@ namespace Chess.IT.Services.View
 
                                                 //oOrder.UserFields.Fields.Item("U_PesoBruto").Value = dPeso;
                                                 oOrder.UserFields.Fields.Item("U_PesoLiq").Value = dPesoCliente; ;
-                                                oOrder.UserFields.Fields.Item("U_Situacao").Value = "10";
+                                                oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                 oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
                                                 oOrder.UserFields.Fields.Item("U_HoraEntradaOS").Value = myTime.ToString("hh:mm");
 
