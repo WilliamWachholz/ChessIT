@@ -447,9 +447,13 @@ namespace Chess.IT.Services.View
                                                     oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                     oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
                                                     oOrder.UserFields.Fields.Item("U_HoraEntradaOS").Value = myTime.ToString("hh:mm");
-
-                                                    oOrder.UserFields.Fields.Item("U_PesoLiq").Value = PesoLiquido;
+                                                                                                        
                                                     oOrder.UserFields.Fields.Item("U_PesoBruto").Value = dPeso;
+
+                                                    if (PesoLiquido == 0)
+                                                        oOrder.UserFields.Fields.Item("U_PesoLiq").Value = Convert.ToDouble(oOrder.UserFields.Fields.Item("U_PesoBruto").Value) - Convert.ToDouble(oOrder.UserFields.Fields.Item("U_Tara").Value);
+                                                    else
+                                                        oOrder.UserFields.Fields.Item("U_PesoLiq").Value = PesoLiquido;
                                                 }
                                                 //o Se[Peso Líquido] <= [Peso Bruto] significa que a ordem de serviço em questão
                                                 //não possui o peso da[Tara].Nesse cenário execute os passos abaixo:
@@ -457,7 +461,7 @@ namespace Chess.IT.Services.View
                                                 {
                                                     //	ORDR.U_Situacao = 2(Aguardando Peso Tara)
                                                     //Essas ordens/ pedidos continuarão na tela de pesagem aguardando a pesagem da tara.
-                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "2";
+                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "3";
                                                 }
 
 
@@ -581,8 +585,10 @@ namespace Chess.IT.Services.View
                                                 //    //	ORDR.U_DataEntradaOS = Data atual
                                                 //    //	ORDR.U_HoraEntradaOS = Horário atualOBalanca.pesoHora
 
-                                                //oOrder.UserFields.Fields.Item("U_PesoBruto").Value = dPeso;
-                                                oOrder.UserFields.Fields.Item("U_PesoLiq").Value = dPesoCliente; ;
+                                                if (dPesoCliente == 0 || dPesoCliente == double.NaN)
+                                                    oOrder.UserFields.Fields.Item("U_PesoLiq").Value = Convert.ToDouble(oOrder.UserFields.Fields.Item("U_PesoBruto").Value) - Convert.ToDouble(oOrder.UserFields.Fields.Item("U_Tara").Value);
+                                                else
+                                                   oOrder.UserFields.Fields.Item("U_PesoLiq").Value = dPesoCliente;
                                                 oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                 oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
                                                 oOrder.UserFields.Fields.Item("U_HoraEntradaOS").Value = myTime.ToString("hh:mm");
@@ -2433,22 +2439,18 @@ namespace Chess.IT.Services.View
 
                                     if (msgErro.Contains("RDR1.AgrNo"))
                                     {
-                                        msgErro = "Data Térmido do Contrato expirou!!!";
-                                        LogHelper.InfoError(msgErro);
+                                        msgErro = "Data Término do Contrato expirou!!!";
+                                        throw new Exception(msgErro);
                                     }
                                     else
                                     {
-                                        LogHelper.InfoError(msgErro);
+                                        throw new Exception(msgErro);
                                     }
-                                    // Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
-                                    ErroGerOSs.Add(new ErroGerOS() { absID = iNumber, Erro = msgErro });
-                                    //throw new Exception(msgErro);
+
                                 }
                                 else
                                 {
                                     osGeradas = true;
-
-                                    //LogHelper.InfoSuccess(string.Format("OS {0} Gerado {1}", iNumber, Program.oCompanyS.GetNewObjectKey()));
 
                                     if (string.IsNullOrEmpty(sOSsGeradas))
                                     {
@@ -2456,7 +2458,6 @@ namespace Chess.IT.Services.View
                                             sEsbocos = Program.oCompanyS.GetNewObjectKey();
                                         else                                            
                                             sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
-                                        //LogHelper.InfoSuccess($"sOSsGeradas {sOSsGeradas}");
 
                                     }
                                     else
@@ -2522,22 +2523,17 @@ namespace Chess.IT.Services.View
 
                                             if (msgErro.Contains("RDR1.AgrNo"))
                                             {
-                                                msgErro = "Data Térmido do Contrato expirou!!!";
-                                                LogHelper.InfoError(msgErro);
+                                                msgErro = "Data Término do Contrato expirou!!!";
+                                                throw new Exception(msgErro);
                                             }
                                             else
                                             {
-                                                LogHelper.InfoError(msgErro);
+                                                throw new Exception(msgErro);
                                             }
-
-
-                                            ErroGerOSs.Add(new ErroGerOS() { absID = iNumber, Erro = msgErro });
-                                            //throw new Exception(msgErro);
                                         }
                                         else
                                         {
                                             osGeradas = true;
-                                            //LogHelper.InfoSuccess(string.Format("OS {0} Gerado {1}", iNumber, Program.oCompanyS.GetNewObjectKey()));
 
                                             if (string.IsNullOrEmpty(sOSsGeradas))
                                             {
@@ -2545,8 +2541,6 @@ namespace Chess.IT.Services.View
                                                     sEsbocos = Program.oCompanyS.GetNewObjectKey();                                                
                                                 else
                                                     sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
-                                                //LogHelper.InfoSuccess($"sOSsGeradas {sOSsGeradas}");
-
                                             }
                                             else
                                             {
@@ -2589,11 +2583,11 @@ namespace Chess.IT.Services.View
 
                 ((Grid)Form.Items.Item("gridContr").Specific).DataTable.Clear();
 
+                MostrarOSGeradas(sOSsGeradas, sEsbocos, ErroGerOSs);
+
                 string queryFiltro = @"select cast('' as varchar(254)) as ""CodCliente"", cast('' as varchar(254)) as ""NomeCliente"", cast(null as date) as ""DataCtrIni"", cast(null as date) as ""DataCtrFim"", cast('' as varchar(254)) as ""NrContrato"", cast('' as varchar(254)) as ""ModeloCtr"", cast('' as varchar(254)) as ""CentroCusto"", cast('' as varchar(254)) as ""NrRota"", 0 as ""DiaColeta"",  0 as ""UtlRes"", 0 as ""UtlLoc"", cast('' as varchar(254)) as ""Motorista"", cast('' as varchar(254)) as ""NomeMotorista"", cast('' as varchar(254)) as ""NrPlaca"", cast(null as date) as ""DataOSIni"", cast(null as date) as ""DataOSFim"", cast('' as varchar(254)) as ""NrOS"", cast('' as varchar(254)) as ""TpOper"", 0 as ""RespFatura"", cast('' as varchar(254)) as ""SitOS"", cast('' as varchar(254)) as ""StaOS"", cast('' as varchar(254)) as ""UsuResp"" from dummy";
 
                 Form.DataSources.DataTables.Item("dtFiltro").ExecuteQuery(queryFiltro);
-
-                MostrarOSGeradas(sOSsGeradas, sEsbocos, ErroGerOSs);
 
                 ((EditText)Form.Items.Item("etMotora").Specific).String = "";
                 ((EditText)Form.Items.Item("etMotoraN").Specific).String = "";
