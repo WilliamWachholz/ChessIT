@@ -44,7 +44,7 @@
     </AdmInfo>
     <UserFieldsMD>
       <row>
-        <Name>Placa</Name>
+        <Name>Motorista</Name>
         <Type>db_Alpha</Type>
         <Size>10</Size>
         <Description>Motorista:</Description>
@@ -63,7 +63,7 @@
     </AdmInfo>
     <UserFieldsMD>
       <row>
-        <Name>Placa</Name>
+        <Name>Capacidade</Name>
         <Type>db_Float</Type>
         <Size>16</Size>
         <Description>Capacidade:</Description>
