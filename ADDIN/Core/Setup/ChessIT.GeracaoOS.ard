@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ChessIT" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="ChessIT.GeracaoOS" ExtVersion="9.9.38" Contdata="" Partner="ChessIT" DBType="HANA" ClientType="A">
+<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="ChessIT" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="ChessIT.GeracaoOS" ExtVersion="9.9.41" Contdata="" Partner="ChessIT" DBType="HANA" ClientType="A">
   <Validity>
     <SBOCompatibility>
       <Version From="" To="" />
@@ -26,7 +26,7 @@
           <Files />
         </Uninstallation>
       </x86>
-      <x64 AddonExe="JBC.exe" AddonSig="0E33BB230CC7C1D4CBC768B65483DD69" ExeDir="X64Client">
+      <x64 AddonExe="JBC.exe" AddonSig="B032B355F08CB2C6378DA4BC39831EF4" ExeDir="X64Client">
         <Installation>
           <Files>
             <File FileName="X64Client\Castle.Core.dll">

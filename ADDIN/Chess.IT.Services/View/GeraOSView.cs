@@ -525,7 +525,7 @@ namespace Chess.IT.Services.View
                                                     //	ORDR.U_Situacao = 10(Coleta não faturada)
                                                     //	ORDR.U_DataEntradaOS = Data atual
                                                     //	ORDR.U_HoraEntradaOS = Horário atualOBalanca.pesoHora
-                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "10";
+                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                     oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
                                                     oOrder.UserFields.Fields.Item("U_HoraEntradaOS").Value = myTime.ToString("hh:mm");
 
@@ -538,7 +538,7 @@ namespace Chess.IT.Services.View
                                                 {
                                                     //	ORDR.U_Situacao = 2(Aguardando Peso Tara)
                                                     //Essas ordens/ pedidos continuarão na tela de pesagem aguardando a pesagem da tara.
-                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "2";
+                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "3";
                                                 }
 
 
@@ -664,7 +664,7 @@ namespace Chess.IT.Services.View
 
                                                 //oOrder.UserFields.Fields.Item("U_PesoBruto").Value = dPeso;
                                                 oOrder.UserFields.Fields.Item("U_PesoLiq").Value = dPesoCliente; ;
-                                                oOrder.UserFields.Fields.Item("U_Situacao").Value = "10";
+                                                oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                 oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
                                                 oOrder.UserFields.Fields.Item("U_HoraEntradaOS").Value = myTime.ToString("hh:mm");
 
@@ -3298,7 +3298,7 @@ namespace Chess.IT.Services.View
                                                               						  when '2' then case OITM.""ItmsGrpCod"" when 102 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'FAT') 
                                                               															     when 118 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')  end 
                                                               end as ""SeqCode"",
-                                                              ORDR.""U_RespFat""
+                                                              ORDR.""U_Status"" as ""Status""
                                                          from ORDR
                                                          inner join RDR1 on RDR1.""DocEntry"" = ORDR.""DocEntry""
                                                          inner join OITM on OITM.""ItemCode"" = RDR1.""ItemCode""   
@@ -3337,7 +3337,7 @@ namespace Chess.IT.Services.View
                                 faturaModel.Draft = ((CheckBoxColumn)gridOS.Columns.Item("Esboço")).IsChecked(row);
                                 faturaModel.GroupNum = recordSet.Fields.Item(11).Value.ToString();
                                 faturaModel.SeqCode = Convert.ToInt32(recordSet.Fields.Item("SeqCode").Value);
-                                faturaModel.RespFat = recordSet.Fields.Item("RespFat").Value.ToString();
+                                faturaModel.StatusFat = recordSet.Fields.Item("Status").Value.ToString();
 
                                 if (faturaModel.Quantity <= 0)
                                 {
@@ -3410,7 +3410,7 @@ namespace Chess.IT.Services.View
                         //documentNFSE.DocDueDate = DateTime.Now;
                         documentNFSE.BPL_IDAssignedToInvoice = 1;
                         documentNFSE.GroupNumber = Convert.ToInt32(faturaGroup.First().GroupNum);
-                        documentNFSE.UserFields.Fields.Item("U_RespFat").Value = faturaGroup.First().RespFat;
+                        documentNFSE.UserFields.Fields.Item("U_Status").Value = faturaGroup.First().StatusFat;
 
                         foreach (Model.FaturaModel faturaModel in faturaGroup)
                         {

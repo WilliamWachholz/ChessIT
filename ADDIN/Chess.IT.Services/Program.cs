@@ -413,8 +413,8 @@ namespace Chess.IT.Services
 
                     Item _stParPeso = form.Items.Add("stParPeso", BoFormItemTypes.it_STATIC);
                     _stParPeso.Top = form.Items.Item("1980000501").Top - 70;
-                    _stParPeso.Left = form.Items.Item("2001").Left + 450;
-                    _stParPeso.Width = 100;
+                    _stParPeso.Left = form.Items.Item("U_TipoOper").Left;
+                    _stParPeso.Width = 150;
                     _stParPeso.LinkTo = "2001";
 
                     StaticText stParPeso = (StaticText)_stParPeso.Specific;

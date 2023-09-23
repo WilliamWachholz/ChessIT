@@ -48,3 +48,4 @@ C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\bin\Debug\SAPbouiCOM.dll
 C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\bin\Debug\Newtonsoft.Json.xml
 C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\bin\Debug\pt-BR\Framework.resources.dll
 C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.CopyComplete
+C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.AssemblyReference.cache
