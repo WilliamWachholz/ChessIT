@@ -296,7 +296,7 @@ namespace Chess.IT.Services.FormClass.userform
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 10;
                 this._oMatrix1.Columns.Item(iCountCol).Visible = false;
-                
+
                 iCountCol++;
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
@@ -305,16 +305,18 @@ namespace Chess.IT.Services.FormClass.userform
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
+                this._oMatrix1.Columns.Item(iCountCol).Visible = false;
                 ((LinkedButton)this._oMatrix1.Columns.Item(iCountCol).ExtendedObject).LinkedObject = BoLinkedObject.lf_Invoice;
                 iCountCol++;
 
 
-                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
+                this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "NNF");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Nº";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "NF";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
+                ((LinkedButton)this._oMatrix1.Columns.Item(iCountCol).ExtendedObject).LinkedObject = BoLinkedObject.lf_Invoice;
                 iCountCol++;
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
@@ -636,7 +638,7 @@ namespace Chess.IT.Services.FormClass.userform
 
                 app.OpenForm(BoFormObjectEnum.fo_Order, "17", docEntry);
             }
-            else if(pVal.ColUID == "C10")
+            else if(pVal.ColUID == "C11")
             {
                 BubbleEvent = false;
 

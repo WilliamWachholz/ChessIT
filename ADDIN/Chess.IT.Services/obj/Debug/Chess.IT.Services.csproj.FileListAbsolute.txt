@@ -48,3 +48,27 @@ C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\bin\Debug\SAPbouiCOM.dll
 C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\bin\Debug\Newtonsoft.Json.xml
 C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\bin\Debug\pt-BR\Framework.resources.dll
 C:\Users\partner\Desktop\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.CopyComplete
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\SrfFiles\FrmCnfIntegraBalanca.srf
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\SrfFiles\FrmGeraOS.srf
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\SrfFiles\FrmNotasGeradas.srf
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\xml\Menu.xml
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\resources\Chess - Certificado de Destinação.rpt
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Chess.IT.Services.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Chess.IT.Services.pdb
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Castle.Core.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Castle.Facilities.Logging.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Castle.Services.Logging.Log4netIntegration.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Castle.Windsor.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Framework.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\FrameworkInterface.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Interop.SAPbobsCOM.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\log4net.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Newtonsoft.Json.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\SAPbouiCOM.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\Newtonsoft.Json.xml
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\bin\Debug\pt-BR\Framework.resources.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.CoreCompileInputs.cache
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.CopyComplete
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.dll
+C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.pdb
