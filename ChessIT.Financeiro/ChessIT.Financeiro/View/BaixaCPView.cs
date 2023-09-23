@@ -1080,9 +1080,9 @@ namespace ChessIT.Financeiro.View
 
                     payments.BPLID = baixaCPGroup.Key.empresa;
 
-                    payments.BankChargeAmount = m_Encargo;                    
-
-                    payments.DocDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
+                    payments.BankChargeAmount = m_Encargo;       
+                    
+                    //payments.DocDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
 
                     payments.TaxDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
 

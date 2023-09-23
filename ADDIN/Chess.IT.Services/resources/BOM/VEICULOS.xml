@@ -47,6 +47,44 @@
         <Name>Placa</Name>
         <Type>db_Alpha</Type>
         <Size>10</Size>
+        <Description>Motorista:</Description>
+        <SubType>st_None</SubType>
+        <TableName>@VEICULOS</TableName>
+        <FieldID>0</FieldID>
+        <EditSize>50</EditSize>
+        <Mandatory>tNO</Mandatory>
+      </row>
+    </UserFieldsMD>
+  </BO>
+  <BO>
+    <AdmInfo>
+      <Object>152</Object>
+      <Version>2</Version>
+    </AdmInfo>
+    <UserFieldsMD>
+      <row>
+        <Name>Placa</Name>
+        <Type>db_Float</Type>
+        <Size>16</Size>
+        <Description>Capacidade:</Description>
+        <SubType>st_Measurement</SubType>
+        <TableName>@VEICULOS</TableName>
+        <FieldID>8</FieldID>
+        <EditSize>16</EditSize>
+        <Mandatory>tNO</Mandatory>
+      </row>
+    </UserFieldsMD>
+  </BO>
+  <BO>
+    <AdmInfo>
+      <Object>152</Object>
+      <Version>2</Version>
+    </AdmInfo>
+    <UserFieldsMD>
+      <row>
+        <Name>Placa</Name>
+        <Type>db_Alpha</Type>
+        <Size>10</Size>
         <Description>Placa:</Description>
         <SubType>st_None</SubType>
         <TableName>@VEICULOS</TableName>

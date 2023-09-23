@@ -272,7 +272,7 @@ namespace Chess.IT.Services.FormClass.userform
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_LINKED_BUTTON);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "DocNumOS");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "OS";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "PV";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;
@@ -283,7 +283,7 @@ namespace Chess.IT.Services.FormClass.userform
 
                 this._oMatrix1.Columns.Add('C' + iCountCol.ToString(), BoFormItemTypes.it_EDIT);
                 this._oMatrix1.Columns.Item(iCountCol).DataBind.Bind("DT_01", "DocDateOS");
-                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Data OS";
+                this._oMatrix1.Columns.Item(iCountCol).TitleObject.Caption = "Data PV";
                 this._oMatrix1.Columns.Item(iCountCol).TitleObject.Sortable = false;
                 this._oMatrix1.Columns.Item(iCountCol).Width = 100;
                 this._oMatrix1.Columns.Item(iCountCol).Editable = false;

@@ -125,7 +125,7 @@ namespace Chess.IT.Services
             //}
 
 
-                AddMenuItems();
+            AddMenuItems();
             Form sboForm = oApplication.Forms.GetFormByTypeAndCount(169, 1);
 
             sboForm.Freeze(true);
@@ -462,7 +462,7 @@ namespace Chess.IT.Services
 
                     string cep = ((EditText)matrixEndereco.Columns.Item("5").Cells.Item(1).Specific).String;
 
-                    if (matrixEndereco.Columns.Item("45").Editable  == false || cep == string.Empty)
+                    if (matrixEndereco.Columns.Item("45").Editable == false || cep == string.Empty)
                     {
                         throw new Exception("Informe o CEP");
                     }
@@ -508,9 +508,9 @@ namespace Chess.IT.Services
                         form.Freeze(false);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    oApplication.StatusBar.SetText("CEP inválido (" + ex.Message + ")"); 
+                    oApplication.StatusBar.SetText("CEP inválido (" + ex.Message + ")");
                 }
             }
 
@@ -529,77 +529,77 @@ namespace Chess.IT.Services
 
                 double dPeso = Convert.ToDouble(oBalancaController.OBalanca.peso);
 
-              
+
 
                 //    Form form = oApplication.Forms.Item(pVal.FormUID);
 
-                    Matrix matrix = (Matrix)form.Items.Item("38").Specific;
+                Matrix matrix = (Matrix)form.Items.Item("38").Specific;
 
-                    string parametroPesagem = ((ComboBox)form.Items.Item("cbParPeso").Specific).Selected.Value;
+                string parametroPesagem = ((ComboBox)form.Items.Item("cbParPeso").Specific).Selected.Value;
 
 
 
-                    string passo = "0";
+                string passo = "0";
 
+                try
+                {
+
+                    string um = "";
                     try
                     {
-
-                        string um = "";
-                        try
-                        {
-                            um = ((EditText)matrix.Columns.Item("212").Cells.Item(1).Specific).String.ToUpper();
-                        }
-                        catch { }
-
-                        passo = "1";
-                        string sPesoBruto = ((EditText)form.Items.Item("U_PesoBruto").Specific).String;
-                        string sTara = ((EditText)form.Items.Item("U_Tara").Specific).String;
-
-                        passo = "2";
-                        double pesoBruto = double.Parse((sPesoBruto.Contains(",") ? sPesoBruto.Replace(".", "").Replace(",", ".") : sPesoBruto), System.Globalization.CultureInfo.InvariantCulture); ;
-                        double tara = double.Parse((sTara.Contains(",") ? sTara.Replace(".", "").Replace(",", ".") : sTara), System.Globalization.CultureInfo.InvariantCulture); ;
-
-                        passo = "3";
-                        if (parametroPesagem.Equals("0"))
-                        {
-                            passo = "4";
-                            pesoBruto = double.Parse((oBalancaController.OBalanca.peso.Contains(",") ? oBalancaController.OBalanca.peso.Replace(".", "").Replace(",", ".") : oBalancaController.OBalanca.peso), System.Globalization.CultureInfo.InvariantCulture);
-                            ((EditText)form.Items.Item("U_PesoBruto").Specific).String = pesoBruto.ToString();
-                        }
-                        else
-                        {
-                            passo = "5";
-                            tara = double.Parse((oBalancaController.OBalanca.peso.Contains(",") ? oBalancaController.OBalanca.peso.Replace(".", "").Replace(",", ".") : oBalancaController.OBalanca.peso), System.Globalization.CultureInfo.InvariantCulture);
-                            ((EditText)form.Items.Item("U_Tara").Specific).String = tara.ToString();
-                        }
-
-                        passo = "6";
-                        if (tara > 0)
-                        {
-                            passo = "7";
-                            double pesoLiquido = pesoBruto - tara;
-                            ((EditText)form.Items.Item("U_PesoLiq").Specific).String = pesoLiquido.ToString();
-                            if (um == "TONELADAS")
-                            {
-                                passo = "8";
-                                ((EditText)matrix.Columns.Item("11").Cells.Item(1).Specific).String = (pesoLiquido / 1000).ToString();
-                            }
-                        }
-
-                        passo = "9";
-                        ((EditText)form.Items.Item("U_HoraEntradaOS").Specific).String = DateTime.Now.ToString("HH:mm");
-                        ((EditText)form.Items.Item("U_DataEntradaOS").Specific).String = DateTime.Now.ToString("dd/MM/yyyy");
-                        ((ComboBox)form.Items.Item("U_Situacao").Specific).Select("11");
-                        ((ComboBox)form.Items.Item("U_Status").Specific).Select("P");
+                        um = ((EditText)matrix.Columns.Item("212").Cells.Item(1).Specific).String.ToUpper();
                     }
-                    catch (Exception ex)
+                    catch { }
+
+                    passo = "1";
+                    string sPesoBruto = ((EditText)form.Items.Item("U_PesoBruto").Specific).String;
+                    string sTara = ((EditText)form.Items.Item("U_Tara").Specific).String;
+
+                    passo = "2";
+                    double pesoBruto = double.Parse((sPesoBruto.Contains(",") ? sPesoBruto.Replace(".", "").Replace(",", ".") : sPesoBruto), System.Globalization.CultureInfo.InvariantCulture); ;
+                    double tara = double.Parse((sTara.Contains(",") ? sTara.Replace(".", "").Replace(",", ".") : sTara), System.Globalization.CultureInfo.InvariantCulture); ;
+
+                    passo = "3";
+                    if (parametroPesagem.Equals("0"))
                     {
-                        throw new Exception("Erro ao preencher campos em tela (etapa " + passo + ") [ " + oBalancaController.OBalanca.peso + "] :" + ex.Message);
+                        passo = "4";
+                        pesoBruto = double.Parse((oBalancaController.OBalanca.peso.Contains(",") ? oBalancaController.OBalanca.peso.Replace(".", "").Replace(",", ".") : oBalancaController.OBalanca.peso), System.Globalization.CultureInfo.InvariantCulture);
+                        ((EditText)form.Items.Item("U_PesoBruto").Specific).String = pesoBruto.ToString();
+                    }
+                    else
+                    {
+                        passo = "5";
+                        tara = double.Parse((oBalancaController.OBalanca.peso.Contains(",") ? oBalancaController.OBalanca.peso.Replace(".", "").Replace(",", ".") : oBalancaController.OBalanca.peso), System.Globalization.CultureInfo.InvariantCulture);
+                        ((EditText)form.Items.Item("U_Tara").Specific).String = tara.ToString();
                     }
 
-                    //sucesso = true;
+                    passo = "6";
+                    if (tara > 0)
+                    {
+                        passo = "7";
+                        double pesoLiquido = pesoBruto - tara;
+                        ((EditText)form.Items.Item("U_PesoLiq").Specific).String = pesoLiquido.ToString();
+                        if (um == "TONELADAS")
+                        {
+                            passo = "8";
+                            ((EditText)matrix.Columns.Item("11").Cells.Item(1).Specific).String = (pesoLiquido / 1000).ToString();
+                        }
+                    }
 
-                    //break;
+                    passo = "9";
+                    ((EditText)form.Items.Item("U_HoraEntradaOS").Specific).String = DateTime.Now.ToString("HH:mm");
+                    ((EditText)form.Items.Item("U_DataEntradaOS").Specific).String = DateTime.Now.ToString("dd/MM/yyyy");
+                    ((ComboBox)form.Items.Item("U_Situacao").Specific).Select("11");
+                    ((ComboBox)form.Items.Item("U_Status").Specific).Select("P");
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Erro ao preencher campos em tela (etapa " + passo + ") [ " + oBalancaController.OBalanca.peso + "] :" + ex.Message);
+                }
+
+                //sucesso = true;
+
+                //break;
 
 
                 //if (sucesso)
@@ -676,7 +676,7 @@ namespace Chess.IT.Services
             return exitCode;
         }
 
-        private  static string GerarFormUID(string formType)
+        private static string GerarFormUID(string formType)
         {
             string result = string.Empty;
 

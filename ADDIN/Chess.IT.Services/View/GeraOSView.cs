@@ -461,7 +461,7 @@ namespace Chess.IT.Services.View
                                                 {
                                                     //	ORDR.U_Situacao = 2(Aguardando Peso Tara)
                                                     //Essas ordens/ pedidos continuarão na tela de pesagem aguardando a pesagem da tara.
-                                                    oOrder.UserFields.Fields.Item("U_Situacao").Value = "3";
+                                                    //oOrder.UserFields.Fields.Item("U_Situacao").Value = "3";
                                                 }
 
 
@@ -585,9 +585,9 @@ namespace Chess.IT.Services.View
                                                 //    //	ORDR.U_DataEntradaOS = Data atual
                                                 //    //	ORDR.U_HoraEntradaOS = Horário atualOBalanca.pesoHora
 
-                                                if (dPesoCliente == 0 || dPesoCliente == double.NaN)
-                                                    oOrder.UserFields.Fields.Item("U_PesoLiq").Value = Convert.ToDouble(oOrder.UserFields.Fields.Item("U_PesoBruto").Value) - Convert.ToDouble(oOrder.UserFields.Fields.Item("U_Tara").Value);
-                                                else
+                                                //if (dPesoCliente == 0 || dPesoCliente == double.NaN)
+                                                //    oOrder.UserFields.Fields.Item("U_PesoLiq").Value = Convert.ToDouble(oOrder.UserFields.Fields.Item("U_PesoBruto").Value) - Convert.ToDouble(oOrder.UserFields.Fields.Item("U_Tara").Value);
+                                                //else
                                                    oOrder.UserFields.Fields.Item("U_PesoLiq").Value = dPesoCliente;
                                                 oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                 oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
