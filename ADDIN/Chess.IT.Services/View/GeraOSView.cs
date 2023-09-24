@@ -2360,9 +2360,37 @@ namespace Chess.IT.Services.View
             return bRetorno;
         }
 
+        private bool ValidaCentroDeCusto(string placa)
+        {
+            bool bRetorno = false;
+            SAPbobsCOM.Recordset recordSetVerificacao = null;
+            try
+            {
+                string SQL =$@"select T0.""PrcCode"" from OPRC T0 where T0.""PrcCode"" = '{placa}';";
+
+                recordSetVerificacao = (SAPbobsCOM.Recordset)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                recordSetVerificacao.DoQuery(SQL);
+                if (recordSetVerificacao.RecordCount > 0)
+                {
+                    bRetorno = true;
+                    //recordSetVerificacao.MoveNext();
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                Program.LimparObjeto(recordSetVerificacao);
+            }
+
+            return bRetorno;
+        }
+
         private void GerarOS()
         {
-            string placaOS = Form.DataSources.UserDataSources.Item("nrPlacaOS").Value;
+            string placa = Form.DataSources.DataTables.Item("dtFiltro").GetValue("NrPlaca", 0).ToString(); 
             DateTime dataSaidaOS = Form.DataSources.UserDataSources.Item("dtSaidaOS").Value == "" ? DateTime.MinValue : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("dtSaidaOS").ValueEx, "yyyyMMdd", null); // Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtSaidaOS").Value);
             string horaSaidaOS = Form.DataSources.UserDataSources.Item("hrSaidaOS").Value;
             //string motora = ((EditText)Form.Items.Item("etMotora").Specific).String;
@@ -2392,7 +2420,7 @@ namespace Chess.IT.Services.View
                 return;
             }
 
-            if (placaOS == "")
+            if (placa == "")
             {
                 Program.oApplicationS.StatusBar.SetText("Informe a placa", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Error);
 
@@ -2414,7 +2442,7 @@ namespace Chess.IT.Services.View
             //}
 
             //valida o centro de custo 
-            if (!ValidaCentroDeCusto())
+            if (!ValidaCentroDeCusto(placa))
             {
                 Program.oApplicationS.StatusBar.SetText("Placa sem centro de Custo!!", BoMessageTime.bmt_Medium, BoStatusBarMessageType.smt_Error);
 
@@ -2498,11 +2526,11 @@ namespace Chess.IT.Services.View
                             {
                                 SAPbobsCOM.Documents documents = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
 
-                                SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placaOS, gridContratos, absID1, utilizacaoResiduo, row);
+                                SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placa, gridContratos, absID1, utilizacaoResiduo, row);
                                 iNumber = Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
                                 while (!recordSet.EoF)
                                 {
-                                    MontaOS(placaOS, dataSaidaOS, horaSaidaOS, motoristaNome, diaColeta, absID1, documents, recordSet);
+                                    MontaOS(placa, dataSaidaOS, horaSaidaOS, motoristaNome, diaColeta, absID1, documents, recordSet);
                                     recordSet.MoveNext();
                                 }
                                 Program.LimparObjeto(recordSet);
@@ -2588,11 +2616,11 @@ namespace Chess.IT.Services.View
                                     {
 
                                         SAPbobsCOM.Documents documents = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
-                                        SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placaOS, gridContratos, absID1, utilizacaoResiduo, row);
+                                        SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placa, gridContratos, absID1, utilizacaoResiduo, row);
                                         iNumber = Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
                                         while (!recordSet.EoF)
                                         {
-                                            MontaOS(placaOS, dataSaidaOS, horaSaidaOS, motoristaNome, diaColeta, absID1, documents, recordSet);
+                                            MontaOS(placa, dataSaidaOS, horaSaidaOS, motoristaNome, diaColeta, absID1, documents, recordSet);
                                             recordSet.MoveNext();
                                         }
                                         Program.LimparObjeto(recordSet);
