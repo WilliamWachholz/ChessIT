@@ -663,7 +663,7 @@ namespace Chess.IT.Services.View
                                                 //    //	ORDR.U_HoraEntradaOS = Horário atualOBalanca.pesoHora
 
                                                 //oOrder.UserFields.Fields.Item("U_PesoBruto").Value = dPeso;
-                                                oOrder.UserFields.Fields.Item("U_PesoLiq").Value = dPesoCliente; 
+                                                oOrder.UserFields.Fields.Item("U_PesoLiq").Value = dPesoCliente;
                                                 oOrder.UserFields.Fields.Item("U_Situacao").Value = "11";
                                                 oOrder.UserFields.Fields.Item("U_DataEntradaOS").Value = DateTime.Now;
                                                 oOrder.UserFields.Fields.Item("U_HoraEntradaOS").Value = myTime.ToString("hh:mm");
@@ -2366,7 +2366,7 @@ namespace Chess.IT.Services.View
             SAPbobsCOM.Recordset recordSetVerificacao = null;
             try
             {
-                string SQL =$@"select T0.""PrcCode"" from OPRC T0 where T0.""PrcCode"" = '{placa}';";
+                string SQL = $@"select T0.""PrcCode"" from OPRC T0 where T0.""PrcCode"" = '{placa}';";
 
                 recordSetVerificacao = (SAPbobsCOM.Recordset)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                 recordSetVerificacao.DoQuery(SQL);
@@ -2390,7 +2390,7 @@ namespace Chess.IT.Services.View
 
         private void GerarOS()
         {
-            string placa = Form.DataSources.DataTables.Item("dtFiltro").GetValue("NrPlaca", 0).ToString(); 
+            string placa = Form.DataSources.DataTables.Item("dtFiltro").GetValue("NrPlaca", 0).ToString();
             DateTime dataSaidaOS = Form.DataSources.UserDataSources.Item("dtSaidaOS").Value == "" ? DateTime.MinValue : DateTime.ParseExact(Form.DataSources.UserDataSources.Item("dtSaidaOS").ValueEx, "yyyyMMdd", null); // Convert.ToDateTime(Form.DataSources.UserDataSources.Item("dtSaidaOS").Value);
             string horaSaidaOS = Form.DataSources.UserDataSources.Item("hrSaidaOS").Value;
             //string motora = ((EditText)Form.Items.Item("etMotora").Specific).String;
@@ -2575,7 +2575,16 @@ namespace Chess.IT.Services.View
                                     else
                                     {
                                         if (Program.oCompanyS.GetNewObjectType() == "112")
-                                            sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();
+                                        {
+                                            if (String.IsNullOrEmpty(sEsbocos))
+                                            {
+                                                sEsbocos = Program.oCompanyS.GetNewObjectKey();
+                                            }
+                                            else
+                                            {
+                                                sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();
+                                            }
+                                        }
                                         else
                                             sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
                                     }
@@ -2666,7 +2675,17 @@ namespace Chess.IT.Services.View
                                                 if (Program.oCompanyS.GetNewObjectType() == "112")
                                                     sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
                                                 else
-                                                    sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();
+                                                {
+                                                    if (String.IsNullOrEmpty(sEsbocos))
+                                                    {
+                                                        sEsbocos = Program.oCompanyS.GetNewObjectKey();
+                                                    }
+                                                    else
+                                                    {
+                                                        sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();
+                                                    }
+
+                                                }
                                             }
                                         }
                                         Program.LimparObjeto(documents);
