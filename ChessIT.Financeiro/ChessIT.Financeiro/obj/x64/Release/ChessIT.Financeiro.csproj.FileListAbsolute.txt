@@ -72,7 +72,6 @@ C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\
 C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Release\ChessIT.Financeiro.exe
 C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Release\ChessIT.Financeiro.pdb
 C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\x64\Release\SAPBusinessOneSDK.dll
-C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Release\ChessIT.Financeiro.csproj.AssemblyReference.cache
 C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Release\ChessIT.Financeiro.Properties.Resources.resources
 C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Release\ChessIT.Financeiro.csproj.GenerateResource.cache
 C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\x64\Release\ChessIT.Financeiro.csproj.CoreCompileInputs.cache

@@ -1,0 +1,15 @@
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\Menu.xml
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\SrfFiles\FrmRenegCP.srf
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\SrfFiles\FrmBaixaCP.srf
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\SrfFiles\FrmDocCP.srf
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\SrfFiles\FrmMeioPagto.srf
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\ChessIT.Financeiro.exe.config
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\ChessIT.Financeiro.exe
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\ChessIT.Financeiro.pdb
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\bin\Release\SAPBusinessOneSDK.dll
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Release\ChessIT.Financeiro.Properties.Resources.resources
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Release\ChessIT.Financeiro.csproj.GenerateResource.cache
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Release\ChessIT.Financeiro.csproj.CoreCompileInputs.cache
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Release\ChessIT.Financeiro.csproj.CopyComplete
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Release\ChessIT.Financeiro.exe
+C:\Users\partner\source\repos\ChessIT\ChessIT.Financeiro\ChessIT.Financeiro\obj\Release\ChessIT.Financeiro.pdb

@@ -102,7 +102,7 @@ namespace Chess.IT.Services
 
                 oMenuCreationParams.Type = BoMenuType.mt_STRING;
                 oMenuCreationParams.UniqueID = "CHESSITG";
-                oMenuCreationParams.String = "Gestão de OS";
+                oMenuCreationParams.String = "Gestão de PV";
                 oMenus.AddEx(oMenuCreationParams);
             }
             catch (Exception ex)

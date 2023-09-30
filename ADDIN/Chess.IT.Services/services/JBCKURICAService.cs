@@ -45,14 +45,9 @@ namespace Chess.IT.Services.services
         }
         public string CertificadoConsulta(
             string sCertificado,
-            //string sDtIni,
-           // string sDtFim,
             string sPNIni,
-           // string sPNFim,
             string sNFSIni,
-            //string sNFSFim,
             string sOSIni
-            //string sOSFim
             )
         {
             if (string.IsNullOrEmpty(sNFSIni))

@@ -1082,8 +1082,7 @@ namespace ChessIT.Financeiro.View
 
                     payments.BankChargeAmount = m_Encargo;       
                     
-                    //payments.DocDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
-
+                    payments.DocDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
                     payments.TaxDate = ((EditText)Form.Items.Item("etDtPagto").Specific).String == "" ? DateTime.Now : Controller.MainController.ConvertDate(((EditText)Form.Items.Item("etDtPagto").Specific).String);
 
                     if (m_DinheiroModel.valor > 0)

@@ -64,7 +64,7 @@ where
 		
 		and
 		(
-			(T3."DocEntry" = {3})
+			(T3."DocNum" = {3})
 			or
 			({3}=0 )
 		)				
