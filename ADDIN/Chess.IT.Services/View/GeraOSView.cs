@@ -2608,13 +2608,15 @@ namespace Chess.IT.Services.View
                                         SAPbobsCOM.Documents documents = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
                                         SAPbobsCOM.Recordset recordSet = ConsultaContratoGeracao(placa, gridContratos, absID1, utilizacaoResiduo, row);
                                         iNumber = Convert.ToInt32(recordSet.Fields.Item(11).Value.ToString());
+
+
                                         while (!recordSet.EoF)
                                         {
                                             MontaOS(placa, dataSaidaOS, horaSaidaOS, motoristaNome, diaColeta, absID1, documents, recordSet);
                                             recordSet.MoveNext();
                                         }
                                         Program.LimparObjeto(recordSet);
-                                        int result = documents.Add();
+                                        int result =  documents.HandleApprovalRequest();
 
                                         if (result != 0)
                                         {
@@ -2639,31 +2641,35 @@ namespace Chess.IT.Services.View
                                         {
                                             osGeradas = true;
 
-                                            if (string.IsNullOrEmpty(sOSsGeradas))
-                                            {
-                                                if (Program.oCompanyS.GetNewObjectType() == "112")
-                                                    sEsbocos = Program.oCompanyS.GetNewObjectKey();
-                                                else
-                                                    sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
+                                            ErroGerOSs.Add(new ErroGerOS() { absID = iNumber, Erro = string.Format("Notas {0} do cliente {1} enviadas para o processo de aprovação.",
+                                        string.Join(",", NotasVencidas(absID1).Select(r => r.Key).ToArray()), NotasVencidas(absID1).Select(r => r.Value).First())
+                                            });
 
-                                            }
-                                            else
-                                            {
-                                                if (Program.oCompanyS.GetNewObjectType() == "112")
-                                                    sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
-                                                else
-                                                {
-                                                    if (String.IsNullOrEmpty(sEsbocos))
-                                                    {
-                                                        sEsbocos = Program.oCompanyS.GetNewObjectKey();
-                                                    }
-                                                    else
-                                                    {
-                                                        sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();
-                                                    }
+                                            //if (string.IsNullOrEmpty(sOSsGeradas))
+                                            //{
+                                            //    if (Program.oCompanyS.GetNewObjectType() == "112")
+                                            //        sEsbocos = Program.oCompanyS.GetNewObjectKey();
+                                            //    else
+                                            //        sOSsGeradas = Program.oCompanyS.GetNewObjectKey();
 
-                                                }
-                                            }
+                                            //}
+                                            //else
+                                            //{
+                                            //    if (Program.oCompanyS.GetNewObjectType() == "112")
+                                            //        sOSsGeradas = sOSsGeradas + "," + Program.oCompanyS.GetNewObjectKey();
+                                            //    else
+                                            //    {
+                                            //        if (String.IsNullOrEmpty(sEsbocos))
+                                            //        {
+                                            //            sEsbocos = Program.oCompanyS.GetNewObjectKey();
+                                            //        }
+                                            //        else
+                                            //        {
+                                            //            sEsbocos = sEsbocos + "," + Program.oCompanyS.GetNewObjectKey();
+                                            //        }
+
+                                            //    }
+                                            //}
                                         }
                                         Program.LimparObjeto(documents);
 
