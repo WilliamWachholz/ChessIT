@@ -2616,7 +2616,7 @@ namespace Chess.IT.Services.View
                                             recordSet.MoveNext();
                                         }
                                         Program.LimparObjeto(recordSet);
-                                        int result =  documents.HandleApprovalRequest();
+                                        int result = documents.Add();
 
                                         if (result != 0)
                                         {

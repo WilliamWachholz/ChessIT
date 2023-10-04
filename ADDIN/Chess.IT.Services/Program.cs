@@ -116,7 +116,6 @@ namespace Chess.IT.Services
             oCompanyS = oCompany;
             oApplicationS = oApplication;
 
-
             //SAPbobsCOM.Documents oOrder;
             //oOrder = (SAPbobsCOM.Documents)Program.oCompanyS.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
             //if (oOrder.GetByKey(1))
