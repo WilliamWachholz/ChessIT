@@ -1540,7 +1540,7 @@ namespace Chess.IT.Services.View
 	                        inner join OITM T2 on T2.""ItemCode""=T1.""ItemCode""
 	                        inner join OITB t3 on t3.""ItmsGrpCod""=T2.""ItmsGrpCod""
                         where 
-	                        t3.""ItmsGrpCod"" IN (102, 118)
+	                        t3.""ItmsGrpCod"" IN (101, 102, 118, 122)
                             and ( T0.""DocEntry""  in ({0}) )
 
                 "
@@ -3132,7 +3132,9 @@ namespace Chess.IT.Services.View
                                                               ORDR.""GroupNum"",
                                                               case OCRD.""U_TipoFat"" when '1' then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')
                                                               						  when '2' then case OITM.""ItmsGrpCod"" when 102 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'FAT') 
-                                                              															     when 118 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')  end 
+                                                                                                                             when 122 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'FAT') 
+                                                              															     when 101 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1')  
+                                                              															     when 118 then (select NFN1.""SeqCode"" from NFN1 where NFN1.""SeqName"" like 'NFSe_v1') end 
                                                               end as ""SeqCode"",
                                                               ORDR.""U_Status"" as ""Status""
                                                          from ORDR
@@ -3141,7 +3143,7 @@ namespace Chess.IT.Services.View
                                                          inner join OCRD on OCRD.""CardCode"" = ORDR.""CardCode""
                                                           left JOIN OOAT T2 ON RDR1.""AgrNo"" = T2.""AbsID""
                                                          where ORDR.""DocEntry"" = {0}                                                            
-                                                           and OITM.""ItmsGrpCod""in (102, 118)
+                                                           and OITM.""ItmsGrpCod""in (101, 102, 118, 122)
                                                             
                                                             ", docEntry, respFaturamento);
 

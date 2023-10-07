@@ -72,4 +72,3 @@ C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT
 C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.CopyComplete
 C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.dll
 C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.pdb
-C:\Users\partner\source\repos\ChessIT\ADDIN\Chess.IT.Services\obj\Debug\Chess.IT.Services.csproj.AssemblyReference.cache
